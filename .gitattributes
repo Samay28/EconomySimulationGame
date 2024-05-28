@@ -1,0 +1,10 @@
+AUDIO filter=lfs diff=lfs merge=lfs -text
+BasicLocomotionSet filter=lfs diff=lfs merge=lfs -text
+MAPS filter=lfs diff=lfs merge=lfs -text
+WAV filter=lfs diff=lfs merge=lfs -text
+UI filter=lfs diff=lfs merge=lfs -text
+model filter=lfs diff=lfs merge=lfs -text
+RetroGameplayLoops filter=lfs diff=lfs merge=lfs -text
+Teen_boy_Alex filter=lfs diff=lfs merge=lfs -text
+UndeadPack filter=lfs diff=lfs merge=lfs -text
+SpeechRecognition filter=lfs diff=lfs merge=lfs -text
