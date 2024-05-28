@@ -25,7 +25,7 @@ void ALand::BeginPlay()
 
 	if (GM)
 	{
-		GM->AddExpenses(Rent); // Add this land's rent to the total expenses
+		GM->AddExpenses(Rent); 
 	}
 }
 
