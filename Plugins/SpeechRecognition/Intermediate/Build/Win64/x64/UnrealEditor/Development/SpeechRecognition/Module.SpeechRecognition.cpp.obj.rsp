@@ -1,11 +1,11 @@
-"C:\Users\Asus\Documents\GitHub\EconomySimulation\Plugins\SpeechRecognition\Intermediate\Build\Win64\x64\UnrealEditor\Development\SpeechRecognition\Module.SpeechRecognition.cpp"
-/FI"C:\Users\Asus\Documents\GitHub\EconomySimulation\Intermediate\Build\Win64\x64\EconomySimulationEditor\Development\Engine\SharedPCH.Engine.Cpp20.h"
-/FI"C:\Users\Asus\Documents\GitHub\EconomySimulation\Plugins\SpeechRecognition\Intermediate\Build\Win64\x64\UnrealEditor\Development\SpeechRecognition\Definitions.SpeechRecognition.h"
-/Yu"C:\Users\Asus\Documents\GitHub\EconomySimulation\Intermediate\Build\Win64\x64\EconomySimulationEditor\Development\Engine\SharedPCH.Engine.Cpp20.h"
-/Fp"C:\Users\Asus\Documents\GitHub\EconomySimulation\Intermediate\Build\Win64\x64\EconomySimulationEditor\Development\Engine\SharedPCH.Engine.Cpp20.h.pch"
-/Fo"C:\Users\Asus\Documents\GitHub\EconomySimulation\Plugins\SpeechRecognition\Intermediate\Build\Win64\x64\UnrealEditor\Development\SpeechRecognition\Module.SpeechRecognition.cpp.obj"
-/sourceDependencies "C:\Users\Asus\Documents\GitHub\EconomySimulation\Plugins\SpeechRecognition\Intermediate\Build\Win64\x64\UnrealEditor\Development\SpeechRecognition\Module.SpeechRecognition.cpp.dep.json"
-@"C:\Users\Asus\Documents\GitHub\EconomySimulation\Plugins\SpeechRecognition\Intermediate\Build\Win64\x64\UnrealEditor\Development\SpeechRecognition\SpeechRecognition.Shared.rsp"
+"C:\Users\narth\OneDrive\Desktop\DRID\Plugins\SpeechRecognition\Intermediate\Build\Win64\x64\UnrealEditor\Development\SpeechRecognition\Module.SpeechRecognition.cpp"
+/FI"C:\Users\narth\OneDrive\Desktop\DRID\Intermediate\Build\Win64\x64\EconomySimulationEditor\Development\Engine\SharedPCH.Engine.Cpp20.h"
+/FI"C:\Users\narth\OneDrive\Desktop\DRID\Plugins\SpeechRecognition\Intermediate\Build\Win64\x64\UnrealEditor\Development\SpeechRecognition\Definitions.SpeechRecognition.h"
+/Yu"C:\Users\narth\OneDrive\Desktop\DRID\Intermediate\Build\Win64\x64\EconomySimulationEditor\Development\Engine\SharedPCH.Engine.Cpp20.h"
+/Fp"C:\Users\narth\OneDrive\Desktop\DRID\Intermediate\Build\Win64\x64\EconomySimulationEditor\Development\Engine\SharedPCH.Engine.Cpp20.h.pch"
+/Fo"C:\Users\narth\OneDrive\Desktop\DRID\Plugins\SpeechRecognition\Intermediate\Build\Win64\x64\UnrealEditor\Development\SpeechRecognition\Module.SpeechRecognition.cpp.obj"
+/sourceDependencies "C:\Users\narth\OneDrive\Desktop\DRID\Plugins\SpeechRecognition\Intermediate\Build\Win64\x64\UnrealEditor\Development\SpeechRecognition\Module.SpeechRecognition.cpp.dep.json"
+@"C:\Users\narth\OneDrive\Desktop\DRID\Plugins\SpeechRecognition\Intermediate\Build\Win64\x64\UnrealEditor\Development\SpeechRecognition\SpeechRecognition.Shared.rsp"
 /Zc:inline
 /nologo
 /Oi
