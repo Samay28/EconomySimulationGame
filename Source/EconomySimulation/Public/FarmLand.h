@@ -4,13 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "Land.h"
+#include "SaveGameInterface.h"
 #include "FarmLand.generated.h"
 
 /**
  *
  */
 UCLASS()
-class ECONOMYSIMULATION_API AFarmLand : public ALand
+class ECONOMYSIMULATION_API AFarmLand : public ALand, public ISaveGameInterface
 {
 	GENERATED_BODY()
 
@@ -36,20 +37,16 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void RentLandForFarming();
 
-	UFUNCTION(BlueprintCallable, Category = "SaveLoad")
-	void SaveFarmState();
+	virtual void SaveGame() override;
 
-	UFUNCTION(BlueprintCallable, Category = "SaveLoad")
-	void LoadFarmState();
+	virtual void LoadGame() override;
 
 protected:
 	virtual void BeginPlay() override;
 
 	int FarmSetupCost;
 
-private:	
-	void SaveGame();
-    void LoadGame();
+private:
 
 	UPROPERTY(EditAnywhere, Category = "Farm")
     int32 FarmID;

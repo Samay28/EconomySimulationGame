@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "SaveGameInterface.h"
 #include "GameManager.generated.h"
 
 UCLASS()
-class ECONOMYSIMULATION_API AGameManager : public AActor
+class ECONOMYSIMULATION_API AGameManager : public AActor, public ISaveGameInterface
 {
 	GENERATED_BODY()
 
@@ -18,13 +19,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int coins;
 
-	virtual void Tick(float DeltaTime) override;
-
 	UPROPERTY(BlueprintReadOnly)
 	int Expenses;
 
 	UPROPERTY(BlueprintReadOnly)
 	int Income;
+
+	virtual void Tick(float DeltaTime) override;
 
 	void AddExpenses(int Amount);
 	void AddIncome(int Amount);
@@ -33,6 +34,14 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "SaveLoad")
 	void DeleteFarmSave();
+
+	virtual void SaveGame() override;
+	virtual void LoadGame() override;
+
+	UFUNCTION(BlueprintCallable)
+	void SaveAll();
+	UFUNCTION(BlueprintCallable)
+	void LoadAll();
 
 protected:
 	// Called when the game starts or when spawned

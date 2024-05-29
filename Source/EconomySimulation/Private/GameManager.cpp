@@ -4,8 +4,10 @@
 #include "Land.h"
 #include "HouseLand.h"
 #include "FarmLand.h"
+#include "SaveGameManager.h"
 #include "Kismet/GameplayStatics.h"
-// Sets default values
+
+
 AGameManager::AGameManager()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -34,6 +36,7 @@ void AGameManager::BeginPlay()
 		FarmActors.Add(*It);
 	}
 	GetWorldTimerManager().SetTimer(DayNightCycle, this, &AGameManager::TriggerDailyEconomy, 300.f, true);
+	LoadAll();
 }
 void AGameManager::Tick(float DeltaTime)
 {
@@ -83,6 +86,66 @@ void AGameManager::DeleteFarmSave()
 	if (UGameplayStatics::DoesSaveGameExist(TEXT("FarmSaveSlot"), 0))
 	{
 		UGameplayStatics::DeleteGameInSlot(TEXT("FarmSaveSlot"), 0);
+		UGameplayStatics::DeleteGameInSlot(TEXT("ManagerSaveSlot"), 0);
 		UE_LOG(LogTemp, Warning, TEXT("Save game deleted"));
+	}
+}
+
+void AGameManager::SaveGame()
+{
+	USaveGameManager *SaveGameInstance = Cast<USaveGameManager>(UGameplayStatics::CreateSaveGameObject(USaveGameManager::StaticClass()));
+	if (SaveGameInstance)
+	{
+		SaveGameInstance->Coins = coins;
+		SaveGameInstance->Expenses = Expenses;
+		SaveGameInstance->Income = Income;
+
+		UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("ManagerSaveSlot"), 0);
+		UE_LOG(LogTemp, Warning, TEXT("Game saved"));
+	}
+}
+
+void AGameManager::LoadGame()
+{
+	if (UGameplayStatics::DoesSaveGameExist(TEXT("ManagerSaveSlot"), 0))
+	{
+		USaveGameManager *LoadGameInstance = Cast<USaveGameManager>(UGameplayStatics::LoadGameFromSlot(TEXT("ManagerSaveSlot"), 0));
+		if (LoadGameInstance)
+		{
+			coins = LoadGameInstance->Coins;
+			Expenses = LoadGameInstance->Expenses;
+			Income = LoadGameInstance->Income;
+			UE_LOG(LogTemp, Warning, TEXT("Game loaded"));
+		}
+	}
+}
+
+void AGameManager::SaveAll()
+{
+	TArray<AActor*> SaveableActors;
+	UGameplayStatics::GetAllActorsWithInterface(GetWorld(), USaveGameInterface::StaticClass(), SaveableActors);
+
+	for (AActor* Actor : SaveableActors)
+	{
+		ISaveGameInterface* SaveableActor = Cast<ISaveGameInterface>(Actor);
+		if (SaveableActor)
+		{
+			SaveableActor->SaveGame();
+		}
+	}
+}
+
+void AGameManager::LoadAll()
+{
+	TArray<AActor*> SaveableActors;
+	UGameplayStatics::GetAllActorsWithInterface(GetWorld(), USaveGameInterface::StaticClass(), SaveableActors);
+
+	for (AActor* Actor : SaveableActors)
+	{
+		ISaveGameInterface* SaveableActor = Cast<ISaveGameInterface>(Actor);
+		if (SaveableActor)
+		{
+			SaveableActor->LoadGame();
+		}
 	}
 }
