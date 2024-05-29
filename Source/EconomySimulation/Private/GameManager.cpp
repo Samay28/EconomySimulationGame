@@ -4,6 +4,7 @@
 #include "Land.h"
 #include "HouseLand.h"
 #include "FarmLand.h"
+#include "Kismet/GameplayStatics.h"
 // Sets default values
 AGameManager::AGameManager()
 {
@@ -13,7 +14,6 @@ AGameManager::AGameManager()
 	Income = 0;
 	BlockPlayerMovement = false;
 }
-
 
 // Called when the game starts or when spawned
 void AGameManager::BeginPlay()
@@ -40,15 +40,15 @@ void AGameManager::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 void AGameManager::TriggerDailyEconomy()
-{	
+{
 	for (ALand *LandActor : LandActors)
 	{
 		if (LandActor)
-		{	
+		{
 			LandActor->DeductRent();
 		}
 	}
-	UE_LOG(LogTemp,Warning,TEXT("%d"),coins);
+	UE_LOG(LogTemp, Warning, TEXT("%d"), coins);
 	// Update each HouseActor
 	for (AHouseLand *HouseActor : HouseActors)
 	{
@@ -71,11 +71,18 @@ void AGameManager::TriggerDailyEconomy()
 
 void AGameManager::AddExpenses(int Amount)
 {
-	Expenses+=Amount;
+	Expenses += Amount;
 }
 
 void AGameManager::AddIncome(int Amount)
 {
-	Income+=Amount;
+	Income += Amount;
 }
-
+void AGameManager::DeleteFarmSave()
+{
+	if (UGameplayStatics::DoesSaveGameExist(TEXT("FarmSaveSlot"), 0))
+	{
+		UGameplayStatics::DeleteGameInSlot(TEXT("FarmSaveSlot"), 0);
+		UE_LOG(LogTemp, Warning, TEXT("Save game deleted"));
+	}
+}

@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "PlayerMovementInterface.h"
 #include "GameManager.generated.h"
 
 UCLASS()
@@ -31,6 +30,10 @@ public:
 	void AddIncome(int Amount);
 
 	bool BlockPlayerMovement;
+
+	UFUNCTION(BlueprintCallable, Category = "SaveLoad")
+	void DeleteFarmSave();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
