@@ -1,0 +1,12 @@
+/NOLOGO
+/errorReport:prompt
+/MACHINE:x64
+/SUBSYSTEM:WINDOWS
+/DEF
+/NAME:"UnrealEditor-SpeechRecognition-0003.dll"
+/IGNORE:4221
+/NODEFAULTLIB
+"C:\Users\Asus\Documents\GitHub\SpaceEscape\Intermediate\Build\Win64\x64\SpaceEscapeEditor\Development\Engine\SharedPCH.Engine.Cpp17.InclOrderUnreal5_1.h.obj"
+"C:\Users\Asus\Documents\GitHub\SpaceEscape\Plugins\SpeechRecognition\Intermediate\Build\Win64\x64\UnrealEditor\Development\SpeechRecognition\Module.SpeechRecognition.cpp.obj"
+"C:\Users\Asus\Documents\GitHub\SpaceEscape\Plugins\SpeechRecognition\Intermediate\Build\Win64\x64\UnrealEditor\Development\SpeechRecognition\Default.rc2.res"
+/OUT:"C:\Users\Asus\Documents\GitHub\SpaceEscape\Plugins\SpeechRecognition\Intermediate\Build\Win64\x64\UnrealEditor\Development\SpeechRecognition\UnrealEditor-SpeechRecognition-0003.lib"
