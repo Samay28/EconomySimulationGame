@@ -87,6 +87,7 @@ void AGameManager::DeleteFarmSave()
 	{
 		UGameplayStatics::DeleteGameInSlot(TEXT("FarmSaveSlot"), 0);
 		UGameplayStatics::DeleteGameInSlot(TEXT("ManagerSaveSlot"), 0);
+		UGameplayStatics::DeleteGameInSlot(TEXT("HouseSaveSlot"), 0);
 		UE_LOG(LogTemp, Warning, TEXT("Save game deleted"));
 	}
 }
