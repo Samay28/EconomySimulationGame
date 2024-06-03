@@ -7,7 +7,6 @@
 #include "SaveGameManager.h"
 #include "Kismet/GameplayStatics.h"
 
-
 AGameManager::AGameManager()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -83,13 +82,11 @@ void AGameManager::AddIncome(int Amount)
 }
 void AGameManager::DeleteFarmSave()
 {
-	if (UGameplayStatics::DoesSaveGameExist(TEXT("FarmSaveSlot"), 0))
-	{
-		UGameplayStatics::DeleteGameInSlot(TEXT("FarmSaveSlot"), 0);
-		UGameplayStatics::DeleteGameInSlot(TEXT("ManagerSaveSlot"), 0);
-		UGameplayStatics::DeleteGameInSlot(TEXT("HouseSaveSlot"), 0);
-		UE_LOG(LogTemp, Warning, TEXT("Save game deleted"));
-	}
+
+	UGameplayStatics::DeleteGameInSlot(TEXT("FarmSaveSlot"), 0);
+	UGameplayStatics::DeleteGameInSlot(TEXT("ManagerSaveSlot"), 0);
+	UGameplayStatics::DeleteGameInSlot(TEXT("HouseSaveSlot"), 0);
+	UE_LOG(LogTemp, Warning, TEXT("Save game deleted"));
 }
 
 void AGameManager::SaveGame()
@@ -123,12 +120,12 @@ void AGameManager::LoadGame()
 
 void AGameManager::SaveAll()
 {
-	TArray<AActor*> SaveableActors;
+	TArray<AActor *> SaveableActors;
 	UGameplayStatics::GetAllActorsWithInterface(GetWorld(), USaveGameInterface::StaticClass(), SaveableActors);
 
-	for (AActor* Actor : SaveableActors)
+	for (AActor *Actor : SaveableActors)
 	{
-		ISaveGameInterface* SaveableActor = Cast<ISaveGameInterface>(Actor);
+		ISaveGameInterface *SaveableActor = Cast<ISaveGameInterface>(Actor);
 		if (SaveableActor)
 		{
 			SaveableActor->SaveGame();
@@ -138,12 +135,12 @@ void AGameManager::SaveAll()
 
 void AGameManager::LoadAll()
 {
-	TArray<AActor*> SaveableActors;
+	TArray<AActor *> SaveableActors;
 	UGameplayStatics::GetAllActorsWithInterface(GetWorld(), USaveGameInterface::StaticClass(), SaveableActors);
 
-	for (AActor* Actor : SaveableActors)
+	for (AActor *Actor : SaveableActors)
 	{
-		ISaveGameInterface* SaveableActor = Cast<ISaveGameInterface>(Actor);
+		ISaveGameInterface *SaveableActor = Cast<ISaveGameInterface>(Actor);
 		if (SaveableActor)
 		{
 			SaveableActor->LoadGame();

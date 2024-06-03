@@ -1,5 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
+#include "HouseLand.h"
+#include "FarmLand.h"
 #include "Land.h"
 #include "GameManager.h"
 #include "Kismet/GameplayStatics.h"
@@ -25,6 +26,8 @@ void ALand::PurchaseLand()
 	{
 		bIsRented = true;
 		GrassMesh->SetVisibility(false);
+		GM->AddExpenses(Rent);
+		GM->coins -= LandCost;
 	}
 }
 
@@ -39,6 +42,37 @@ void ALand::BeginPlay()
 	{
 		GM->AddExpenses(Rent);
 		GrassMesh->SetVisibility(false);
+		UE_LOG(LogTemp,Warning,TEXT("Hi, %d"), GM->Expenses);
+	}
+}
+
+void ALand::ConvertToHouse()
+{
+	FVector Location = GetActorLocation();
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = this;
+	SpawnParams.Instigator = GetInstigator();
+
+	AHouseLand *NewHouse = GetWorld()->SpawnActor<AHouseLand>(AHouseLand::StaticClass(), Location, FRotator::ZeroRotator, SpawnParams);
+	if (NewHouse)
+	{
+		CreatedActors.Add(NewHouse);
+		Destroy(); // Destroy the current land actor
+	}
+}
+
+void ALand::ConvertToFarm()
+{
+	FVector Location = GetActorLocation();
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = this;
+	SpawnParams.Instigator = GetInstigator();
+
+	AFarmLand *NewFarm = GetWorld()->SpawnActor<AFarmLand>(AFarmLand::StaticClass(), Location, FRotator::ZeroRotator, SpawnParams);
+	if (NewFarm)
+	{
+		CreatedActors.Add(NewFarm);
+		Destroy(); // Destroy the current land actor
 	}
 }
 

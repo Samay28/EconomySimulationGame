@@ -34,6 +34,13 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void PurchaseLand();
 
+	UFUNCTION(BlueprintCallable)
+	void ConvertToFarm();
+
+	UFUNCTION(BlueprintCallable)
+	void ConvertToHouse();
+	TArray<AActor*> CreatedActors;
+
 protected:
 	virtual void Tick(float DeltaTime) override;
 	virtual void BeginPlay() override;
