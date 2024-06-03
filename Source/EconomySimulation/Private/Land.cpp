@@ -11,11 +11,23 @@ ALand::ALand()
 	PrimaryActorTick.bCanEverTick = true;
 	LandMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Normal Land"));
 	LandMesh->SetupAttachment(RootComponent);
+
+	GrassMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Grass"));
+	GrassMesh->SetupAttachment(LandMesh);
 	Rent = 1;
-	bIsRented = true;
+	LandCost = 50;
+	bIsRented = false;
 }
 
-// Called when the game starts or when spawned
+void ALand::PurchaseLand()
+{
+	if (GM->coins >= LandCost && !bIsRented)
+	{
+		bIsRented = true;
+		GrassMesh->SetVisibility(false);
+	}
+}
+
 void ALand::BeginPlay()
 {
 	Super::BeginPlay();
@@ -23,9 +35,10 @@ void ALand::BeginPlay()
 	AActor *FoundActor = UGameplayStatics::GetActorOfClass(GetWorld(), AGameManager::StaticClass());
 	GM = Cast<AGameManager>(FoundActor);
 
-	if (GM)
+	if (GM && bIsRented)
 	{
-		GM->AddExpenses(Rent); 
+		GM->AddExpenses(Rent);
+		GrassMesh->SetVisibility(false);
 	}
 }
 

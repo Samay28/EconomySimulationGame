@@ -12,24 +12,29 @@ class ECONOMYSIMULATION_API ALand : public AActor
 	GENERATED_BODY()
 
 public:
-
 	ALand();
 
-	UPROPERTY(EditAnywhere,BlueprintReadOnly)
-	UStaticMeshComponent* LandMesh;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UStaticMeshComponent *LandMesh;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UStaticMeshComponent *GrassMesh;
 
 	UPROPERTY(EditAnywhere)
 	int Rent;
 
-	virtual void Tick(float DeltaTime) override;
-
+	UPROPERTY(EditAnywhere)
+	bool bIsRented;
+	int LandCost;
+	
 	void DeductRent();
 
-	bool bIsRented;
+	class AGameManager *GM;
 
-	class AGameManager* GM;
+	UFUNCTION(BlueprintCallable)
+	void PurchaseLand();
 
 protected:
-	// Called when the game starts or when spawned
+	virtual void Tick(float DeltaTime) override;
 	virtual void BeginPlay() override;
 };
