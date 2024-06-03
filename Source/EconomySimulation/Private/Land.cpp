@@ -42,18 +42,24 @@ void ALand::BeginPlay()
 	{
 		GM->AddExpenses(Rent);
 		GrassMesh->SetVisibility(false);
-		UE_LOG(LogTemp,Warning,TEXT("Hi, %d"), GM->Expenses);
+		UE_LOG(LogTemp, Warning, TEXT("Hi, %d"), GM->Expenses);
 	}
 }
 
 void ALand::ConvertToHouse()
 {
+	if (!HouseLandBlueprint)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("HouseLandBlueprint is not set."));
+		return;
+	}
+
 	FVector Location = GetActorLocation();
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = this;
 	SpawnParams.Instigator = GetInstigator();
 
-	AHouseLand *NewHouse = GetWorld()->SpawnActor<AHouseLand>(AHouseLand::StaticClass(), Location, FRotator::ZeroRotator, SpawnParams);
+	AHouseLand *NewHouse = GetWorld()->SpawnActor<AHouseLand>(HouseLandBlueprint, Location, FRotator::ZeroRotator, SpawnParams);
 	if (NewHouse)
 	{
 		CreatedActors.Add(NewHouse);
@@ -63,12 +69,18 @@ void ALand::ConvertToHouse()
 
 void ALand::ConvertToFarm()
 {
+	if (!FarmLandBlueprint)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("FarmLandBlueprint is not set."));
+		return;
+	}
+
 	FVector Location = GetActorLocation();
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Owner = this;
 	SpawnParams.Instigator = GetInstigator();
 
-	AFarmLand *NewFarm = GetWorld()->SpawnActor<AFarmLand>(AFarmLand::StaticClass(), Location, FRotator::ZeroRotator, SpawnParams);
+	AFarmLand *NewFarm = GetWorld()->SpawnActor<AFarmLand>(FarmLandBlueprint, Location, FRotator::ZeroRotator, SpawnParams);
 	if (NewFarm)
 	{
 		CreatedActors.Add(NewFarm);

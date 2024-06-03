@@ -23,7 +23,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	int Rent;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere,BlueprintReadOnly)
 	bool bIsRented;
 	int LandCost;
 	
@@ -39,7 +39,15 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void ConvertToHouse();
-	TArray<AActor*> CreatedActors;
+	
+	UPROPERTY(EditDefaultsOnly, Category = "Conversion")
+    TSubclassOf<class AHouseLand> HouseLandBlueprint;
+
+    UPROPERTY(EditDefaultsOnly, Category = "Conversion")
+    TSubclassOf<class AFarmLand> FarmLandBlueprint;
+
+	UPROPERTY()
+    TArray<AActor*> CreatedActors;
 
 protected:
 	virtual void Tick(float DeltaTime) override;
