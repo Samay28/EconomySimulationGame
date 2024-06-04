@@ -19,11 +19,13 @@ AHouseLand::AHouseLand()
     MaintenanceFees = 10;
 
     HouseID = FMath::Rand();
+    LoadGame();
 }
 void AHouseLand::BeginPlay()
 {
     Super::BeginPlay();
-    LoadGame();
+    
+    OwnHouse();
 }
 void AHouseLand::GetHouseRent()
 {

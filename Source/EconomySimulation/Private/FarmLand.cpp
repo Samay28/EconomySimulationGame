@@ -20,12 +20,15 @@ AFarmLand::AFarmLand()
     CropsCost = 10;
 
     FarmID = FMath::Rand();
+    LoadGame();
 }
 void AFarmLand::BeginPlay()
 {
     Super::BeginPlay();
-    LoadGame();
+    RentLandForFarming();
+    
 }
+
 void AFarmLand::RentLandForFarming()
 {
     if (GM->coins >= FarmSetupCost && !bIsRented)

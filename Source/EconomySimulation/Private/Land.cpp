@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "HouseLand.h"
 #include "FarmLand.h"
+#include "LandSaveGame.h"
 #include "Land.h"
 #include "GameManager.h"
 #include "Kismet/GameplayStatics.h"
@@ -8,7 +9,7 @@
 // Sets default values
 ALand::ALand()
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+
 	PrimaryActorTick.bCanEverTick = true;
 	LandMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Normal Land"));
 	LandMesh->SetupAttachment(RootComponent);
@@ -18,6 +19,9 @@ ALand::ALand()
 	Rent = 1;
 	LandCost = 50;
 	bIsRented = false;
+
+	LandID = FMath::Rand();
+	LandTypeNum = 0;
 }
 
 void ALand::PurchaseLand()
@@ -34,7 +38,7 @@ void ALand::PurchaseLand()
 void ALand::BeginPlay()
 {
 	Super::BeginPlay();
-
+	LoadGame();
 	AActor *FoundActor = UGameplayStatics::GetActorOfClass(GetWorld(), AGameManager::StaticClass());
 	GM = Cast<AGameManager>(FoundActor);
 
@@ -63,7 +67,9 @@ void ALand::ConvertToHouse()
 	if (NewHouse)
 	{
 		CreatedActors.Add(NewHouse);
-		Destroy(); // Destroy the current land actor
+		LandTypeNum = 2;
+		SaveGame();
+		Destroy(); 
 	}
 }
 
@@ -84,8 +90,81 @@ void ALand::ConvertToFarm()
 	if (NewFarm)
 	{
 		CreatedActors.Add(NewFarm);
-		Destroy(); // Destroy the current land actor
+		LandTypeNum = 1;
+		SaveGame();
+		Destroy(); 
 	}
+}
+
+void ALand::SaveGame()
+{
+    ULandSaveGame* SaveGameInstance = Cast<ULandSaveGame>(UGameplayStatics::CreateSaveGameObject(ULandSaveGame::StaticClass()));
+    if (!SaveGameInstance)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Failed to create SaveGameInstance"));
+        return;
+    }
+
+    FLandSaveData SaveData;
+    SaveData.LandID = LandID;
+    SaveData.LandTypeNum = LandTypeNum;
+    SaveData.Location = GetActorLocation();
+    SaveData.Rotation = GetActorRotation();
+
+    if (UGameplayStatics::DoesSaveGameExist(TEXT("LandSaveSlot"), 0))
+    {
+        SaveGameInstance = Cast<ULandSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("LandSaveSlot"), 0));
+    }
+
+    for (int32 i = 0; i < SaveGameInstance->LandDataArray.Num(); ++i)
+    {
+        if (SaveGameInstance->LandDataArray[i].LandID == LandID)
+        {
+            SaveGameInstance->LandDataArray.RemoveAt(i);
+            break;
+        }
+    }
+
+    SaveGameInstance->LandDataArray.Add(SaveData);
+    UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("LandSaveSlot"), 0);
+    UE_LOG(LogTemp, Warning, TEXT("Game Saved"));
+}
+
+void ALand::LoadGame()
+{
+    if (!UGameplayStatics::DoesSaveGameExist(TEXT("LandSaveSlot"), 0))
+    {
+        UE_LOG(LogTemp, Warning, TEXT("No save game found"));
+        return;
+    }
+
+    ULandSaveGame* LoadGameInstance = Cast<ULandSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("LandSaveSlot"), 0));
+    if (!LoadGameInstance)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Failed to load save game"));
+        return;
+    }
+
+    for (const FLandSaveData& SaveData : LoadGameInstance->LandDataArray)
+    {
+        if (SaveData.LandID == LandID)
+        {
+            LandTypeNum = SaveData.LandTypeNum;
+            SetActorLocation(SaveData.Location);
+            SetActorRotation(SaveData.Rotation);
+
+            if (LandTypeNum == 1 && FarmLandBlueprint)
+            {
+                ConvertToFarm();
+            }
+            else if (LandTypeNum == 2 && HouseLandBlueprint)
+            {
+                ConvertToHouse();
+            }
+
+            break;
+        }
+    }
 }
 
 // Called every frame

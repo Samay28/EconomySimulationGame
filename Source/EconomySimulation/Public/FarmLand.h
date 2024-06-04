@@ -43,7 +43,6 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-
 	int FarmSetupCost;
 
 private:

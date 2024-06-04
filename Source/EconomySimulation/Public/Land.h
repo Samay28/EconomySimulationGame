@@ -23,10 +23,10 @@ public:
 	UPROPERTY(EditAnywhere)
 	int Rent;
 
-	UPROPERTY(EditAnywhere,BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool bIsRented;
 	int LandCost;
-	
+
 	void DeductRent();
 
 	class AGameManager *GM;
@@ -39,17 +39,29 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void ConvertToHouse();
-	
-	UPROPERTY(EditDefaultsOnly, Category = "Conversion")
-    TSubclassOf<class AHouseLand> HouseLandBlueprint;
 
-    UPROPERTY(EditDefaultsOnly, Category = "Conversion")
-    TSubclassOf<class AFarmLand> FarmLandBlueprint;
+	UPROPERTY(EditDefaultsOnly, Category = "Conversion")
+	TSubclassOf<class AHouseLand> HouseLandBlueprint;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Conversion")
+	TSubclassOf<class AFarmLand> FarmLandBlueprint;
 
 	UPROPERTY()
-    TArray<AActor*> CreatedActors;
+	TArray<AActor *> CreatedActors;
+
+	UFUNCTION(BlueprintCallable)
+	void SaveGame();
+
+	UFUNCTION(BlueprintCallable)
+	void LoadGame();
 
 protected:
 	virtual void Tick(float DeltaTime) override;
 	virtual void BeginPlay() override;
+
+	int LandTypeNum; // 1 for farm, 2 for house, 0 for plain land
+
+private:
+	UPROPERTY(EditAnywhere)
+	int32 LandID;
 };
