@@ -65,14 +65,14 @@ void UPlayerInventoryComponent::RemoveItem(FName ItemName, int32 Quantity)
     }
 }
 
-// bool UPlayerInventoryComponent::HasItem(FName ItemName, int32 Quantity) const
-// {
-//     for (const FInventoryItem& Item : InventoryItems)
-//     {
-//         if (Item.ItemName == ItemName && Item.Quantity >= Quantity)
-//         {
-//             return true;
-//         }
-//     }
-//     return false;
-// }
+bool UPlayerInventoryComponent::HasItem(FName ItemName, int32 Quantity) const
+{
+    for (const FInventoryItem& Item : Inventory)
+    {
+        if (Item.ItemName == ItemName && Item.Quantity >= Quantity)
+        {
+            return true;
+        }
+    }
+    return false;
+}

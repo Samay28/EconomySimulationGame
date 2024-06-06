@@ -54,6 +54,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
 	void RemoveItem(FName ItemName, int32 Quantity);
 
-	// UFUNCTION(BlueprintCallable, Category = "Inventory")
-	// bool HasItem(FName ItemName, int32 Quantity) const;
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	bool HasItem(FName ItemName, int32 Quantity) const;
 };
