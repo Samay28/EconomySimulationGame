@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "PlayerInventoryComponent.h"
 #include "MyPlayerCharacter.generated.h"
 
 UCLASS()
@@ -46,6 +47,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	class UCameraComponent* CameraComponent;
+
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category="Inventory")
+	UPlayerInventoryComponent* PlayerInventoryComponent;
 
 protected:
 	// Called when the game starts or when spawned

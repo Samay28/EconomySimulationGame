@@ -21,6 +21,8 @@ AMyPlayerCharacter::AMyPlayerCharacter()
 
     CameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
     CameraComponent->SetupAttachment(SpringArm);
+
+    PlayerInventoryComponent = CreateDefaultSubobject<UPlayerInventoryComponent>(TEXT("PlayerInventory"));
 }
 
 void AMyPlayerCharacter::BeginPlay()

@@ -43,13 +43,6 @@ void AGameManager::Tick(float DeltaTime)
 }
 void AGameManager::TriggerDailyEconomy()
 {
-	for (ALand *LandActor : LandActors)
-	{
-		if (LandActor)
-		{
-			LandActor->DeductRent();
-		}
-	}
 	UE_LOG(LogTemp, Warning, TEXT("%d"), coins);
 	// Update each HouseActor
 	for (AHouseLand *HouseActor : HouseActors)
@@ -66,6 +59,13 @@ void AGameManager::TriggerDailyEconomy()
 		if (FarmActor)
 		{
 			FarmActor->HarvestCrops();
+		}
+	}
+	for (ALand *LandActor : LandActors)
+	{
+		if (LandActor)
+		{
+			LandActor->DeductRent();
 		}
 	}
 }
@@ -86,6 +86,7 @@ void AGameManager::DeleteFarmSave()
 	UGameplayStatics::DeleteGameInSlot(TEXT("FarmSaveSlot"), 0);
 	UGameplayStatics::DeleteGameInSlot(TEXT("ManagerSaveSlot"), 0);
 	UGameplayStatics::DeleteGameInSlot(TEXT("HouseSaveSlot"), 0);
+	UGameplayStatics::DeleteGameInSlot(TEXT("LandSaveSlot"), 0);
 	UE_LOG(LogTemp, Warning, TEXT("Save game deleted"));
 }
 
