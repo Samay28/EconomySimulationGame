@@ -38,6 +38,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	class AGameManager* GM;
+	class AMyPlayerCharacter* Player;
 
 private:
 	FTimerHandle RewardTimerHandle;

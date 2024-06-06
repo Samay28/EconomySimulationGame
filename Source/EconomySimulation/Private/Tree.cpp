@@ -1,5 +1,6 @@
 #include "Tree.h"
 #include "GameManager.h"
+#include "MyPlayerCharacter.h"
 #include "Kismet/GameplayStatics.h"
 #include "Math/UnrealMathUtility.h"
 
@@ -10,12 +11,11 @@ ATree::ATree()
     TreeMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Tree Mesh"));
     TreeMesh->SetupAttachment(RootComponent);
 
-    coinsToBeRewarded = 10;
+    // coinsToBeRewarded = 10;
     TimeToCut = 10;
     TimeToRegenerate = 60;
     CanBeCut = true;
     IsCutting = false; // Initialize IsCutting flag
-
 }
 
 void ATree::BeginPlay()
@@ -23,6 +23,9 @@ void ATree::BeginPlay()
     Super::BeginPlay();
     AActor *FoundActor = UGameplayStatics::GetActorOfClass(GetWorld(), AGameManager::StaticClass());
     GM = Cast<AGameManager>(FoundActor);
+
+    APlayerController *PlayerController = UGameplayStatics::GetPlayerController(this, 0);
+    Player = Cast<AMyPlayerCharacter>(PlayerController->GetCharacter());
     InitialRotation = GetActorRotation();
 }
 
@@ -41,9 +44,9 @@ void ATree::StartCuttingTrees()
 void ATree::ProvideRewards()
 {
     TreeMesh->SetVisibility(false);
-    coinsToBeRewarded = FMath::RandRange(5, 15);
-    GM->coins += coinsToBeRewarded;
-    UE_LOG(LogTemp, Warning, TEXT("Tree cut! Coins rewarded: %d"), coinsToBeRewarded);
+    int32 woodAwardedTemp = FMath::RandRange(10, 15);
+    Player->PlayerInventoryComponent->AddItem("wood", woodAwardedTemp);
+    UE_LOG(LogTemp, Warning, TEXT("Tree cut! Coins rewarded: %d"), woodAwardedTemp);
     CanBeCut = false;
     IsCutting = false; // Stop the cutting effect
     GetWorldTimerManager().SetTimer(RegenerationTimerHandle, this, &ATree::RegenerateTime, TimeToRegenerate, false);
