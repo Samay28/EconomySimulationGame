@@ -25,6 +25,9 @@ struct FFarmData
     
     UPROPERTY(VisibleAnywhere, Category = "SaveGameData")
     float CropsCost;
+
+    UPROPERTY(VisibleAnywhere, Category = "SaveGameData")
+    int32 count;
 };
 
 UCLASS()

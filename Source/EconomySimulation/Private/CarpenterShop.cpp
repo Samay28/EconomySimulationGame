@@ -1,6 +1,4 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "CarpenterShop.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameManager.h"
@@ -10,7 +8,8 @@ ACarpenterShop::ACarpenterShop()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+    ShopMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ShopMesh"));
+    SetRootComponent(ShopMesh);
 }
 
 // Called when the game starts or when spawned
@@ -25,7 +24,6 @@ void ACarpenterShop::BeginPlay()
 void ACarpenterShop::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 

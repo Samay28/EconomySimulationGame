@@ -12,13 +12,10 @@ class ECONOMYSIMULATION_API ACarpenterShop : public AActor
 {
 	GENERATED_BODY()
 	
-public:	
-	// Sets default values for this actor's properties
-	ACarpenterShop();
-
 protected:
-	// Called when the game starts or when spawned
+
 	virtual void BeginPlay() override;
+	ACarpenterShop();
 
 public:	
 	// Called every frame
@@ -28,4 +25,6 @@ public:
     void SellItem(AMyPlayerCharacter* PlayerCharacter, FName ItemName, int32 Quantity, int32 Value);
 
 	class AGameManager* GM;
+	UPROPERTY(EditAnywhere)
+	UStaticMeshComponent* ShopMesh;
 };

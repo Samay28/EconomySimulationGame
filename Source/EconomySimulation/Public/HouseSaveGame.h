@@ -22,6 +22,9 @@ struct FHouseData
 
 	UPROPERTY(VisibleAnywhere, Category = "SaveGameData")
 	int32 HouseID;
+
+	UPROPERTY(VisibleAnywhere, Category = "SaveGameData")
+	int32 count;
 };
 
 UCLASS()

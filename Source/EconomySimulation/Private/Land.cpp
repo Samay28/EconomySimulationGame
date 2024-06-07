@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "HouseLand.h"
 #include "FarmLand.h"
+#include "CarpenterShop.h"
 #include "LandSaveGame.h"
 #include "Land.h"
 #include "GameManager.h"
@@ -72,6 +73,38 @@ void ALand::ConvertToHouse()
 		Destroy(); 
 	}
 }
+
+void ALand::ConvertToCarpenterShop()
+{
+    if (!CarpenterShopBlueprint)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("CarpenterShopBlueprint is not set!"));
+        return;
+    }
+
+    // Spawn the Carpenter Shop Actor
+    ACarpenterShop* CarpenterShop = GetWorld()->SpawnActor<ACarpenterShop>(CarpenterShopBlueprint, GetActorLocation(), GetActorRotation());
+
+    if (CarpenterShop)
+    {
+        // Attach the Carpenter Shop to the LandMesh
+        CarpenterShop->AttachToComponent(LandMesh, FAttachmentTransformRules::SnapToTargetIncludingScale);
+
+        // Set transform values
+        CarpenterShop->SetActorRelativeLocation(FVector(0.0f, 0.0f, 200.0f));
+        CarpenterShop->SetActorRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
+        CarpenterShop->SetActorRelativeScale3D(FVector(0.4f, 0.5f, 1.0f));
+
+        UE_LOG(LogTemp, Warning, TEXT("Carpenter Shop successfully converted and attached to LandMesh"));
+        LandTypeNum = 3;
+        SaveGame();
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Failed to spawn Carpenter Shop"));
+    }
+}
+
 
 void ALand::ConvertToFarm()
 {
@@ -161,6 +194,10 @@ void ALand::LoadGame()
             {
                 ConvertToHouse();
             }
+			else if(LandTypeNum==3 && CarpenterShopBlueprint)
+			{
+				ConvertToCarpenterShop();
+			}
 
             break;
         }

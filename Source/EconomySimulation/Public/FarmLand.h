@@ -44,7 +44,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	int FarmSetupCost;
-
+	int count;
 private:
 
 	UPROPERTY(EditAnywhere, Category = "Farm")

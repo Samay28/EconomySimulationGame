@@ -18,6 +18,7 @@ AFarmLand::AFarmLand()
     bIsRented = false;
     HarvestProfit = 20;
     CropsCost = 10;
+    count = 0;
 
     FarmID = FMath::Rand();
     LoadGame();
@@ -25,8 +26,10 @@ AFarmLand::AFarmLand()
 void AFarmLand::BeginPlay()
 {
     Super::BeginPlay();
-    RentLandForFarming();
-    
+    if (count==0)
+    {
+        RentLandForFarming();
+    }
 }
 
 void AFarmLand::RentLandForFarming()
@@ -36,17 +39,17 @@ void AFarmLand::RentLandForFarming()
         HarvestProfit = FMath::RandRange(5, 25);
         Carrots->SetVisibility(true);
         bCropsSowed = true;
-        bIsRented = true;
         GM->coins -= FarmSetupCost;
         UE_LOG(LogTemp, Warning, TEXT("Farm Bought, Remaining money : %d"), GM->coins);
         GM->AddIncome(HarvestProfit);
         GM->AddExpenses(CropsCost);
+        count++;
         SaveGame();
     }
 }
 void AFarmLand::SaveGame()
 {
-    UFarmSaveGame* SaveGameInstance;
+    UFarmSaveGame *SaveGameInstance;
     if (UGameplayStatics::DoesSaveGameExist(TEXT("FarmSaveSlot"), 0))
     {
         SaveGameInstance = Cast<UFarmSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("FarmSaveSlot"), 0));
@@ -75,6 +78,7 @@ void AFarmLand::SaveGame()
     FarmData.bCropsSowed = bCropsSowed;
     FarmData.HarvestProfit = HarvestProfit;
     FarmData.CropsCost = CropsCost;
+    FarmData.count = count;
     UE_LOG(LogTemp, Warning, TEXT("Farm Saved1"));
 
     // Remove existing entry with the same FarmID
@@ -107,23 +111,23 @@ void AFarmLand::SaveGame()
     }
 }
 
-
 void AFarmLand::LoadGame()
-{   
+{
     UE_LOG(LogTemp, Warning, TEXT("Farm Loaded nah"));
     UFarmSaveGame *LoadGameInstance = Cast<UFarmSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("FarmSaveSlot"), 0));
     if (LoadGameInstance)
-    {   
+    {
         UE_LOG(LogTemp, Warning, TEXT("Farm Loaded nah2"));
         for (const FFarmData &FarmData : LoadGameInstance->FarmDataArray)
-        {   
+        {
             UE_LOG(LogTemp, Warning, TEXT("Farm Loaded nah3"));
             if (FarmData.FarmID == FarmID)
-            {   
+            {
                 bIsRented = FarmData.bIsRented;
                 bCropsSowed = FarmData.bCropsSowed;
                 HarvestProfit = FarmData.HarvestProfit;
                 CropsCost = FarmData.CropsCost;
+                count = FarmData.count;
                 UE_LOG(LogTemp, Warning, TEXT("Farm Loaded"));
                 Carrots->SetVisibility(bCropsSowed);
                 break;

@@ -40,11 +40,17 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ConvertToHouse();
 
+	UFUNCTION(BlueprintCallable)
+	void ConvertToCarpenterShop();
+
 	UPROPERTY(EditDefaultsOnly, Category = "Conversion")
 	TSubclassOf<class AHouseLand> HouseLandBlueprint;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Conversion")
 	TSubclassOf<class AFarmLand> FarmLandBlueprint;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Conversion")
+	TSubclassOf<class ACarpenterShop> CarpenterShopBlueprint;
 
 	UPROPERTY()
 	TArray<AActor *> CreatedActors;

@@ -47,4 +47,5 @@ protected:
 	virtual void BeginPlay() override;
 
 	int HouseConstructionCost;
+	int count;
 };
