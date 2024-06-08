@@ -30,6 +30,7 @@ public:
 	void AddExpenses(int Amount);
 	void AddIncome(int Amount);
 
+	UPROPERTY(BlueprintReadWrite)
 	bool BlockPlayerMovement;
 
 	UFUNCTION(BlueprintCallable, Category = "SaveLoad")

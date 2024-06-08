@@ -56,4 +56,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
 	bool HasItem(FName ItemName, int32 Quantity) const;
+
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	int32 GetItemQuantity(FName ItemName) const;
 };

@@ -76,3 +76,15 @@ bool UPlayerInventoryComponent::HasItem(FName ItemName, int32 Quantity) const
     }
     return false;
 }
+
+int32 UPlayerInventoryComponent::GetItemQuantity(FName ItemName) const
+{
+    for (const FInventoryItem& Item : Inventory)
+	{
+		if (Item.ItemName == ItemName)
+		{
+			return Item.Quantity;
+		}
+	}
+	return 0;
+}
