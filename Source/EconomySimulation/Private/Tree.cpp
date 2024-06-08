@@ -45,7 +45,7 @@ void ATree::ProvideRewards()
 {
     TreeMesh->SetVisibility(false);
     int32 woodAwardedTemp = FMath::RandRange(10, 15);
-    Player->PlayerInventoryComponent->AddItem("wood", woodAwardedTemp);
+    Player->PlayerInventoryComponent->AddItem("wood", woodAwardedTemp, 5);
     UE_LOG(LogTemp, Warning, TEXT("Tree cut! Coins rewarded: %d"), woodAwardedTemp);
     CanBeCut = false;
     IsCutting = false; // Stop the cutting effect

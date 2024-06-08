@@ -32,38 +32,47 @@ void UPlayerInventoryComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 	// ...
 }
 
-void UPlayerInventoryComponent::AddItem(FName ItemName, int32 Quantity)
+void UPlayerInventoryComponent::AddItem(FName ItemName, int32 Quantity, int32 Value)
 {
-	for(FInventoryItem& Item : Inventory)
-	{
-		if(Item.ItemName == ItemName)
-		{
-			Item.Quantity+=Quantity;
-			return;
-		}
-	}
-	Inventory.Add(FInventoryItem(ItemName,Quantity));
+    if (Quantity <= 0)
+    {
+        return;
+    }
+
+    FInventoryItem* FoundItem = Inventory.FindByPredicate([&](const FInventoryItem& Item) { return Item.ItemName == ItemName; });
+
+    if (FoundItem)
+    {
+        FoundItem->Quantity += Quantity;
+    }
+    else
+    {
+        Inventory.Add(FInventoryItem(ItemName, Quantity));
+        ItemValues.Add(ItemName, Value);  // Set the value for the new item
+    }
 }
+
 
 void UPlayerInventoryComponent::RemoveItem(FName ItemName, int32 Quantity)
 {
-    // Find the item in the inventory
-    for (int32 i = 0; i < Inventory.Num(); ++i)
+    if (Quantity <= 0)
     {
-        if (Inventory[i].ItemName == ItemName)
-        {
-            // Item found, decrease the quantity
-            Inventory[i].Quantity -= Quantity;
+        return;
+    }
 
-            // Remove the item if the quantity is zero or less
-            if (Inventory[i].Quantity <= 0)
-            {
-                Inventory.RemoveAt(i);
-            }
-            return;
+    FInventoryItem* FoundItem = Inventory.FindByPredicate([&](const FInventoryItem& Item) { return Item.ItemName == ItemName; });
+
+    if (FoundItem)
+    {
+        FoundItem->Quantity -= Quantity;
+        if (FoundItem->Quantity <= 0)
+        {
+            Inventory.RemoveSingle(*FoundItem);
+            ItemValues.Remove(ItemName);  // Remove the item value if the item is completely removed
         }
     }
 }
+
 
 bool UPlayerInventoryComponent::HasItem(FName ItemName, int32 Quantity) const
 {

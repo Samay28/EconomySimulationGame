@@ -22,9 +22,12 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
     UFUNCTION(BlueprintCallable, Category = "Shop")
-    void SellItem(AMyPlayerCharacter* PlayerCharacter, FName ItemName, int32 Quantity, int32 Value);
+    void SellItem(AMyPlayerCharacter* PlayerCharacter);
 
 	class AGameManager* GM;
+
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* ShopMesh;
+
+
 };

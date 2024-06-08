@@ -1,6 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "CarpenterShop.h"
 #include "Kismet/GameplayStatics.h"
+#include "MyPlayerCharacter.h"
 #include "GameManager.h"
 
 // Sets default values
@@ -27,19 +28,42 @@ void ACarpenterShop::Tick(float DeltaTime)
 }
 
 
-void ACarpenterShop::SellItem(AMyPlayerCharacter *PlayerCharacter, FName ItemName, int32 Quantity, int32 Value)
+void ACarpenterShop::SellItem(AMyPlayerCharacter* PlayerCharacter)
 {
-	if (PlayerCharacter && PlayerCharacter->PlayerInventoryComponent)
+    if (!PlayerCharacter || !PlayerCharacter->PlayerInventoryComponent)
     {
-        if (PlayerCharacter->PlayerInventoryComponent->HasItem(ItemName, Quantity))
+        UE_LOG(LogTemp, Warning, TEXT("PlayerCharacter or PlayerInventory is null"));
+        return;
+    }
+
+    UPlayerInventoryComponent* PlayerInventory = PlayerCharacter->PlayerInventoryComponent;
+    TArray<FInventoryItem>& Inventory = PlayerInventory->Inventory;
+    TMap<FName, int32>& ItemValues = PlayerInventory->ItemValues;
+
+    int32 TotalValue = 0;
+
+    for (const FInventoryItem& Item : Inventory)
+    {
+        int32* ItemValue = ItemValues.Find(Item.ItemName);
+        if (ItemValue)
         {
-            PlayerCharacter->PlayerInventoryComponent->RemoveItem(ItemName, Quantity);
-            GM->coins += Value*Quantity;
-            UE_LOG(LogTemp, Warning, TEXT("Sold %d %s"), Quantity, *ItemName.ToString());
+            int32 TotalItemValue = Item.Quantity * (*ItemValue);
+            TotalValue += TotalItemValue;
+
+            UE_LOG(LogTemp, Warning, TEXT("Sold %d of %s for %d coins"), Item.Quantity, *Item.ItemName.ToString(), TotalItemValue);
         }
         else
         {
-            UE_LOG(LogTemp, Warning, TEXT("Not enough items to sell"));
+            UE_LOG(LogTemp, Warning, TEXT("No value found for item: %s"), *Item.ItemName.ToString());
         }
     }
+
+    // Clear the inventory after selling everything
+    Inventory.Empty();
+    ItemValues.Empty();  // Clear item values as well
+
+    // Add the total value to the player's coins
+    GM->coins += TotalValue;
+
+    UE_LOG(LogTemp, Warning, TEXT("Total coins earned from selling all items: %d"), TotalValue);
 }

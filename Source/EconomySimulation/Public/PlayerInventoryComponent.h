@@ -17,20 +17,20 @@ struct FInventoryItem
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 Quantity;
 
-	FInventoryItem()   //This is the default constructor. It initializes an FInventoryItem instance with default values.
+	FInventoryItem() // This is the default constructor. It initializes an FInventoryItem instance with default values.
 		: ItemName(NAME_None), Quantity(0)
 	{
 	}
 
-	FInventoryItem(FName NewItemName, int32 NewQuantity) //This constructor allows the creation of an FInventoryItem instance with specific values for ItemName and Quantity.
+	FInventoryItem(FName NewItemName, int32 NewQuantity) // This constructor allows the creation of an FInventoryItem instance with specific values for ItemName and Quantity.
 		: ItemName(NewItemName), Quantity(NewQuantity)
 	{
 	}
 
-	bool operator==(const FInventoryItem& Other) const
-    {
-        return ItemName == Other.ItemName && Quantity == Other.Quantity;
-    }
+	bool operator==(const FInventoryItem &Other) const
+	{
+		return ItemName == Other.ItemName && Quantity == Other.Quantity;
+	}
 };
 
 UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
@@ -49,7 +49,7 @@ public:
 	TArray<FInventoryItem> Inventory;
 
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
-	void AddItem(FName ItemName, int32 Quantity);
+	void AddItem(FName ItemName, int32 Quantity, int32 Value);
 
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
 	void RemoveItem(FName ItemName, int32 Quantity);
@@ -59,4 +59,7 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
 	int32 GetItemQuantity(FName ItemName) const;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
+	TMap<FName, int32> ItemValues;
 };
