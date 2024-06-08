@@ -10,7 +10,6 @@
 // Sets default values
 ALand::ALand()
 {
-
 	PrimaryActorTick.bCanEverTick = true;
 	LandMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Normal Land"));
 	LandMesh->SetupAttachment(RootComponent);
