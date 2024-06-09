@@ -11,6 +11,9 @@ ATree::ATree()
     TreeMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Tree Mesh"));
     TreeMesh->SetupAttachment(RootComponent);
 
+    LandForTreeMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TreeLandMesh"));
+    LandForTreeMesh->SetupAttachment(RootComponent);
+
     // coinsToBeRewarded = 10;
     TimeToCut = 10;
     TimeToRegenerate = 60;
@@ -31,7 +34,6 @@ void ATree::BeginPlay()
 
 void ATree::StartCuttingTrees()
 {
-    UE_LOG(LogTemp, Warning, TEXT("fwfwfwf"));
     GetWorldTimerManager().SetTimer(RewardTimerHandle, this, &ATree::ProvideRewards, TimeToCut, false);
     if (CanBeCut)
     {
@@ -44,9 +46,11 @@ void ATree::StartCuttingTrees()
 void ATree::ProvideRewards()
 {
     TreeMesh->SetVisibility(false);
-    int32 woodAwardedTemp = FMath::RandRange(10, 15);
+    int32 woodAwardedTemp = FMath::RandRange(0, 2);
+    int32 leafAwardedTemp = FMath::RandRange(0, 5);
     Player->PlayerInventoryComponent->AddItem("wood", woodAwardedTemp, 5);
-    UE_LOG(LogTemp, Warning, TEXT("Tree cut! Coins rewarded: %d"), woodAwardedTemp);
+    Player->PlayerInventoryComponent->AddItem("leaf", leafAwardedTemp, 3);
+    UE_LOG(LogTemp, Warning, TEXT("Tree cut! wood rewarded: %d, leaf rewarded : %d"), woodAwardedTemp,leafAwardedTemp);
     CanBeCut = false;
     IsCutting = false; // Stop the cutting effect
     GetWorldTimerManager().SetTimer(RegenerationTimerHandle, this, &ATree::RegenerateTime, TimeToRegenerate, false);
@@ -65,11 +69,12 @@ void ATree::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
-    if (IsCutting)
+    if (IsCutting && TreeMesh)
     {
         const float Angle = FMath::Sin(GetWorld()->TimeSeconds * 50.0f) * 3.0f; // Fast sine wave to shake
-        FRotator NewRotation = GetActorRotation();
+        FRotator NewRotation = TreeMesh->GetRelativeRotation(); // Get the relative rotation of TreeMesh
         NewRotation.Pitch = Angle;
-        SetActorRotation(NewRotation);
+        TreeMesh->SetRelativeRotation(NewRotation); // Set the relative rotation of TreeMesh
     }
 }
+

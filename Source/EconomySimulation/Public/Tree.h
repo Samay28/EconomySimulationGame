@@ -18,6 +18,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent *TreeMesh;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UStaticMeshComponent *LandForTreeMesh;
 
 	int coinsToBeRewarded;
 	int TimeToCut;
