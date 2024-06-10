@@ -23,7 +23,7 @@ AMyPlayerCharacter::AMyPlayerCharacter()
     CameraComponent->SetupAttachment(SpringArm);
 
     PlayerInventoryComponent = CreateDefaultSubobject<UPlayerInventoryComponent>(TEXT("PlayerInventory"));
-    StartLocation = GetActorLocation();
+    StartLocation = FVector(-480,6680,350);
     JungleStartLocation = FVector(64072.112698f, 129536.133462f, 299.611306f);
 }
 
@@ -52,7 +52,7 @@ void AMyPlayerCharacter::SendBackPlayer()
         if (SpringArm)
         {
             SpringArm->TargetArmLength = 1390.f;
-            SpringArm->SetRelativeRotation(FRotator(0,0,0.f));
+            SpringArm->SetRelativeRotation(FRotator(0,180,0.f));
             SpringArm->SocketOffset = FVector(0.0f, 0.0f, 365.f);
             SpringArm->TargetOffset = FVector(0.0f, 0.0f, 450.f);
             SpringArm->bInheritYaw = false;

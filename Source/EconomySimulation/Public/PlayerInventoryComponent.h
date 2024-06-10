@@ -40,9 +40,15 @@ class ECONOMYSIMULATION_API UPlayerInventoryComponent : public UActorComponent
 
 public:
 	UPlayerInventoryComponent();
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	void SaveInventory();
+
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	void LoadInventory();
 
 protected:
 	virtual void BeginPlay() override;
+	
 
 public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction) override;

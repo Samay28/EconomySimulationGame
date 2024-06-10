@@ -63,6 +63,6 @@ void ACarpenterShop::SellItem(AMyPlayerCharacter* PlayerCharacter)
     ItemValues.Empty();  // Clear item values as well
 
     GM->coins += TotalValue;
-
+    PlayerInventory->SaveInventory();
     UE_LOG(LogTemp, Warning, TEXT("Total coins earned from selling all items: %d"), TotalValue);
 }
