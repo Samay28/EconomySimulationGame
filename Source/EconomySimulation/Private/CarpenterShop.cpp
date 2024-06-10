@@ -64,5 +64,6 @@ void ACarpenterShop::SellItem(AMyPlayerCharacter* PlayerCharacter)
 
     GM->coins += TotalValue;
     PlayerInventory->SaveInventory();
+    GM->SaveGame();
     UE_LOG(LogTemp, Warning, TEXT("Total coins earned from selling all items: %d"), TotalValue);
 }
