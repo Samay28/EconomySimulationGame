@@ -38,6 +38,8 @@ public:
 
 	bool bShouldMoveForward;
 	FRotator CurrentRotation;
+	FVector StartLocation;
+	FVector JungleStartLocation;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Economy")
 	int Coins;
@@ -50,6 +52,14 @@ public:
 
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category="Inventory")
 	UPlayerInventoryComponent* PlayerInventoryComponent;
+
+
+	//jungle
+	UFUNCTION(BlueprintCallable)
+	void TeleportPlayer();
+
+	UFUNCTION(BlueprintCallable)
+	void SendBackPlayer();
 
 protected:
 	// Called when the game starts or when spawned

@@ -12,7 +12,7 @@ ATree::ATree()
     TreeMesh->SetupAttachment(RootComponent);
 
     LandForTreeMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TreeLandMesh"));
-    LandForTreeMesh->SetupAttachment(RootComponent);
+    LandForTreeMesh->SetupAttachment(TreeMesh);
 
     // coinsToBeRewarded = 10;
     TimeToCut = 10;
@@ -69,12 +69,12 @@ void ATree::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 
-    if (IsCutting && TreeMesh)
-    {
-        const float Angle = FMath::Sin(GetWorld()->TimeSeconds * 50.0f) * 3.0f; // Fast sine wave to shake
-        FRotator NewRotation = TreeMesh->GetRelativeRotation(); // Get the relative rotation of TreeMesh
-        NewRotation.Pitch = Angle;
-        TreeMesh->SetRelativeRotation(NewRotation); // Set the relative rotation of TreeMesh
-    }
+    // if (IsCutting && TreeMesh)
+    // {
+    //     const float Angle = FMath::Sin(GetWorld()->TimeSeconds * 50.0f) * 3.0f; // Fast sine wave to shake
+    //     FRotator NewRotation = TreeMesh->GetRelativeRotation(); // Get the relative rotation of TreeMesh
+    //     NewRotation.Pitch = Angle;
+    //     TreeMesh->SetRelativeRotation(NewRotation); // Set the relative rotation of TreeMesh
+    // }
 }
 
