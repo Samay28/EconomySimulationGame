@@ -52,7 +52,7 @@ void AMyPlayerCharacter::SendBackPlayer()
         if (SpringArm)
         {
             SpringArm->TargetArmLength = 1390.f;
-            SpringArm->SetRelativeRotation(FRotator(0,180,0.f));
+            SpringArm->SetRelativeRotation(FRotator(0,-90,00.f));
             SpringArm->SocketOffset = FVector(0.0f, 0.0f, 365.f);
             SpringArm->TargetOffset = FVector(0.0f, 0.0f, 450.f);
             SpringArm->bInheritYaw = false;

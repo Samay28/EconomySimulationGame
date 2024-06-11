@@ -43,6 +43,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void ConvertToCarpenterShop();
 
+	UFUNCTION(BlueprintCallable)
+	void KeepSimpleLand();
+
 	UPROPERTY(EditDefaultsOnly, Category = "Conversion")
 	TSubclassOf<class AHouseLand> HouseLandBlueprint;
 

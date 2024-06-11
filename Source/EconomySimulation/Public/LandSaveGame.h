@@ -20,6 +20,12 @@ struct FLandSaveData
 
     UPROPERTY(VisibleAnywhere, Category = "SaveData")
     FRotator Rotation;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+    int32 Rent;
+    
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    bool bIsRented;
 };
 
 UCLASS()
