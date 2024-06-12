@@ -12,7 +12,7 @@ AGameManager::AGameManager()
 	PrimaryActorTick.bCanEverTick = true;
 	coins = 500;
 	Expenses = 0;
-	Income = 0;
+	Revenue = 0;
 	BlockPlayerMovement = false;
 }
 
@@ -78,7 +78,7 @@ void AGameManager::AddExpenses(int Amount)
 
 void AGameManager::AddIncome(int Amount)
 {
-	Income += Amount;
+	Revenue += Amount;
 }
 void AGameManager::DeleteFarmSave()
 {
@@ -98,7 +98,7 @@ void AGameManager::SaveGame()
 	{
 		SaveGameInstance->Coins = coins;
 		SaveGameInstance->Expenses = Expenses;
-		SaveGameInstance->Income = Income;
+		SaveGameInstance->Revenue = Revenue;
 
 		UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("ManagerSaveSlot"), 0);
 		UE_LOG(LogTemp, Warning, TEXT("Game saved"));
@@ -114,7 +114,7 @@ void AGameManager::LoadGame()
 		{
 			coins = LoadGameInstance->Coins;
 			Expenses = LoadGameInstance->Expenses;
-			Income = LoadGameInstance->Income;
+			Revenue = LoadGameInstance->Revenue;
 			UE_LOG(LogTemp, Warning, TEXT("Game loaded"));
 		}
 	}

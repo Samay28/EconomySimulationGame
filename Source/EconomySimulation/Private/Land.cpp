@@ -2,6 +2,7 @@
 #include "HouseLand.h"
 #include "FarmLand.h"
 #include "CarpenterShop.h"
+#include "FishShop.h"
 #include "LandSaveGame.h"
 #include "Land.h"
 #include "GameManager.h"
@@ -103,6 +104,37 @@ void ALand::ConvertToCarpenterShop()
     else
     {
         UE_LOG(LogTemp, Warning, TEXT("Failed to spawn Carpenter Shop"));
+    }
+}
+
+void ALand::ConvertToFishShop()
+{
+    if (!FishShopBlueprint)
+    {   
+        UE_LOG(LogTemp, Warning, TEXT("SUS"));
+        return;
+    }
+
+    // Spawn the Carpenter Shop Actor
+    AFishShop *FishShop = GetWorld()->SpawnActor<AFishShop>(FishShopBlueprint, GetActorLocation(), GetActorRotation());
+
+    if (FishShop)
+    {
+        // Attach the Carpenter Shop to the LandMesh
+        FishShop->AttachToComponent(LandMesh, FAttachmentTransformRules::SnapToTargetIncludingScale);
+
+        // Set transform values
+        FishShop->SetActorRelativeLocation(FVector(0.0f, 0.0f, 200.0f));
+        FishShop->SetActorRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
+        FishShop->SetActorRelativeScale3D(FVector(0.4f, 0.5f, 1.0f));
+
+        UE_LOG(LogTemp, Warning, TEXT("Fish Shop successfully converted and attached to LandMesh"));
+        LandTypeNum = 4;
+        SaveGame();
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Failed to spawn Fish Shop"));
     }
 }
 
@@ -208,7 +240,10 @@ void ALand::LoadGame()
             {
                 ConvertToCarpenterShop();
             }
-
+            else if (LandTypeNum == 4 && FishShopBlueprint)
+            {
+                ConvertToFishShop();
+            }
             break;
         }
     }

@@ -23,7 +23,7 @@ public:
 	int Expenses;
 
 	UPROPERTY(BlueprintReadOnly)
-	int Income;
+	int Revenue;
 
 	virtual void Tick(float DeltaTime) override;
 

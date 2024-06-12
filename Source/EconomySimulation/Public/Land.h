@@ -44,6 +44,9 @@ public:
 	void ConvertToCarpenterShop();
 
 	UFUNCTION(BlueprintCallable)
+	void ConvertToFishShop();
+
+	UFUNCTION(BlueprintCallable)
 	void KeepSimpleLand();
 
 	UPROPERTY(EditDefaultsOnly, Category = "Conversion")
@@ -54,6 +57,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Conversion")
 	TSubclassOf<class ACarpenterShop> CarpenterShopBlueprint;
+
+	UPROPERTY(EditAnywhere, Category = "Conversion")
+	TSubclassOf<class AFishShop> FishShopBlueprint;
 
 	UPROPERTY()
 	TArray<AActor *> CreatedActors;

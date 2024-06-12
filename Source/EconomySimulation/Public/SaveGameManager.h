@@ -23,5 +23,5 @@ public:
 	int32 Expenses;
 
 	UPROPERTY(VisibleAnywhere, Category = "SaveGameData")
-	int32 Income;
+	int32 Revenue;
 };

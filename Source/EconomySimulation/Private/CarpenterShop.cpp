@@ -1,7 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "CarpenterShop.h"
 #include "Kismet/GameplayStatics.h"
-#include "MyPlayerCharacter.h"
 #include "GameManager.h"
 
 // Sets default values
