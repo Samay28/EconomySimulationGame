@@ -47,6 +47,9 @@ public:
 	void ConvertToFishShop();
 
 	UFUNCTION(BlueprintCallable)
+	void ConvertToOresShop();
+
+	UFUNCTION(BlueprintCallable)
 	void KeepSimpleLand();
 
 	UPROPERTY(EditDefaultsOnly, Category = "Conversion")
@@ -60,6 +63,9 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Conversion")
 	TSubclassOf<class AFishShop> FishShopBlueprint;
+
+	UPROPERTY(EditAnywhere, Category = "Conversion")
+	TSubclassOf<class AOresShop> OresShopBlueprint;
 
 	UPROPERTY()
 	TArray<AActor *> CreatedActors;

@@ -3,6 +3,7 @@
 #include "FarmLand.h"
 #include "CarpenterShop.h"
 #include "FishShop.h"
+#include "OresShop.h"
 #include "LandSaveGame.h"
 #include "Land.h"
 #include "GameManager.h"
@@ -110,7 +111,7 @@ void ALand::ConvertToCarpenterShop()
 void ALand::ConvertToFishShop()
 {
     if (!FishShopBlueprint)
-    {   
+    {
         UE_LOG(LogTemp, Warning, TEXT("SUS"));
         return;
     }
@@ -135,6 +136,37 @@ void ALand::ConvertToFishShop()
     else
     {
         UE_LOG(LogTemp, Warning, TEXT("Failed to spawn Fish Shop"));
+    }
+}
+
+void ALand::ConvertToOresShop()
+{
+    if (!OresShopBlueprint)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("SUS2"));
+        return;
+    }
+
+    // Spawn the Carpenter Shop Actor
+    AOresShop *OresShop = GetWorld()->SpawnActor<AOresShop>(OresShopBlueprint, GetActorLocation(), GetActorRotation());
+
+    if (OresShop)
+    {
+        // Attach the Carpenter Shop to the LandMesh
+        OresShop->AttachToComponent(LandMesh, FAttachmentTransformRules::SnapToTargetIncludingScale);
+
+        // Set transform values
+        OresShop->SetActorRelativeLocation(FVector(0.0f, 0.0f, 200.0f));
+        OresShop->SetActorRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
+        OresShop->SetActorRelativeScale3D(FVector(0.4f, 0.5f, 1.0f));
+
+        UE_LOG(LogTemp, Warning, TEXT("Ores Shop successfully converted and attached to LandMesh"));
+        LandTypeNum = 5;
+        SaveGame();
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Failed to spawn Ores Shop"));
     }
 }
 
@@ -243,6 +275,10 @@ void ALand::LoadGame()
             else if (LandTypeNum == 4 && FishShopBlueprint)
             {
                 ConvertToFishShop();
+            }
+            else if (LandTypeNum == 5 && OresShopBlueprint)
+            {
+                ConvertToOresShop();
             }
             break;
         }
