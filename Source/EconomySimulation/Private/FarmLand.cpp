@@ -113,14 +113,11 @@ void AFarmLand::SaveGame()
 
 void AFarmLand::LoadGame()
 {
-    UE_LOG(LogTemp, Warning, TEXT("Farm Loaded nah"));
     UFarmSaveGame *LoadGameInstance = Cast<UFarmSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("FarmSaveSlot"), 0));
     if (LoadGameInstance)
     {
-        UE_LOG(LogTemp, Warning, TEXT("Farm Loaded nah2"));
         for (const FFarmData &FarmData : LoadGameInstance->FarmDataArray)
         {
-            UE_LOG(LogTemp, Warning, TEXT("Farm Loaded nah3"));
             if (FarmData.FarmID == FarmID)
             {
                 bIsRented = FarmData.bIsRented;
@@ -128,7 +125,6 @@ void AFarmLand::LoadGame()
                 HarvestProfit = FarmData.HarvestProfit;
                 CropsCost = FarmData.CropsCost;
                 count = FarmData.count;
-                UE_LOG(LogTemp, Warning, TEXT("Farm Loaded"));
                 Carrots->SetVisibility(bCropsSowed);
                 break;
             }
