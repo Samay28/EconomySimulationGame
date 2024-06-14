@@ -37,8 +37,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void RentLandForFarming();
 
-	virtual void SaveGame() override;
-
+	virtual void SaveGame() override;	
 	virtual void LoadGame() override;
 
 protected:

@@ -4,6 +4,7 @@
 #include "Land.h"
 #include "HouseLand.h"
 #include "FarmLand.h"
+#include "Pond.h"
 #include "SaveGameManager.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -33,6 +34,10 @@ void AGameManager::BeginPlay()
 	for (TActorIterator<AFarmLand> It(GetWorld()); It; ++It)
 	{
 		FarmActors.Add(*It);
+	}
+	for (TActorIterator<APond> It(GetWorld()); It; ++It)
+	{
+		PondActors.Add(*It);
 	}
 	GetWorldTimerManager().SetTimer(DayNightCycle, this, &AGameManager::TriggerDailyEconomy, 300.f, true);
 	LoadAll();
@@ -66,6 +71,13 @@ void AGameManager::TriggerDailyEconomy()
 		if (LandActor)
 		{
 			LandActor->DeductRent();
+		}
+	}
+	for (APond *PondActor : PondActors)
+	{
+		if (PondActor)
+		{
+			PondActor->DeductRent();
 		}
 	}
 }

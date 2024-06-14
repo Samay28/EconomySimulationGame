@@ -30,6 +30,7 @@ public:
 	void DeductRent();
 
 	class AGameManager *GM;
+	class AMyPlayerCharacter* Player;
 
 	UFUNCTION(BlueprintCallable)
 	void PurchaseLand();
@@ -39,6 +40,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void ConvertToHouse();
+
+	UFUNCTION(BlueprintCallable)
+	void ConvertToPond();
 
 	UFUNCTION(BlueprintCallable)
 	void ConvertToCarpenterShop();
@@ -57,6 +61,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Conversion")
 	TSubclassOf<class AFarmLand> FarmLandBlueprint;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Conversion")
+	TSubclassOf<class APond> PondBlueprint;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Conversion")
 	TSubclassOf<class ACarpenterShop> CarpenterShopBlueprint;

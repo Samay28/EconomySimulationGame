@@ -56,4 +56,5 @@ private:
 	TArray<class ALand *> LandActors;
 	TArray<class AFarmLand *> FarmActors;
 	TArray<class AHouseLand *> HouseActors;
+	TArray<class APond *> PondActors;
 };

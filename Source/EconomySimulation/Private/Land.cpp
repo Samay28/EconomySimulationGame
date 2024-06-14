@@ -1,12 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "HouseLand.h"
 #include "FarmLand.h"
+#include "Pond.h"
 #include "CarpenterShop.h"
 #include "FishShop.h"
 #include "OresShop.h"
 #include "LandSaveGame.h"
 #include "Land.h"
 #include "GameManager.h"
+#include "MyPlayerCharacter.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -72,6 +74,29 @@ void ALand::ConvertToHouse()
     {
         CreatedActors.Add(NewHouse);
         LandTypeNum = 2;
+        SaveGame();
+        Destroy();
+    }
+}
+
+void ALand::ConvertToPond()
+{
+    if (!PondBlueprint)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("PondBlueprint is not set."));
+        return;
+    }
+
+    FVector Location = GetActorLocation();
+    FActorSpawnParameters SpawnParams;
+    SpawnParams.Owner = this;
+    SpawnParams.Instigator = GetInstigator();
+
+    APond *NewPond = GetWorld()->SpawnActor<APond>(PondBlueprint, Location, FRotator::ZeroRotator, SpawnParams);
+    if (NewPond)
+    {
+        CreatedActors.Add(NewPond);
+        LandTypeNum = 6;
         SaveGame();
         Destroy();
     }
@@ -280,6 +305,11 @@ void ALand::LoadGame()
             {
                 ConvertToOresShop();
             }
+            else if (LandTypeNum == 6 && PondBlueprint)
+            {
+                ConvertToPond();
+            }
+
             break;
         }
     }
