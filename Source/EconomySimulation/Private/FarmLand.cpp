@@ -14,10 +14,10 @@ AFarmLand::AFarmLand()
     Carrots->SetupAttachment(LandMesh);
     Carrots->SetVisibility(false);
 
+    StorageComponent = CreateDefaultSubobject<UBusinessStorageComponent>(TEXT("Storage"));
+
     FarmSetupCost = 50;
-    bCropsSowed = false;
     bIsRented = false;
-    // HarvestProfit = 20;
     count = 0;
 
     FarmID = FMath::Rand();
@@ -32,7 +32,7 @@ void AFarmLand::BeginPlay()
     }
    if(bIsRented)
    {
-        GetWorldTimerManager().SetTimer(ResourceGeneratingHandle, this, &AFarmLand::HarvestCrops, 10.0f, true);
+        GetWorldTimerManager().SetTimer(ResourceGeneratingHandle, this, &AFarmLand::HarvestCropsToStorage, 10.0f, true);
     }
     APlayerController *PlayerController = UGameplayStatics::GetPlayerController(this, 0);
     Player = Cast<AMyPlayerCharacter>(PlayerController->GetCharacter());
@@ -47,7 +47,6 @@ void AFarmLand::RentLandForFarming()
         bIsRented = true;
         GM->coins -= FarmSetupCost;
         UE_LOG(LogTemp, Warning, TEXT("Farm Bought, Remaining money : %d"), GM->coins);
-        GM->AddIncome(HarvestProfit);
         count++;
         SaveGame();
     }
@@ -80,8 +79,6 @@ void AFarmLand::SaveGame()
     FFarmData FarmData;
     FarmData.FarmID = FarmID;
     FarmData.bIsRented = bIsRented;
-    FarmData.bCropsSowed = bCropsSowed;
-    FarmData.HarvestProfit = HarvestProfit;
     FarmData.count = count;
     UE_LOG(LogTemp, Warning, TEXT("Farm Saved1"));
 
@@ -125,10 +122,8 @@ void AFarmLand::LoadGame()
             if (FarmData.FarmID == FarmID)
             {
                 bIsRented = FarmData.bIsRented;
-                bCropsSowed = FarmData.bCropsSowed;
-                HarvestProfit = FarmData.HarvestProfit;
                 count = FarmData.count;
-                Carrots->SetVisibility(bCropsSowed);
+                Carrots->SetVisibility(bIsRented);
                 break;
             }
         }
@@ -139,7 +134,7 @@ void AFarmLand::Tick(float DeltaTime)
     Super::Tick(DeltaTime);
 }
 
-void AFarmLand::HarvestCrops()
+void AFarmLand::HarvestCropsToStorage()
 {
     if (bIsRented && Player && Player->PlayerInventoryComponent)
     {

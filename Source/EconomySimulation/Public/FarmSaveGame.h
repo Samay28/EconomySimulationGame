@@ -18,12 +18,6 @@ struct FFarmData
     bool bIsRented;
 
     UPROPERTY(VisibleAnywhere, Category = "SaveGameData")
-    bool bCropsSowed;
-
-    UPROPERTY(VisibleAnywhere, Category = "SaveGameData")
-    float HarvestProfit;
-
-    UPROPERTY(VisibleAnywhere, Category = "SaveGameData")
     int32 count;
 };
 

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Land.h"
 #include "SaveGameInterface.h"
+#include "BusinessStorageComponent.h"
 #include "FarmLand.generated.h"
 
 
@@ -17,23 +18,20 @@ public:
 	AFarmLand();
 
 	UPROPERTY(EditAnywhere)
-	int HarvestProfit;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	bool bCropsSowed;
-
-	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent *Carrots;
 
 	UFUNCTION(BlueprintCallable)
 	void RentLandForFarming();
 
-	void HarvestCrops();
+	void HarvestCropsToStorage();
 
 	virtual void SaveGame() override;	
 	virtual void LoadGame() override;
 
 	class AMyPlayerCharacter* Player;
+
+	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category="Storage")
+	UBusinessStorageComponent* StorageComponent;
 protected:
 
 	virtual void BeginPlay() override;

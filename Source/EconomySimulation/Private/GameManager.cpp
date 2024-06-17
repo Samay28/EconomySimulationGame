@@ -57,15 +57,6 @@ void AGameManager::TriggerDailyEconomy()
 			HouseActor->GetHouseRent();
 		}
 	}
-
-	// Update each FarmActor
-	for (AFarmLand *FarmActor : FarmActors)
-	{
-		if (FarmActor)
-		{
-			FarmActor->HarvestCrops();
-		}
-	}
 	for (APond *PondActor : PondActors)
 	{
 		if (PondActor)
