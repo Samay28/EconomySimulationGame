@@ -7,9 +7,7 @@
 #include "SaveGameInterface.h"
 #include "FarmLand.generated.h"
 
-/**
- *
- */
+
 UCLASS()
 class ECONOMYSIMULATION_API AFarmLand : public ALand, public ISaveGameInterface
 {
@@ -17,9 +15,6 @@ class ECONOMYSIMULATION_API AFarmLand : public ALand, public ISaveGameInterface
 
 public:
 	AFarmLand();
-
-	UPROPERTY(EditAnywhere)
-	int CropsCost;
 
 	UPROPERTY(EditAnywhere)
 	int HarvestProfit;
@@ -30,22 +25,26 @@ public:
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent *Carrots;
 
-	virtual void Tick(float DeltaTime) override;
-
-	void HarvestCrops();
-
 	UFUNCTION(BlueprintCallable)
 	void RentLandForFarming();
+
+	void HarvestCrops();
 
 	virtual void SaveGame() override;	
 	virtual void LoadGame() override;
 
+	class AMyPlayerCharacter* Player;
 protected:
+
 	virtual void BeginPlay() override;
+	virtual void Tick(float DeltaTime) override;
 	int FarmSetupCost;
 	int count;
+
 private:
 
 	UPROPERTY(EditAnywhere, Category = "Farm")
     int32 FarmID;
+
+	FTimerHandle ResourceGeneratingHandle;
 };

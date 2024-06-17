@@ -15,9 +15,6 @@ struct FHouseData
 	int PayCheck;
 
 	UPROPERTY(VisibleAnywhere, Category = "SaveGameData")
-	int MaintenanceFees;
-
-	UPROPERTY(VisibleAnywhere, Category = "SaveGameData")
 	bool DoesOwnHouse;
 
 	UPROPERTY(VisibleAnywhere, Category = "SaveGameData")

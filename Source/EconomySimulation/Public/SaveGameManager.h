@@ -18,10 +18,7 @@ public:
 
 	UPROPERTY(VisibleAnywhere, Category = "SaveGameData")
 	int32 Coins;
-
-	UPROPERTY(VisibleAnywhere, Category = "SaveGameData")
-	int32 Expenses;
-
+	
 	UPROPERTY(VisibleAnywhere, Category = "SaveGameData")
 	int32 Revenue;
 };

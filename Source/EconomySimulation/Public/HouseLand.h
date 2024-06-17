@@ -21,9 +21,6 @@ public:
 	UPROPERTY(EditAnywhere)
 	int PayCheck;
 
-	UPROPERTY(EditAnywhere)
-	int MaintenanceFees;
-
 	UPROPERTY(EditAnywhere,BlueprintReadOnly)
 	bool DoesOwnHouse;
 

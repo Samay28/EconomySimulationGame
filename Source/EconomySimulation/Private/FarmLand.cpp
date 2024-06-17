@@ -4,6 +4,7 @@
 #include "Components/SceneComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Math/UnrealMathUtility.h"
+#include "MyPlayerCharacter.h"
 #include "GameManager.h"
 #include "FarmSaveGame.h"
 
@@ -16,8 +17,7 @@ AFarmLand::AFarmLand()
     FarmSetupCost = 50;
     bCropsSowed = false;
     bIsRented = false;
-    HarvestProfit = 20;
-    CropsCost = 10;
+    // HarvestProfit = 20;
     count = 0;
 
     FarmID = FMath::Rand();
@@ -26,23 +26,28 @@ AFarmLand::AFarmLand()
 void AFarmLand::BeginPlay()
 {
     Super::BeginPlay();
-    if (count==0)
+    if (count == 0)
     {
         RentLandForFarming();
     }
+   if(bIsRented)
+   {
+        GetWorldTimerManager().SetTimer(ResourceGeneratingHandle, this, &AFarmLand::HarvestCrops, 10.0f, true);
+    }
+    APlayerController *PlayerController = UGameplayStatics::GetPlayerController(this, 0);
+    Player = Cast<AMyPlayerCharacter>(PlayerController->GetCharacter());
 }
 
 void AFarmLand::RentLandForFarming()
 {
     if (GM->coins >= FarmSetupCost && !bIsRented)
     {
-        HarvestProfit = FMath::RandRange(5, 25);
+        // HarvestProfit = FMath::RandRange(5, 25);
         Carrots->SetVisibility(true);
-        bCropsSowed = true;
+        bIsRented = true;
         GM->coins -= FarmSetupCost;
         UE_LOG(LogTemp, Warning, TEXT("Farm Bought, Remaining money : %d"), GM->coins);
         GM->AddIncome(HarvestProfit);
-        GM->AddExpenses(CropsCost);
         count++;
         SaveGame();
     }
@@ -77,7 +82,6 @@ void AFarmLand::SaveGame()
     FarmData.bIsRented = bIsRented;
     FarmData.bCropsSowed = bCropsSowed;
     FarmData.HarvestProfit = HarvestProfit;
-    FarmData.CropsCost = CropsCost;
     FarmData.count = count;
     UE_LOG(LogTemp, Warning, TEXT("Farm Saved1"));
 
@@ -123,7 +127,6 @@ void AFarmLand::LoadGame()
                 bIsRented = FarmData.bIsRented;
                 bCropsSowed = FarmData.bCropsSowed;
                 HarvestProfit = FarmData.HarvestProfit;
-                CropsCost = FarmData.CropsCost;
                 count = FarmData.count;
                 Carrots->SetVisibility(bCropsSowed);
                 break;
@@ -138,11 +141,42 @@ void AFarmLand::Tick(float DeltaTime)
 
 void AFarmLand::HarvestCrops()
 {
-    if (bCropsSowed)
+    if (bIsRented && Player && Player->PlayerInventoryComponent)
     {
-        HarvestProfit = FMath::RandRange(5, 25);
-        GM->coins -= CropsCost;
-        GM->coins += HarvestProfit;
-        UE_LOG(LogTemp, Warning, TEXT("Farm Profit : %d"), HarvestProfit);
+        // Define the probabilities
+        const float WheatProbability = 0.6f;
+        const float CarrotProbability = 0.3f;
+        const float PotatoProbability = 0.1f;
+
+        // Generate a random float between 0 and 1
+        float RandomValue = FMath::FRand();
+
+        FName AwardedCrop;
+        int Value;
+        if (RandomValue < WheatProbability)
+        {
+            AwardedCrop = "wheat";
+            Value = 10;
+        }
+        else if (RandomValue < WheatProbability + CarrotProbability)
+        {
+            AwardedCrop = "carrot";
+            Value = 20;
+        }
+        else
+        {
+            AwardedCrop = "potato";
+            Value = 25;
+        }
+        int32 Quantity = FMath::RandRange(1, 3);
+        Player->PlayerInventoryComponent->AddItem(AwardedCrop, Quantity, Value);
+
+        // Log the awarded crop and quantity for debugging
+        UE_LOG(LogTemp, Warning, TEXT("Harvested: %s, Quantity: %d"), *AwardedCrop.ToString(), Quantity);
+        Player->PlayerInventoryComponent->SaveInventory();
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Failed to harvest crops: Player or InventoryComponent not found"));
     }
 }

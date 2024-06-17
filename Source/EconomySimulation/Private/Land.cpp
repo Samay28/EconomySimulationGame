@@ -20,7 +20,6 @@ ALand::ALand()
 
     GrassMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Grass"));
     GrassMesh->SetupAttachment(LandMesh);
-    Rent = 1;
     LandCost = 50;
     bIsRented = false;
 
@@ -34,7 +33,6 @@ void ALand::PurchaseLand()
     {
         bIsRented = true;
         GrassMesh->SetVisibility(false);
-        GM->AddExpenses(Rent);
         LandTypeNum = 0;
         GM->coins -= LandCost;
         SaveGame();
@@ -50,9 +48,7 @@ void ALand::BeginPlay()
 
     if (GM && bIsRented)
     {
-        GM->AddExpenses(Rent);
         GrassMesh->SetVisibility(false);
-        UE_LOG(LogTemp, Warning, TEXT("Hi, %d"), GM->Expenses);
     }
 }
 
@@ -239,7 +235,6 @@ void ALand::SaveGame()
     SaveData.Location = GetActorLocation();
     SaveData.Rotation = GetActorRotation();
     SaveData.bIsRented = bIsRented;
-    SaveData.Rent = Rent;
 
     if (UGameplayStatics::DoesSaveGameExist(TEXT("LandSaveSlot"), 0))
     {
@@ -282,8 +277,7 @@ void ALand::LoadGame()
             LandTypeNum = SaveData.LandTypeNum;
             SetActorLocation(SaveData.Location);
             SetActorRotation(SaveData.Rotation);
-            bIsRented = SaveData.bIsRented; // Add this line
-            Rent = SaveData.Rent;           // Add this line
+            bIsRented = SaveData.bIsRented; // Add this line       
 
             if (LandTypeNum == 1 && FarmLandBlueprint)
             {
@@ -325,6 +319,5 @@ void ALand::DeductRent()
 {
     if (bIsRented)
     {
-        GM->coins -= Rent;
     }
 }

@@ -20,11 +20,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent *GrassMesh;
 
-	UPROPERTY(EditAnywhere)
-	int Rent;
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool bIsRented;
+	
 	int LandCost;
 
 	void DeductRent();

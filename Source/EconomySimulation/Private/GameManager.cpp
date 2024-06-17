@@ -12,7 +12,7 @@ AGameManager::AGameManager()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	coins = 500;
-	Expenses = 0;
+	// Expenses = 0;
 	Revenue = 0;
 	BlockPlayerMovement = false;
 }
@@ -66,27 +66,20 @@ void AGameManager::TriggerDailyEconomy()
 			FarmActor->HarvestCrops();
 		}
 	}
-	for (ALand *LandActor : LandActors)
-	{
-		if (LandActor)
-		{
-			LandActor->DeductRent();
-		}
-	}
 	for (APond *PondActor : PondActors)
 	{
 		if (PondActor)
 		{
-			PondActor->DeductRent();
+			PondActor->ProvideRewards();
 		}
 	}
 }
 // Called every frame
 
-void AGameManager::AddExpenses(int Amount)
-{
-	Expenses += Amount;
-}
+// void AGameManager::AddExpenses(int Amount)
+// {
+// 	Expenses += Amount;
+// }
 
 void AGameManager::AddIncome(int Amount)
 {
@@ -110,7 +103,7 @@ void AGameManager::SaveGame()
 	if (SaveGameInstance)
 	{
 		SaveGameInstance->Coins = coins;
-		SaveGameInstance->Expenses = Expenses;
+		// SaveGameInstance->Expenses = Expenses;
 		SaveGameInstance->Revenue = Revenue;
 
 		UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("ManagerSaveSlot"), 0);
@@ -126,7 +119,7 @@ void AGameManager::LoadGame()
 		if (LoadGameInstance)
 		{
 			coins = LoadGameInstance->Coins;
-			Expenses = LoadGameInstance->Expenses;
+			// Expenses = LoadGameInstance->Expenses;
 			Revenue = LoadGameInstance->Revenue;
 			UE_LOG(LogTemp, Warning, TEXT("Game loaded"));
 		}

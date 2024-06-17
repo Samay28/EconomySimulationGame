@@ -19,15 +19,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int coins;
 
-	UPROPERTY(BlueprintReadOnly)
-	int Expenses;
+	// UPROPERTY(BlueprintReadOnly)
+	// int Expenses;
 
 	UPROPERTY(BlueprintReadOnly)
 	int Revenue;
 
 	virtual void Tick(float DeltaTime) override;
 
-	void AddExpenses(int Amount);
+	// void AddExpenses(int Amount);
 	void AddIncome(int Amount);
 
 	UPROPERTY(BlueprintReadWrite)

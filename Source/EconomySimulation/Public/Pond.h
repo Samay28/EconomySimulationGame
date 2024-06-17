@@ -17,9 +17,6 @@ class ECONOMYSIMULATION_API APond : public ALand
 public:
 	APond();
 
-	UPROPERTY(EditAnywhere)
-	int CleaningCost;
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool IsPurchased;
 

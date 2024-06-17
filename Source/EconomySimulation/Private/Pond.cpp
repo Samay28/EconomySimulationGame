@@ -14,8 +14,7 @@ APond::APond()
     WaterMesh->SetupAttachment(LandMesh);
 
     PondSetupCost = 50;
-    IsPurchased = true;
-    CleaningCost = 10;
+    IsPurchased = false;
     count = 0;
     PondLevel = 1;
 
@@ -47,7 +46,6 @@ void APond::SetupPond()
         PondLevel = 1;
         IsPurchased = true;
         GM->coins -= PondSetupCost;
-        GM->AddExpenses(CleaningCost);
         count++;
         SaveGame();
     }

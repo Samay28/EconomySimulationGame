@@ -17,7 +17,6 @@ AHouseLand::AHouseLand()
     DoesOwnHouse = false;
     PayCheck = 30;
     count = 0;
-    MaintenanceFees = 10;
 
     HouseID = FMath::Rand();
     LoadGame();
@@ -36,7 +35,6 @@ void AHouseLand::GetHouseRent()
     {
         PayCheck = FMath::RandRange(5, 45);
         UE_LOG(LogTemp, Warning, TEXT("Credited House Rent"));
-        GM->coins -= MaintenanceFees;
         GM->coins += PayCheck;
     }
 }
@@ -51,7 +49,6 @@ void AHouseLand::OwnHouse()
         GM->coins -= HouseConstructionCost;
         UE_LOG(LogTemp, Warning, TEXT("House Bought, Remaining money : %d"), GM->coins);
         GM->AddIncome(PayCheck);
-        GM->AddExpenses(MaintenanceFees);
         count++;
         SaveGame();
     }
@@ -89,7 +86,6 @@ void AHouseLand::SaveGame()
     HouseData.HouseID = HouseID;
     HouseData.DoesOwnHouse = DoesOwnHouse;
     HouseData.PayCheck = PayCheck;
-    HouseData.MaintenanceFees = MaintenanceFees;
     HouseData.count = count;
     UE_LOG(LogTemp, Warning, TEXT("House Saved1"));
 
@@ -137,7 +133,6 @@ void AHouseLand::LoadGame()
             {
                 DoesOwnHouse = HouseData.DoesOwnHouse;
                 PayCheck = HouseData.PayCheck;
-                MaintenanceFees = HouseData.MaintenanceFees;
                 count = HouseData.count;
                 UE_LOG(LogTemp, Warning, TEXT("House Loaded"));
                 HouseMesh->SetVisibility(DoesOwnHouse);
