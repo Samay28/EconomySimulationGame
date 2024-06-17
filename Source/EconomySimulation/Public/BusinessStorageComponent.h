@@ -17,19 +17,22 @@ struct FStorageItem
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int32 Quantity;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 Value;
+
 	FStorageItem() // This is the default constructor. It initializes an FStorageItem instance with default values.
-		: ItemName(NAME_None), Quantity(0)
+		: ItemName(NAME_None), Quantity(0) , Value(0)
 	{
 	}
 
-	FStorageItem(FName NewItemName, int32 NewQuantity) // This constructor allows the creation of an FStorageItem instance with specific values for ItemName and Quantity.
-		: ItemName(NewItemName), Quantity(NewQuantity)
+	FStorageItem(FName NewItemName, int32 NewQuantity, int32 NewValue) // This constructor allows the creation of an FStorageItem instance with specific values for ItemName and Quantity.
+		: ItemName(NewItemName), Quantity(NewQuantity), Value(NewValue)
 	{
 	}
 
 	bool operator==(const FStorageItem &Other) const
 	{
-		return ItemName == Other.ItemName && Quantity == Other.Quantity;
+		return ItemName == Other.ItemName && Quantity == Other.Quantity && Value == Other.Value;
 	}
 };
 
@@ -71,5 +74,8 @@ public:
 	int32 GetItemQuantity(FName ItemName) const;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
-	TMap<FName, int32> ItemValues;		
+	TMap<FName, int32> ItemValues;	
+
+	TArray<FStorageItem> GetItems() const;	
+	void ClearItems();
 };

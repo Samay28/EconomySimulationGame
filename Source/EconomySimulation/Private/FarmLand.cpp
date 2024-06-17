@@ -30,9 +30,10 @@ void AFarmLand::BeginPlay()
     {
         RentLandForFarming();
     }
-   if(bIsRented)
-   {
+    if (bIsRented)
+    {
         GetWorldTimerManager().SetTimer(ResourceGeneratingHandle, this, &AFarmLand::HarvestCropsToStorage, 10.0f, true);
+        StorageComponent->LoadStorage();
     }
     APlayerController *PlayerController = UGameplayStatics::GetPlayerController(this, 0);
     Player = Cast<AMyPlayerCharacter>(PlayerController->GetCharacter());
@@ -164,14 +165,27 @@ void AFarmLand::HarvestCropsToStorage()
             Value = 25;
         }
         int32 Quantity = FMath::RandRange(1, 3);
-        Player->PlayerInventoryComponent->AddItem(AwardedCrop, Quantity, Value);
+        StorageComponent->AddItem(AwardedCrop, Quantity, Value);
 
         // Log the awarded crop and quantity for debugging
         UE_LOG(LogTemp, Warning, TEXT("Harvested: %s, Quantity: %d"), *AwardedCrop.ToString(), Quantity);
-        Player->PlayerInventoryComponent->SaveInventory();
+        StorageComponent->SaveStorage();
     }
     else
     {
         UE_LOG(LogTemp, Warning, TEXT("Failed to harvest crops: Player or InventoryComponent not found"));
+    }
+}
+void AFarmLand::TransferItems()
+{
+    if (Player && Player->PlayerInventoryComponent && StorageComponent)
+    {
+        for (const auto &Item : StorageComponent->GetItems())
+        {
+            Player->PlayerInventoryComponent->AddItem(Item.ItemName, Item.Quantity, Item.Value);
+            StorageComponent->RemoveItem(Item.ItemName, Item.Quantity);
+            UE_LOG(LogTemp, Warning, TEXT("Name: %s, Quantity: %d, Value : %d"), *Item.ItemName.ToString(), Item.Quantity, Item.Value);
+            StorageComponent->SaveStorage();
+        }
     }
 }

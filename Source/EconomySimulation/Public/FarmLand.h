@@ -23,6 +23,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void RentLandForFarming();
 
+	UFUNCTION(BlueprintCallable)
+	void TransferItems();
+
 	void HarvestCropsToStorage();
 
 	virtual void SaveGame() override;	
@@ -45,4 +48,5 @@ private:
     int32 FarmID;
 
 	FTimerHandle ResourceGeneratingHandle;
+	
 };
