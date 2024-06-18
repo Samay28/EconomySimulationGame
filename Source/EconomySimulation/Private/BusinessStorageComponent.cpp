@@ -7,23 +7,22 @@
 // Sets default values for this component's properties
 UBusinessStorageComponent::UBusinessStorageComponent()
 {
-	PrimaryComponentTick.bCanEverTick = true;
+    PrimaryComponentTick.bCanEverTick = true;
 }
 
 void UBusinessStorageComponent::SaveStorage()
 {
-    UStorageSaveClass* SaveGameInstance = Cast<UStorageSaveClass>(UGameplayStatics::CreateSaveGameObject(UStorageSaveClass::StaticClass()));
+    UStorageSaveClass *SaveGameInstance = Cast<UStorageSaveClass>(UGameplayStatics::CreateSaveGameObject(UStorageSaveClass::StaticClass()));
 
-    for (const FStorageItem& Item : Storage)
+    for (const FStorageItem &Item : Storage)
     {
         SaveGameInstance->SavedStorage.Add(FStorageItemData(Item.ItemName, Item.Quantity, Item.Value));
         UE_LOG(LogTemp, Warning, TEXT("Saving item - Name: %s, Quantity: %d, Value: %d"), *Item.ItemName.ToString(), Item.Quantity, Item.Value);
     }
 
-    for (const auto& ItemValue : ItemValues)
+    for (const auto &ItemValue : ItemValues)
     {
         SaveGameInstance->SavedItemValues.Add(ItemValue.Key, ItemValue.Value);
-        UE_LOG(LogTemp, Warning, TEXT("Saving item value - Name: %s, Value: %d"), *ItemValue.Key.ToString(), ItemValue.Value);
     }
 
     if (UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("StorageSlot"), 0))
@@ -36,10 +35,9 @@ void UBusinessStorageComponent::SaveStorage()
     }
 }
 
-
 void UBusinessStorageComponent::LoadStorage()
 {
-    UStorageSaveClass* LoadGameInstance = Cast<UStorageSaveClass>(UGameplayStatics::LoadGameFromSlot(TEXT("StorageSlot"), 0));
+    UStorageSaveClass *LoadGameInstance = Cast<UStorageSaveClass>(UGameplayStatics::LoadGameFromSlot(TEXT("StorageSlot"), 0));
     if (LoadGameInstance)
     {
         Storage.Empty();
@@ -47,7 +45,7 @@ void UBusinessStorageComponent::LoadStorage()
 
         UE_LOG(LogTemp, Warning, TEXT("Loaded game instance, number of saved items: %d"), LoadGameInstance->SavedStorage.Num());
 
-        for (const FStorageItemData& ItemData : LoadGameInstance->SavedStorage)
+        for (const FStorageItemData &ItemData : LoadGameInstance->SavedStorage)
         {
             Storage.Add(FStorageItem(ItemData.ItemName, ItemData.Quantity, ItemData.Value));
             UE_LOG(LogTemp, Warning, TEXT("Loaded item - Name: %s, Quantity: %d, Value: %d"), *ItemData.ItemName.ToString(), ItemData.Quantity, ItemData.Value);
@@ -55,7 +53,7 @@ void UBusinessStorageComponent::LoadStorage()
 
         UE_LOG(LogTemp, Warning, TEXT("Loaded game instance, number of saved item values: %d"), LoadGameInstance->SavedItemValues.Num());
 
-        for (const auto& ItemValue : LoadGameInstance->SavedItemValues)
+        for (const auto &ItemValue : LoadGameInstance->SavedItemValues)
         {
             ItemValues.Add(ItemValue.Key, ItemValue.Value);
             UE_LOG(LogTemp, Warning, TEXT("Loaded item value - Name: %s, Value: %d"), *ItemValue.Key.ToString(), ItemValue.Value);
@@ -72,16 +70,16 @@ void UBusinessStorageComponent::LoadStorage()
 // Called when the game starts
 void UBusinessStorageComponent::BeginPlay()
 {
-	Super::BeginPlay();
-
+    Super::BeginPlay();
+    LoadStorage();
 }
 
 // Called every frame
 void UBusinessStorageComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+    Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+    // ...
 }
 
 void UBusinessStorageComponent::AddItem(FName ItemName, int32 Quantity, int32 Value)
@@ -89,10 +87,8 @@ void UBusinessStorageComponent::AddItem(FName ItemName, int32 Quantity, int32 Va
     if (Quantity <= 0)
         return;
 
-    FStorageItem* FoundItem = Storage.FindByPredicate([&](const FStorageItem& Item)
-    {
-        return Item.ItemName == ItemName;
-    });
+    FStorageItem *FoundItem = Storage.FindByPredicate([&](const FStorageItem &Item)
+                                                      { return Item.ItemName == ItemName; });
 
     if (FoundItem)
     {
@@ -103,63 +99,64 @@ void UBusinessStorageComponent::AddItem(FName ItemName, int32 Quantity, int32 Va
     {
         Storage.Add(FStorageItem(ItemName, Quantity, Value));
     }
-    ItemValues.Add(ItemName, Value);
+    if (ItemValues.Contains(ItemName))
+    {
+        ItemValues[ItemName] = Value;
+    }
+    else
+    {
+        ItemValues.Add(ItemName, Value);
+    }
     SaveStorage();
 }
 
 void UBusinessStorageComponent::RemoveItem(FName ItemName, int32 Quantity)
 {
-	if (Quantity <= 0)
-	{
-		return;
-	}
-
-	FStorageItem *FoundItem = Storage.FindByPredicate([&](const FStorageItem &Item)
-													  { return Item.ItemName == ItemName; });
-
-	if (FoundItem)
-	{
-		FoundItem->Quantity -= Quantity;
-		if (FoundItem->Quantity <= 0)
-		{
-			Storage.RemoveSingle(*FoundItem);
-			ItemValues.Remove(ItemName); // Remove the item value if the item is completely removed
-		}
-
-		SaveStorage();
-	}
+    for (int32 i = 0; i < Storage.Num(); ++i)
+    {
+        if (Storage[i].ItemName == ItemName)
+        {
+            Storage[i].Quantity -= Quantity;
+            if (Storage[i].Quantity <= 0)
+            {
+                Storage.RemoveAt(i);
+            }
+            return;
+        }
+    }
+    SaveStorage();
 }
 
 bool UBusinessStorageComponent::HasItem(FName ItemName, int32 Quantity) const
 {
-	for (const FStorageItem &Item : Storage)
-	{
-		if (Item.ItemName == ItemName && Item.Quantity >= Quantity)
-		{
-			return true;
-		}
-	}
-	return false;
+    for (const FStorageItem &Item : Storage)
+    {
+        if (Item.ItemName == ItemName && Item.Quantity >= Quantity)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 int32 UBusinessStorageComponent::GetItemQuantity(FName ItemName) const
 {
-	for (const FStorageItem &Item : Storage)
-	{
-		if (Item.ItemName == ItemName)
-		{
-			return Item.Quantity;
-		}
-	}
-	return 0;
+    for (const FStorageItem &Item : Storage)
+    {
+        if (Item.ItemName == ItemName)
+        {
+            return Item.Quantity;
+        }
+    }
+    return 0;
 }
 
 TArray<FStorageItem> UBusinessStorageComponent::GetItems() const
 {
-	return Storage;
+    return Storage;
 }
 
 void UBusinessStorageComponent::ClearItems()
 {
-	Storage.Empty();
+    Storage.Empty();
 }

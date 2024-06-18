@@ -33,7 +33,7 @@ void AFarmLand::BeginPlay()
     if (bIsRented)
     {
         GetWorldTimerManager().SetTimer(ResourceGeneratingHandle, this, &AFarmLand::HarvestCropsToStorage, 10.0f, true);
-        StorageComponent->LoadStorage();
+        // StorageComponent->LoadStorage();
     }
     APlayerController *PlayerController = UGameplayStatics::GetPlayerController(this, 0);
     Player = Cast<AMyPlayerCharacter>(PlayerController->GetCharacter());
