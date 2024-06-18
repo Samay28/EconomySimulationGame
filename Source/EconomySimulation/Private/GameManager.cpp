@@ -57,13 +57,6 @@ void AGameManager::TriggerDailyEconomy()
 			HouseActor->GetHouseRent();
 		}
 	}
-	for (APond *PondActor : PondActors)
-	{
-		if (PondActor)
-		{
-			PondActor->ProvideRewards();
-		}
-	}
 }
 // Called every frame
 

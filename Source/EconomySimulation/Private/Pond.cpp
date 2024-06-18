@@ -4,6 +4,7 @@
 #include "Components/SceneComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "MyPlayerCharacter.h"
+#include "BusinessStorageComponent.h"
 #include "PondSaveGame.h"
 #include "Math/UnrealMathUtility.h"
 #include "GameManager.h"
@@ -12,6 +13,8 @@ APond::APond()
 {
     WaterMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("WaterMesh"));
     WaterMesh->SetupAttachment(LandMesh);
+
+    StorageComponent = CreateDefaultSubobject<UBusinessStorageComponent>(TEXT("Storage Component"));
 
     PondSetupCost = 50;
     IsPurchased = false;
@@ -28,10 +31,10 @@ void APond::BeginPlay()
     {
         SetupPond();
     }
+
+    GetWorldTimerManager().SetTimer(ItemsProvider, this, &APond::ProvideResourcesToStorage, 10.0f, true);
     APlayerController *PlayerController = UGameplayStatics::GetPlayerController(this, 0);
     Player = Cast<AMyPlayerCharacter>(PlayerController->GetCharacter());
-    ProvideRewards();
-    
 }
 
 void APond::Tick(float DeltaTime)
@@ -51,17 +54,51 @@ void APond::SetupPond()
     }
 }
 
-void APond::ProvideRewards()
+void APond::ProvideResourcesToStorage()
 {
-    int TroutAwardedTemp = FMath::RandRange(1, 4);
-    int TunaAwardedTemp = FMath::RandRange(0, 2);
-    int SalmonAwardedTemp = FMath::RandRange(0, 1);
+    const float TroutProbability = 0.6f;
+    const float TunaProbability = 0.3f;
+    const float SalmonProbability = 0.1f;
 
-    Player->PlayerInventoryComponent->AddItem("trout", TroutAwardedTemp, 15);
-    Player->PlayerInventoryComponent->AddItem("tuna", TunaAwardedTemp, 25);
-    Player->PlayerInventoryComponent->AddItem("salmon", SalmonAwardedTemp, 40);
-    Player->PlayerInventoryComponent->SaveInventory();
-    UE_LOG(LogTemp, Warning, TEXT("trout : %d, tuna : %d, salmon : %d"), TroutAwardedTemp, TunaAwardedTemp, SalmonAwardedTemp);
+    // Generate a random float between 0 and 1
+    float RandomValue = FMath::FRand();
+
+    FName AwardedFish;
+    int Value;
+    if (RandomValue < TroutProbability)
+    {
+        AwardedFish = "trout";
+        Value = 20;
+    }
+    else if (RandomValue < TroutProbability + TunaProbability)
+    {
+        AwardedFish = "tuna";
+        Value = 30;
+    }
+    else
+    {
+        AwardedFish = "salmon";
+        Value = 45;
+    }
+    int32 Quantity = FMath::RandRange(1, 2);
+    StorageComponent->AddItem(AwardedFish, Quantity, Value);
+
+    UE_LOG(LogTemp, Warning, TEXT("Harvested: %s, Quantity: %d"), *AwardedFish.ToString(), Quantity);
+    StorageComponent->SaveStorage();
+}
+
+void APond::TransferItems()
+{
+    if (Player && Player->PlayerInventoryComponent && StorageComponent)
+    {
+        for (const auto &Item : StorageComponent->GetItems())
+        {
+            Player->PlayerInventoryComponent->AddItem(Item.ItemName, Item.Quantity, Item.Value);
+            StorageComponent->RemoveItem(Item.ItemName, Item.Quantity);
+            UE_LOG(LogTemp, Warning, TEXT("Name: %s, Quantity: %d, Value : %d"), *Item.ItemName.ToString(), Item.Quantity, Item.Value);
+            StorageComponent->SaveStorage();
+        }
+    }
 }
 
 void APond::SaveGame()
@@ -133,7 +170,7 @@ void APond::LoadGame()
         for (const FPondData &PondData : LoadGameInstance->PondDataArray)
         {
             if (PondData.PondID == PondID)
-            {   
+            {
                 UE_LOG(LogTemp, Error, TEXT("BAAAH"));
                 IsPurchased = PondData.IsPurchased;
                 count = PondData.count;
@@ -142,4 +179,3 @@ void APond::LoadGame()
         }
     }
 }
-

@@ -25,16 +25,21 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-	void ProvideRewards();
+
+	UFUNCTION(BlueprintCallable)
+	void TransferItems();
 
 	UFUNCTION(BlueprintCallable)
 	void SetupPond();
 
+	void ProvideResourcesToStorage();
 	void SaveGame();
 	void LoadGame();
 
 	int PondLevel;
-	// class MyPlayerCharacter* Player;
+	
+	UPROPERTY(EditAnywhere,BlueprintReadOnly)
+	class UBusinessStorageComponent* StorageComponent;
 
 protected:
 	virtual void BeginPlay() override;
@@ -44,4 +49,6 @@ protected:
 private:
 	UPROPERTY(EditAnywhere, Category = "Pond")
 	int32 PondID;
+
+	FTimerHandle ItemsProvider;
 };
