@@ -49,6 +49,7 @@ void APond::SetupPond()
         PondLevel = 1;
         IsPurchased = true;
         GM->coins -= PondSetupCost;
+        GM->SaveGame();
         count++;
         SaveGame();
     }

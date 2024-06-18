@@ -11,16 +11,19 @@ struct FHouseData
 {	
 	GENERATED_BODY()
 
-	UPROPERTY(VisibleAnywhere, Category = "SaveGameData")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int PayCheck;
 
-	UPROPERTY(VisibleAnywhere, Category = "SaveGameData")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	int RentCollected;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool DoesOwnHouse;
 
-	UPROPERTY(VisibleAnywhere, Category = "SaveGameData")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int32 HouseID;
 
-	UPROPERTY(VisibleAnywhere, Category = "SaveGameData")
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int32 count;
 };
 

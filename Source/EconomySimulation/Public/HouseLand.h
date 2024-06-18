@@ -11,7 +11,7 @@
  *
  */
 UCLASS()
-class ECONOMYSIMULATION_API AHouseLand : public ALand, public ISaveGameInterface
+class ECONOMYSIMULATION_API AHouseLand : public ALand
 {
 	GENERATED_BODY()
 
@@ -21,11 +21,14 @@ public:
 	UPROPERTY(EditAnywhere)
 	int PayCheck;
 
-	UPROPERTY(EditAnywhere,BlueprintReadOnly)
+	UPROPERTY(EditAnywhere)
+	int RentCollected;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool DoesOwnHouse;
 
 	UPROPERTY(VisibleAnywhere, Category = "SaveGameData")
-    int32 HouseID;
+	int32 HouseID;
 
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent *HouseMesh;
@@ -35,9 +38,11 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void OwnHouse();
 
-	virtual void SaveGame() override;
-	virtual void LoadGame() override;
+	void SaveGame();
+	void LoadGame();
 
+	UFUNCTION(BlueprintCallable)
+	void TransferRent();
 
 protected:
 	virtual void Tick(float DeltaTime) override;
@@ -45,4 +50,6 @@ protected:
 
 	int HouseConstructionCost;
 	int count;
+
+	FTimerHandle HouseRent;
 };

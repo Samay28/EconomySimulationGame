@@ -15,34 +15,41 @@ AHouseLand::AHouseLand()
     HouseConstructionCost = 50;
     bIsRented = false;
     DoesOwnHouse = false;
-    PayCheck = 30;
+    PayCheck = 10;
+    RentCollected = 0;
     count = 0;
 
-    HouseID = FMath::Rand();
-    LoadGame();
+    // Generate a unique HouseID
 }
+
 void AHouseLand::BeginPlay()
 {
     Super::BeginPlay();
-    if (count == 0)
+
+    if (HouseID == 0)
     {
-        OwnHouse();
+        HouseID = FMath::Rand();
     }
+    LoadGame();
+    SaveGame(); // Save the generated HouseID if it's new
+
+    OwnHouse();
+    GetWorldTimerManager().SetTimer(HouseRent, this, &AHouseLand::GetHouseRent, 10.0f, true);
 }
+
 void AHouseLand::GetHouseRent()
 {
     if (DoesOwnHouse)
     {
-        PayCheck = FMath::RandRange(5, 45);
-        UE_LOG(LogTemp, Warning, TEXT("Credited House Rent"));
-        GM->coins += PayCheck;
+        RentCollected += PayCheck;
+        SaveGame();
+        UE_LOG(LogTemp, Warning, TEXT("total Rent : %d"), RentCollected);
     }
 }
 void AHouseLand::OwnHouse()
 {
     if (GM->coins >= HouseConstructionCost && !DoesOwnHouse)
     {
-        PayCheck = FMath::RandRange(5, 45);
         DoesOwnHouse = true;
         HouseMesh->SetVisibility(true);
         bIsRented = true;
@@ -86,10 +93,11 @@ void AHouseLand::SaveGame()
     HouseData.HouseID = HouseID;
     HouseData.DoesOwnHouse = DoesOwnHouse;
     HouseData.PayCheck = PayCheck;
+    HouseData.RentCollected = RentCollected;
     HouseData.count = count;
-    UE_LOG(LogTemp, Warning, TEXT("House Saved1"));
+    UE_LOG(LogTemp, Warning, TEXT("total Rent Saved As : %d"), HouseData.RentCollected);
 
-    // Remove existing entry with the same FarmID
+    // Remove existing entry with the same id
     bool bFoundExisting = false;
     for (int32 i = 0; i < SaveGameInstance->HouseDataArray.Num(); ++i)
     {
@@ -97,7 +105,6 @@ void AHouseLand::SaveGame()
         {
             SaveGameInstance->HouseDataArray.RemoveAt(i);
             bFoundExisting = true;
-            UE_LOG(LogTemp, Warning, TEXT("House Saved"));
             break;
         }
     }
@@ -121,23 +128,39 @@ void AHouseLand::SaveGame()
 
 void AHouseLand::LoadGame()
 {
-    UE_LOG(LogTemp, Warning, TEXT("House Loaded nah"));
     UHouseSaveGame *LoadGameInstance = Cast<UHouseSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("HouseSaveSlot"), 0));
     if (LoadGameInstance)
     {
-        UE_LOG(LogTemp, Warning, TEXT("House Loaded nah2"));
         for (const FHouseData &HouseData : LoadGameInstance->HouseDataArray)
         {
-            UE_LOG(LogTemp, Warning, TEXT("Farm Loaded nah3"));
-            if (HouseData.HouseID == HouseID)
-            {
-                DoesOwnHouse = HouseData.DoesOwnHouse;
-                PayCheck = HouseData.PayCheck;
-                count = HouseData.count;
-                UE_LOG(LogTemp, Warning, TEXT("House Loaded"));
-                HouseMesh->SetVisibility(DoesOwnHouse);
-                break;
-            }
+
+            DoesOwnHouse = HouseData.DoesOwnHouse;
+            PayCheck = HouseData.PayCheck;
+            count = HouseData.count;
+            RentCollected = HouseData.RentCollected;
+            HouseMesh->SetVisibility(DoesOwnHouse);
+            UE_LOG(LogTemp, Warning, TEXT("Loaded HouseID: %d, Rent: %d"), HouseID, RentCollected);
+            return; 
         }
+
+        // If no matching HouseID found, generate a new one and save it
+        HouseID = FMath::Rand();
+        SaveGame();
+        UE_LOG(LogTemp, Warning, TEXT("Generated new HouseID: %d"), HouseID);
     }
+    else
+    {
+        UE_LOG(LogTemp, Error, TEXT("Failed to load save game from slot: HouseSaveSlot"));
+        HouseID = FMath::Rand();
+        SaveGame();
+        UE_LOG(LogTemp, Warning, TEXT("Generated new HouseID: %d"), HouseID);
+    }
+}
+
+void AHouseLand::TransferRent()
+{
+    GM->coins += RentCollected;
+    RentCollected = 0;
+    SaveGame();
+    GM->SaveGame();
 }
