@@ -2,58 +2,38 @@
 #include "StorageSaveClass.h"
 #include "Kismet/GameplayStatics.h"
 
-// Sets default values for this component's properties
+TMap<FName, int32> UBusinessStorageComponent::GlobalItemQuantities;
 UBusinessStorageComponent::UBusinessStorageComponent()
 {
     PrimaryComponentTick.bCanEverTick = true;
 }
 
+void UBusinessStorageComponent::BeginPlay()
+{
+    Super::BeginPlay();
+    LoadStorage();
+}
+
+// Called every frame
+void UBusinessStorageComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
+{
+    Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+}
+
 void UBusinessStorageComponent::SaveStorage()
 {
-    UStorageSaveClass *SaveGameInstance;
-    if (UGameplayStatics::DoesSaveGameExist(TEXT("StorageSlot"), 0))
+    UStorageSaveClass *SaveGameInstance = Cast<UStorageSaveClass>(UGameplayStatics::CreateSaveGameObject(UStorageSaveClass::StaticClass()));
+
+    for (const auto &ItemQuantity : GlobalItemQuantities)
     {
-        SaveGameInstance = Cast<UStorageSaveClass>(UGameplayStatics::LoadGameFromSlot(TEXT("StorageSlot"), 0));
-        if (!SaveGameInstance)
-        {
-            UE_LOG(LogTemp, Error, TEXT("Failed to load save game instance from slot: StorageSlot"));
-            return;
-        }
-    }
-    else
-    {
-        SaveGameInstance = Cast<UStorageSaveClass>(UGameplayStatics::CreateSaveGameObject(UStorageSaveClass::StaticClass()));
-        if (!SaveGameInstance)
-        {
-            UE_LOG(LogTemp, Error, TEXT("Failed to create save game instance for Storage"));
-            return;
-        }
+        SaveGameInstance->SavedStorage.Add(FStorageItemData(ItemQuantity.Key, ItemQuantity.Value, ItemValues.Contains(ItemQuantity.Key) ? ItemValues[ItemQuantity.Key] : 0));
+        UE_LOG(LogTemp, Warning, TEXT("Saving item - Name: %s, Quantity: %d"), *ItemQuantity.Key.ToString(), ItemQuantity.Value);
     }
 
-    // Merge current storage with saved storage
-    for (const FStorageItem &CurrentItem : Storage)
+    for (const auto &ItemValue : ItemValues)
     {
-        bool bItemFound = false;
-        for (FStorageItemData &SavedItem : SaveGameInstance->SavedStorage)
-        {
-            if (SavedItem.ItemName == CurrentItem.ItemName)
-            {
-                SavedItem.Quantity += CurrentItem.Quantity;
-                SavedItem.Value = CurrentItem.Value;
-                bItemFound = true;
-                break;
-            }
-        }
-        if (!bItemFound)
-        {
-            SaveGameInstance->SavedStorage.Add(FStorageItemData(CurrentItem.ItemName, CurrentItem.Quantity, CurrentItem.Value));
-        }
-    }
-
-    // Merge current item values with saved item values
-    for (const auto &CurrentItemValue : ItemValues)
-    {
-        SaveGameInstance->SavedItemValues.FindOrAdd(CurrentItemValue.Key) = CurrentItemValue.Value;
+        SaveGameInstance->SavedItemValues.Add(ItemValue.Key, ItemValue.Value);
     }
 
     if (UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("StorageSlot"), 0))
@@ -71,30 +51,22 @@ void UBusinessStorageComponent::LoadStorage()
     UStorageSaveClass *LoadGameInstance = Cast<UStorageSaveClass>(UGameplayStatics::LoadGameFromSlot(TEXT("StorageSlot"), 0));
     if (LoadGameInstance)
     {
+        GlobalItemQuantities.Empty();
+        ItemValues.Empty();
+
         UE_LOG(LogTemp, Warning, TEXT("Loaded game instance, number of saved items: %d"), LoadGameInstance->SavedStorage.Num());
 
-        for (const FStorageItemData &SavedItem : LoadGameInstance->SavedStorage)
+        for (const FStorageItemData &ItemData : LoadGameInstance->SavedStorage)
         {
-            FStorageItem *FoundItem = Storage.FindByPredicate([&](const FStorageItem &Item)
-                                                              { return Item.ItemName == SavedItem.ItemName; });
-            if (FoundItem)
-            {
-                FoundItem->Quantity += SavedItem.Quantity;
-                FoundItem->Value = SavedItem.Value;
-            }
-            else
-            {
-                Storage.Add(FStorageItem(SavedItem.ItemName, SavedItem.Quantity, SavedItem.Value));
-            }
-            UE_LOG(LogTemp, Warning, TEXT("Loaded item - Name: %s, Quantity: %d, Value: %d"), *SavedItem.ItemName.ToString(), SavedItem.Quantity, SavedItem.Value);
+            GlobalItemQuantities.Add(ItemData.ItemName, ItemData.Quantity);
+            ItemValues.Add(ItemData.ItemName, ItemData.Value);
+            UE_LOG(LogTemp, Warning, TEXT("Loaded item - Name: %s, Quantity: %d, Value: %d"), *ItemData.ItemName.ToString(), ItemData.Quantity, ItemData.Value);
         }
 
-        UE_LOG(LogTemp, Warning, TEXT("Loaded game instance, number of saved item values: %d"), LoadGameInstance->SavedItemValues.Num());
-
-        for (const auto &SavedItemValue : LoadGameInstance->SavedItemValues)
+        for (const auto &ItemValue : LoadGameInstance->SavedItemValues)
         {
-            ItemValues.FindOrAdd(SavedItemValue.Key) = SavedItemValue.Value;
-            UE_LOG(LogTemp, Warning, TEXT("Loaded item value - Name: %s, Value: %d"), *SavedItemValue.Key.ToString(), SavedItemValue.Value);
+            ItemValues.Add(ItemValue.Key, ItemValue.Value);
+            UE_LOG(LogTemp, Warning, TEXT("Loaded item value - Name: %s, Value: %d"), *ItemValue.Key.ToString(), ItemValue.Value);
         }
 
         UE_LOG(LogTemp, Warning, TEXT("Storage loaded successfully"));
@@ -105,38 +77,24 @@ void UBusinessStorageComponent::LoadStorage()
     }
 }
 
+
 // Called when the game starts
-void UBusinessStorageComponent::BeginPlay()
-{
-    Super::BeginPlay();
-    LoadStorage();
-}
 
-// Called every frame
-void UBusinessStorageComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction *ThisTickFunction)
-{
-    Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-    // ...
-}
 
 void UBusinessStorageComponent::AddItem(FName ItemName, int32 Quantity, int32 Value)
 {
     if (Quantity <= 0)
         return;
 
-    FStorageItem *FoundItem = Storage.FindByPredicate([&](const FStorageItem &Item)
-                                                      { return Item.ItemName == ItemName; });
-
-    if (FoundItem)
+    if (GlobalItemQuantities.Contains(ItemName))
     {
-        FoundItem->Quantity += Quantity;
-        FoundItem->Value = Value; // Ensure the value is updated if item already exists
+        GlobalItemQuantities[ItemName] += Quantity;
     }
     else
     {
-        Storage.Add(FStorageItem(ItemName, Quantity, Value));
+        GlobalItemQuantities.Add(ItemName, Quantity);
     }
+
     if (ItemValues.Contains(ItemName))
     {
         ItemValues[ItemName] = Value;
@@ -145,56 +103,49 @@ void UBusinessStorageComponent::AddItem(FName ItemName, int32 Quantity, int32 Va
     {
         ItemValues.Add(ItemName, Value);
     }
+
     SaveStorage();
 }
 
 void UBusinessStorageComponent::RemoveItem(FName ItemName, int32 Quantity)
 {
-    for (int32 i = 0; i < Storage.Num(); ++i)
+    if (GlobalItemQuantities.Contains(ItemName))
     {
-        if (Storage[i].ItemName == ItemName)
+        GlobalItemQuantities[ItemName] -= Quantity;
+        if (GlobalItemQuantities[ItemName] <= 0)
         {
-            Storage[i].Quantity -= Quantity;
-            if (Storage[i].Quantity <= 0)
-            {
-                Storage.RemoveAt(i);
-            }
-            return;
+            GlobalItemQuantities.Remove(ItemName);
         }
+
+        SaveStorage();
     }
-    SaveStorage();
 }
 
 bool UBusinessStorageComponent::HasItem(FName ItemName, int32 Quantity) const
 {
-    for (const FStorageItem &Item : Storage)
-    {
-        if (Item.ItemName == ItemName && Item.Quantity >= Quantity)
-        {
-            return true;
-        }
-    }
-    return false;
+    const int32* FoundQuantity = GlobalItemQuantities.Find(ItemName);
+    return FoundQuantity && *FoundQuantity >= Quantity;
 }
 
 int32 UBusinessStorageComponent::GetItemQuantity(FName ItemName) const
 {
-    for (const FStorageItem &Item : Storage)
-    {
-        if (Item.ItemName == ItemName)
-        {
-            return Item.Quantity;
-        }
-    }
-    return 0;
+    const int32* FoundQuantity = GlobalItemQuantities.Find(ItemName);
+    return FoundQuantity ? *FoundQuantity : 0;
 }
 
 TArray<FStorageItem> UBusinessStorageComponent::GetItems() const
 {
-    return Storage;
+    TArray<FStorageItem> Items;
+    for (const auto &ItemQuantity : GlobalItemQuantities)
+    {
+        int32 Value = ItemValues.Contains(ItemQuantity.Key) ? ItemValues[ItemQuantity.Key] : 0;
+        Items.Add(FStorageItem(ItemQuantity.Key, ItemQuantity.Value, Value));
+    }
+    return Items;
 }
 
 void UBusinessStorageComponent::ClearItems()
 {
     Storage.Empty();
+    SaveStorage();
 }

@@ -179,9 +179,9 @@ void AFarmLand::TransferItems()
         for (const auto &Item : StorageComponent->GetItems())
         {
             Player->PlayerInventoryComponent->AddItem(Item.ItemName, Item.Quantity, Item.Value);
-            StorageComponent->RemoveItem(Item.ItemName, Item.Quantity);
-            UE_LOG(LogTemp, Warning, TEXT("Name: %s, Quantity: %d, Value : %d"), *Item.ItemName.ToString(), Item.Quantity, Item.Value);
+            UE_LOG(LogTemp, Warning, TEXT("TRANSFERRING Name: %s, Quantity: %d, Value : %d"), *Item.ItemName.ToString(), Item.Quantity, Item.Value);
             StorageComponent->SaveStorage();
         }
     }
+    StorageComponent->ClearItems();
 }

@@ -55,6 +55,8 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	static TMap<FName, int32> GlobalItemQuantities;
+
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
