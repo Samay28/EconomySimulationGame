@@ -166,7 +166,6 @@ void AFarmLand::HarvestCropsToStorage()
         }
         int32 Quantity = FMath::RandRange(1, 3);
         StorageComponent->AddItem(AwardedCrop, Quantity, Value);
-        StorageComponent->SaveStorage();
     }
     else
     {

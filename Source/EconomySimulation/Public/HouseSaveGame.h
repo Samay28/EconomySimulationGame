@@ -15,13 +15,13 @@ struct FHouseData
 	int PayCheck;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	int RentCollected;
+	int32 RentCollected;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	bool DoesOwnHouse;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	int32 HouseID;
+	// UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	// int32 HouseID;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int32 count;

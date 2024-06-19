@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #include "BusinessStorageComponent.h"
 #include "StorageSaveClass.h"
 #include "Kismet/GameplayStatics.h"
@@ -12,17 +10,50 @@ UBusinessStorageComponent::UBusinessStorageComponent()
 
 void UBusinessStorageComponent::SaveStorage()
 {
-    UStorageSaveClass *SaveGameInstance = Cast<UStorageSaveClass>(UGameplayStatics::CreateSaveGameObject(UStorageSaveClass::StaticClass()));
-
-    for (const FStorageItem &Item : Storage)
+    UStorageSaveClass *SaveGameInstance;
+    if (UGameplayStatics::DoesSaveGameExist(TEXT("StorageSlot"), 0))
     {
-        SaveGameInstance->SavedStorage.Add(FStorageItemData(Item.ItemName, Item.Quantity, Item.Value));
-        UE_LOG(LogTemp, Warning, TEXT("Saving item - Name: %s, Quantity: %d, Value: %d"), *Item.ItemName.ToString(), Item.Quantity, Item.Value);
+        SaveGameInstance = Cast<UStorageSaveClass>(UGameplayStatics::LoadGameFromSlot(TEXT("StorageSlot"), 0));
+        if (!SaveGameInstance)
+        {
+            UE_LOG(LogTemp, Error, TEXT("Failed to load save game instance from slot: StorageSlot"));
+            return;
+        }
+    }
+    else
+    {
+        SaveGameInstance = Cast<UStorageSaveClass>(UGameplayStatics::CreateSaveGameObject(UStorageSaveClass::StaticClass()));
+        if (!SaveGameInstance)
+        {
+            UE_LOG(LogTemp, Error, TEXT("Failed to create save game instance for Storage"));
+            return;
+        }
     }
 
-    for (const auto &ItemValue : ItemValues)
+    // Merge current storage with saved storage
+    for (const FStorageItem &CurrentItem : Storage)
     {
-        SaveGameInstance->SavedItemValues.Add(ItemValue.Key, ItemValue.Value);
+        bool bItemFound = false;
+        for (FStorageItemData &SavedItem : SaveGameInstance->SavedStorage)
+        {
+            if (SavedItem.ItemName == CurrentItem.ItemName)
+            {
+                SavedItem.Quantity += CurrentItem.Quantity;
+                SavedItem.Value = CurrentItem.Value;
+                bItemFound = true;
+                break;
+            }
+        }
+        if (!bItemFound)
+        {
+            SaveGameInstance->SavedStorage.Add(FStorageItemData(CurrentItem.ItemName, CurrentItem.Quantity, CurrentItem.Value));
+        }
+    }
+
+    // Merge current item values with saved item values
+    for (const auto &CurrentItemValue : ItemValues)
+    {
+        SaveGameInstance->SavedItemValues.FindOrAdd(CurrentItemValue.Key) = CurrentItemValue.Value;
     }
 
     if (UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("StorageSlot"), 0))
@@ -40,23 +71,30 @@ void UBusinessStorageComponent::LoadStorage()
     UStorageSaveClass *LoadGameInstance = Cast<UStorageSaveClass>(UGameplayStatics::LoadGameFromSlot(TEXT("StorageSlot"), 0));
     if (LoadGameInstance)
     {
-        Storage.Empty();
-        ItemValues.Empty();
-
         UE_LOG(LogTemp, Warning, TEXT("Loaded game instance, number of saved items: %d"), LoadGameInstance->SavedStorage.Num());
 
-        for (const FStorageItemData &ItemData : LoadGameInstance->SavedStorage)
+        for (const FStorageItemData &SavedItem : LoadGameInstance->SavedStorage)
         {
-            Storage.Add(FStorageItem(ItemData.ItemName, ItemData.Quantity, ItemData.Value));
-            UE_LOG(LogTemp, Warning, TEXT("Loaded item - Name: %s, Quantity: %d, Value: %d"), *ItemData.ItemName.ToString(), ItemData.Quantity, ItemData.Value);
+            FStorageItem *FoundItem = Storage.FindByPredicate([&](const FStorageItem &Item)
+                                                              { return Item.ItemName == SavedItem.ItemName; });
+            if (FoundItem)
+            {
+                FoundItem->Quantity += SavedItem.Quantity;
+                FoundItem->Value = SavedItem.Value;
+            }
+            else
+            {
+                Storage.Add(FStorageItem(SavedItem.ItemName, SavedItem.Quantity, SavedItem.Value));
+            }
+            UE_LOG(LogTemp, Warning, TEXT("Loaded item - Name: %s, Quantity: %d, Value: %d"), *SavedItem.ItemName.ToString(), SavedItem.Quantity, SavedItem.Value);
         }
 
         UE_LOG(LogTemp, Warning, TEXT("Loaded game instance, number of saved item values: %d"), LoadGameInstance->SavedItemValues.Num());
 
-        for (const auto &ItemValue : LoadGameInstance->SavedItemValues)
+        for (const auto &SavedItemValue : LoadGameInstance->SavedItemValues)
         {
-            ItemValues.Add(ItemValue.Key, ItemValue.Value);
-            UE_LOG(LogTemp, Warning, TEXT("Loaded item value - Name: %s, Value: %d"), *ItemValue.Key.ToString(), ItemValue.Value);
+            ItemValues.FindOrAdd(SavedItemValue.Key) = SavedItemValue.Value;
+            UE_LOG(LogTemp, Warning, TEXT("Loaded item value - Name: %s, Value: %d"), *SavedItemValue.Key.ToString(), SavedItemValue.Value);
         }
 
         UE_LOG(LogTemp, Warning, TEXT("Storage loaded successfully"));

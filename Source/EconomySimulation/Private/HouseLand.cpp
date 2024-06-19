@@ -3,6 +3,9 @@
 #include "HouseSaveGame.h"
 #include "Math/UnrealMathUtility.h"
 #include "Kismet/GameplayStatics.h"
+#include "EngineUtils.h"
+
+int AHouseLand::RentCollected = 0;
 
 AHouseLand::AHouseLand()
 {
@@ -14,22 +17,13 @@ AHouseLand::AHouseLand()
     bIsRented = false;
     DoesOwnHouse = false;
     PayCheck = 10;
-    RentCollected = 0;
     count = 0;
-
-    // Generate a unique HouseID
 }
 
 void AHouseLand::BeginPlay()
 {
     Super::BeginPlay();
-
-    if (HouseID == 0)
-    {
-        HouseID = FMath::Rand();
-    }
     LoadGame();
-
     OwnHouse();
     GetWorldTimerManager().SetTimer(HouseRent, this, &AHouseLand::GetHouseRent, 10.0f, true);
 }
@@ -88,31 +82,23 @@ void AHouseLand::SaveGame()
     // Log to verify loading or creation of SaveGameInstance
     UE_LOG(LogTemp, Warning, TEXT("SaveGameInstance loaded or created"));
 
+    // Aggregate the rent from all instances
+    // int32 TotalRentCollected = 0;
+    // for (TActorIterator<AHouseLand> It(GetWorld()); It; ++It)
+    // {
+    //     AHouseLand* House = *It;
+    //     RentCollected += House->RentCollected;
+    // }
+
     FHouseData HouseData;
-    HouseData.HouseID = HouseID;
     HouseData.DoesOwnHouse = DoesOwnHouse;
     HouseData.PayCheck = PayCheck;
     HouseData.RentCollected = RentCollected;
     HouseData.count = count;
-    UE_LOG(LogTemp, Warning, TEXT("total Rent Saved As : %d"), HouseData.RentCollected);
+    UE_LOG(LogTemp, Warning, TEXT("Total Rent Saved As : %d"), HouseData.RentCollected);
 
-    // Remove existing entry with the same id
-    bool bFoundExisting = false;
-    for (int32 i = 0; i < SaveGameInstance->HouseDataArray.Num(); ++i)
-    {
-        if (SaveGameInstance->HouseDataArray[i].HouseID == HouseID)
-        {
-            SaveGameInstance->HouseDataArray.RemoveAt(i);
-            bFoundExisting = true;
-            break;
-        }
-    }
-
-    if (!bFoundExisting)
-    {
-        UE_LOG(LogTemp, Warning, TEXT("No existing entry with the same HouseID found. Adding new entry."));
-    }
-
+    // Add or update the house data in the array
+    SaveGameInstance->HouseDataArray.Empty();
     SaveGameInstance->HouseDataArray.Add(HouseData);
 
     if (UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("HouseSaveSlot"), 0))
@@ -128,27 +114,19 @@ void AHouseLand::SaveGame()
 void AHouseLand::LoadGame()
 {
     UHouseSaveGame *LoadGameInstance = Cast<UHouseSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("HouseSaveSlot"), 0));
-    if (LoadGameInstance)
+    if (LoadGameInstance && LoadGameInstance->HouseDataArray.Num() > 0)
     {
-        for (const FHouseData &HouseData : LoadGameInstance->HouseDataArray)
-        {
-            // Check if the HouseID matches
-            if (HouseData.HouseID == HouseID)
-            {
-                DoesOwnHouse = HouseData.DoesOwnHouse;
-                PayCheck = HouseData.PayCheck;
-                count = HouseData.count;
-                RentCollected = HouseData.RentCollected;
-                HouseMesh->SetVisibility(DoesOwnHouse);
-                UE_LOG(LogTemp, Warning, TEXT("Loaded HouseID: %d, Rent: %d"), HouseID, RentCollected);
-                return; // House data loaded successfully
-            }
-        }
-        UE_LOG(LogTemp, Warning, TEXT("No matching HouseID found in saved data."));
+        const FHouseData &HouseData = LoadGameInstance->HouseDataArray[0];
+        DoesOwnHouse = HouseData.DoesOwnHouse;
+        PayCheck = HouseData.PayCheck;
+        count = HouseData.count;
+        RentCollected = HouseData.RentCollected;
+        HouseMesh->SetVisibility(DoesOwnHouse);
+        UE_LOG(LogTemp, Warning, TEXT("Loaded RentCollected: %d"), RentCollected);
     }
     else
     {
-        UE_LOG(LogTemp, Error, TEXT("Failed to load save game from slot: HouseSaveSlot"));
+        UE_LOG(LogTemp, Error, TEXT("Failed to load save game from slot: HouseSaveSlot or no saved data found"));
     }
 }
 
@@ -156,6 +134,7 @@ void AHouseLand::TransferRent()
 {
     GM->coins += RentCollected;
     RentCollected = 0;
+
     SaveGame();
     GM->SaveGame();
 }

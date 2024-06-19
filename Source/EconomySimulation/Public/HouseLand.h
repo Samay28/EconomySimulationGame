@@ -21,14 +21,11 @@ public:
 	UPROPERTY(EditAnywhere)
 	int PayCheck;
 
-	UPROPERTY(EditAnywhere)
-	int RentCollected;
-
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool DoesOwnHouse;
 
-	UPROPERTY(VisibleAnywhere, Category = "SaveGameData")
-	int32 HouseID;
+	// UPROPERTY(VisibleAnywhere, Category = "SaveGameData")
+	// int32 HouseID;
 
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent *HouseMesh;
@@ -53,4 +50,6 @@ protected:
 	int count;
 
 	FTimerHandle HouseRent;
+
+	static int RentCollected;
 };

@@ -48,15 +48,15 @@ void AGameManager::Tick(float DeltaTime)
 }
 void AGameManager::TriggerDailyEconomy()
 {
-	UE_LOG(LogTemp, Warning, TEXT("%d"), coins);
-	// Update each HouseActor
-	for (AHouseLand *HouseActor : HouseActors)
-	{
-		if (HouseActor)
-		{
-			HouseActor->GetHouseRent();
-		}
-	}
+	// UE_LOG(LogTemp, Warning, TEXT("%d"), coins);
+	// // Update each HouseActor
+	// for (AHouseLand *HouseActor : HouseActors)
+	// {
+	// 	if (HouseActor)
+	// 	{
+	// 		HouseActor->GetHouseRent();
+	// 	}
+	// }
 }
 // Called every frame
 
