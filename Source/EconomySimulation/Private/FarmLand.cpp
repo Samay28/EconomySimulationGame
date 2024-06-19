@@ -98,7 +98,7 @@ void AFarmLand::SaveGame()
 
     if (!bFoundExisting)
     {
-        UE_LOG(LogTemp, Warning, TEXT("No existing entry with the same FarmID found. Adding new entry."));
+        UE_LOG(LogTemp, Error, TEXT("No existing entry with the same FarmID found. Adding new entry."));
     }
 
     SaveGameInstance->FarmDataArray.Add(FarmData);
@@ -166,9 +166,6 @@ void AFarmLand::HarvestCropsToStorage()
         }
         int32 Quantity = FMath::RandRange(1, 3);
         StorageComponent->AddItem(AwardedCrop, Quantity, Value);
-
-        // Log the awarded crop and quantity for debugging
-        UE_LOG(LogTemp, Warning, TEXT("Harvested: %s, Quantity: %d"), *AwardedCrop.ToString(), Quantity);
         StorageComponent->SaveStorage();
     }
     else

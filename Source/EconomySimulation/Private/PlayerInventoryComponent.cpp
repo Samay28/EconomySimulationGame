@@ -9,7 +9,6 @@ UPlayerInventoryComponent::UPlayerInventoryComponent()
 {
     PrimaryComponentTick.bCanEverTick = true;
 
-    // ...
 }
 
 // Called when the game starts
@@ -22,15 +21,15 @@ void UPlayerInventoryComponent::BeginPlay()
 
 void UPlayerInventoryComponent::SaveInventory()
 {
-    UInventorySaveGame* SaveGameInstance = Cast<UInventorySaveGame>(UGameplayStatics::CreateSaveGameObject(UInventorySaveGame::StaticClass()));
-    
-    for (const FInventoryItem& Item : Inventory)
+    UInventorySaveGame *SaveGameInstance = Cast<UInventorySaveGame>(UGameplayStatics::CreateSaveGameObject(UInventorySaveGame::StaticClass()));
+
+    for (const FInventoryItem &Item : Inventory)
     {
         SaveGameInstance->SavedInventory.Add(FInventoryItemData(Item.ItemName, Item.Quantity));
     }
 
     // Save the item values
-    for (const auto& ItemValue : ItemValues)
+    for (const auto &ItemValue : ItemValues)
     {
         SaveGameInstance->SavedItemValues.Add(ItemValue.Key, ItemValue.Value);
     }
@@ -45,22 +44,21 @@ void UPlayerInventoryComponent::SaveInventory()
     }
 }
 
-
 void UPlayerInventoryComponent::LoadInventory()
 {
-    UInventorySaveGame* LoadGameInstance = Cast<UInventorySaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("PlayerInventorySlot"), 0));
+    UInventorySaveGame *LoadGameInstance = Cast<UInventorySaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("PlayerInventorySlot"), 0));
     if (LoadGameInstance)
     {
         Inventory.Empty();
         ItemValues.Empty(); // Ensure we clear the previous values before loading new ones
 
-        for (const FInventoryItemData& ItemData : LoadGameInstance->SavedInventory)
+        for (const FInventoryItemData &ItemData : LoadGameInstance->SavedInventory)
         {
             Inventory.Add(FInventoryItem(ItemData.ItemName, ItemData.Quantity));
         }
 
         // Load the item values
-        for (const auto& ItemValue : LoadGameInstance->SavedItemValues)
+        for (const auto &ItemValue : LoadGameInstance->SavedItemValues)
         {
             ItemValues.Add(ItemValue.Key, ItemValue.Value);
         }
@@ -88,10 +86,8 @@ void UPlayerInventoryComponent::AddItem(FName ItemName, int32 Quantity, int32 Va
         return;
     }
 
-    FInventoryItem* FoundItem = Inventory.FindByPredicate([&](const FInventoryItem& Item) //If an item with the desired name is found, FindByPredicate returns a pointer to that item. If no matching item is found, it returns nullptr
-    {
-        return Item.ItemName == ItemName;
-    });
+    FInventoryItem *FoundItem = Inventory.FindByPredicate([&](const FInventoryItem &Item) // If an item with the desired name is found, FindByPredicate returns a pointer to that item. If no matching item is found, it returns nullptr
+                                                          { return Item.ItemName == ItemName; });
 
     if (FoundItem)
     {
@@ -113,10 +109,8 @@ void UPlayerInventoryComponent::RemoveItem(FName ItemName, int32 Quantity)
         return;
     }
 
-    FInventoryItem* FoundItem = Inventory.FindByPredicate([&](const FInventoryItem& Item)
-    {
-        return Item.ItemName == ItemName;
-    });
+    FInventoryItem *FoundItem = Inventory.FindByPredicate([&](const FInventoryItem &Item)
+                                                          { return Item.ItemName == ItemName; });
 
     if (FoundItem)
     {
@@ -130,7 +124,6 @@ void UPlayerInventoryComponent::RemoveItem(FName ItemName, int32 Quantity)
         SaveInventory();
     }
 }
-
 
 bool UPlayerInventoryComponent::HasItem(FName ItemName, int32 Quantity) const
 {

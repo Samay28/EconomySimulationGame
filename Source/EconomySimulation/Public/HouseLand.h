@@ -40,6 +40,7 @@ public:
 
 	void SaveGame();
 	void LoadGame();
+	
 
 	UFUNCTION(BlueprintCallable)
 	void TransferRent();

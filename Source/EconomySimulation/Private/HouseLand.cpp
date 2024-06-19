@@ -1,5 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #include "HouseLand.h"
 #include "GameManager.h"
 #include "HouseSaveGame.h"
@@ -31,7 +29,6 @@ void AHouseLand::BeginPlay()
         HouseID = FMath::Rand();
     }
     LoadGame();
-    SaveGame(); // Save the generated HouseID if it's new
 
     OwnHouse();
     GetWorldTimerManager().SetTimer(HouseRent, this, &AHouseLand::GetHouseRent, 10.0f, true);
@@ -43,9 +40,9 @@ void AHouseLand::GetHouseRent()
     {
         RentCollected += PayCheck;
         SaveGame();
-        UE_LOG(LogTemp, Warning, TEXT("total Rent : %d"), RentCollected);
     }
 }
+
 void AHouseLand::OwnHouse()
 {
     if (GM->coins >= HouseConstructionCost && !DoesOwnHouse)
@@ -60,10 +57,12 @@ void AHouseLand::OwnHouse()
         SaveGame();
     }
 }
+
 void AHouseLand::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 }
+
 void AHouseLand::SaveGame()
 {
     UHouseSaveGame *SaveGameInstance;
@@ -133,27 +132,23 @@ void AHouseLand::LoadGame()
     {
         for (const FHouseData &HouseData : LoadGameInstance->HouseDataArray)
         {
-
-            DoesOwnHouse = HouseData.DoesOwnHouse;
-            PayCheck = HouseData.PayCheck;
-            count = HouseData.count;
-            RentCollected = HouseData.RentCollected;
-            HouseMesh->SetVisibility(DoesOwnHouse);
-            UE_LOG(LogTemp, Warning, TEXT("Loaded HouseID: %d, Rent: %d"), HouseID, RentCollected);
-            return; 
+            // Check if the HouseID matches
+            if (HouseData.HouseID == HouseID)
+            {
+                DoesOwnHouse = HouseData.DoesOwnHouse;
+                PayCheck = HouseData.PayCheck;
+                count = HouseData.count;
+                RentCollected = HouseData.RentCollected;
+                HouseMesh->SetVisibility(DoesOwnHouse);
+                UE_LOG(LogTemp, Warning, TEXT("Loaded HouseID: %d, Rent: %d"), HouseID, RentCollected);
+                return; // House data loaded successfully
+            }
         }
-
-        // If no matching HouseID found, generate a new one and save it
-        HouseID = FMath::Rand();
-        SaveGame();
-        UE_LOG(LogTemp, Warning, TEXT("Generated new HouseID: %d"), HouseID);
+        UE_LOG(LogTemp, Warning, TEXT("No matching HouseID found in saved data."));
     }
     else
     {
         UE_LOG(LogTemp, Error, TEXT("Failed to load save game from slot: HouseSaveSlot"));
-        HouseID = FMath::Rand();
-        SaveGame();
-        UE_LOG(LogTemp, Warning, TEXT("Generated new HouseID: %d"), HouseID);
     }
 }
 
