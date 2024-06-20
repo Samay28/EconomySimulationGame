@@ -46,7 +46,6 @@ void AHouseLand::OwnHouse()
         bIsRented = true;
         GM->coins -= HouseConstructionCost;
         UE_LOG(LogTemp, Warning, TEXT("House Bought, Remaining money : %d"), GM->coins);
-        GM->AddIncome(PayCheck);
         count++;
         SaveGame();
     }

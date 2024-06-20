@@ -10,7 +10,7 @@
 
 
 UCLASS()
-class ECONOMYSIMULATION_API AFarmLand : public ALand, public ISaveGameInterface
+class ECONOMYSIMULATION_API AFarmLand : public ALand
 {
 	GENERATED_BODY()
 
@@ -28,8 +28,8 @@ public:
 
 	void HarvestCropsToStorage();
 
-	virtual void SaveGame() override;	
-	virtual void LoadGame() override;
+	 void SaveGame() ;	
+	 void LoadGame() ;
 
 	class AMyPlayerCharacter* Player;
 

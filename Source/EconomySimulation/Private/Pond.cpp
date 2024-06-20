@@ -90,7 +90,7 @@ void APond::ProvideResourcesToStorage()
 
 void APond::TransferItems()
 {
-     if (Player && Player->PlayerInventoryComponent && StorageComponent)
+    if (Player && Player->PlayerInventoryComponent && StorageComponent)
     {
         for (const auto &Item : StorageComponent->GetItems())
         {

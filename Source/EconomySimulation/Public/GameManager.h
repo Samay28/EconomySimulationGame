@@ -8,7 +8,7 @@
 #include "GameManager.generated.h"
 
 UCLASS()
-class ECONOMYSIMULATION_API AGameManager : public AActor, public ISaveGameInterface
+class ECONOMYSIMULATION_API AGameManager : public AActor
 {
 	GENERATED_BODY()
 
@@ -19,16 +19,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int coins;
 
-	// UPROPERTY(BlueprintReadOnly)
-	// int Expenses;
-
-	UPROPERTY(BlueprintReadOnly)
-	int Revenue;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int IslandValue;
 
 	virtual void Tick(float DeltaTime) override;
-
-	// void AddExpenses(int Amount);
-	void AddIncome(int Amount);
 
 	UPROPERTY(BlueprintReadWrite)
 	bool BlockPlayerMovement;
@@ -36,25 +30,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "SaveLoad")
 	void DeleteFarmSave();
 
-	virtual void SaveGame() override;
-	virtual void LoadGame() override;
-
-	UFUNCTION(BlueprintCallable)
-	void SaveAll();
-	UFUNCTION(BlueprintCallable)
-	void LoadAll();
+	void SaveGame();
+	void LoadGame();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 private:
-	FTimerHandle DayNightCycle;
-
-	void TriggerDailyEconomy();
-
-	TArray<class ALand *> LandActors;
-	TArray<class AFarmLand *> FarmActors;
-	TArray<class AHouseLand *> HouseActors;
-	TArray<class APond *> PondActors;
 };

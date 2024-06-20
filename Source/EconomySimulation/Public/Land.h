@@ -43,6 +43,9 @@ public:
 	void ConvertToPond();
 
 	UFUNCTION(BlueprintCallable)
+	void ConvertToMiningLand();
+
+	UFUNCTION(BlueprintCallable)
 	void ConvertToCarpenterShop();
 
 	UFUNCTION(BlueprintCallable)
@@ -62,6 +65,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Conversion")
 	TSubclassOf<class APond> PondBlueprint;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Conversion")
+	TSubclassOf<class AMiningLand> MiningLandBlueprint;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Conversion")
 	TSubclassOf<class ACarpenterShop> CarpenterShopBlueprint;

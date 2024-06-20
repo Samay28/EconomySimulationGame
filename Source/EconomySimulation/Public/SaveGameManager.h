@@ -20,5 +20,5 @@ public:
 	int32 Coins;
 	
 	UPROPERTY(VisibleAnywhere, Category = "SaveGameData")
-	int32 Revenue;
+	int IslandValue;
 };

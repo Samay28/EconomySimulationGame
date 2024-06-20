@@ -2,6 +2,7 @@
 #include "HouseLand.h"
 #include "FarmLand.h"
 #include "Pond.h"
+#include "MiningLand.h"
 #include "CarpenterShop.h"
 #include "FishShop.h"
 #include "OresShop.h"
@@ -93,6 +94,29 @@ void ALand::ConvertToPond()
     {
         CreatedActors.Add(NewPond);
         LandTypeNum = 6;
+        SaveGame();
+        Destroy();
+    }
+}
+
+void ALand::ConvertToMiningLand()
+{
+    if (!MiningLandBlueprint)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("MiningLandBlueprint is not set."));
+        return;
+    }
+
+    FVector Location = GetActorLocation();
+    FActorSpawnParameters SpawnParams;
+    SpawnParams.Owner = this;
+    SpawnParams.Instigator = GetInstigator();
+
+    AMiningLand *NewMiningLand = GetWorld()->SpawnActor<AMiningLand>(MiningLandBlueprint, Location, FRotator::ZeroRotator, SpawnParams);
+    if (NewMiningLand)
+    {
+        CreatedActors.Add(NewMiningLand);
+        LandTypeNum = 7;
         SaveGame();
         Destroy();
     }
@@ -277,7 +301,7 @@ void ALand::LoadGame()
             LandTypeNum = SaveData.LandTypeNum;
             SetActorLocation(SaveData.Location);
             SetActorRotation(SaveData.Rotation);
-            bIsRented = SaveData.bIsRented; // Add this line       
+            bIsRented = SaveData.bIsRented; // Add this line
 
             if (LandTypeNum == 1 && FarmLandBlueprint)
             {
@@ -302,6 +326,10 @@ void ALand::LoadGame()
             else if (LandTypeNum == 6 && PondBlueprint)
             {
                 ConvertToPond();
+            }
+            else if (LandTypeNum == 7 && MiningLandBlueprint)
+            {
+                ConvertToMiningLand();
             }
 
             break;

@@ -8,13 +8,12 @@
 // Sets default values
 AOresShop::AOresShop()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	ShopMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ShopMesh"));
 	SetRootComponent(ShopMesh);
 }
 
-// Called when the game starts or when spawned
+
 void AOresShop::BeginPlay()
 {
 	Super::BeginPlay();

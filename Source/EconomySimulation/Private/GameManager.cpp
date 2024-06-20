@@ -12,8 +12,7 @@ AGameManager::AGameManager()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	coins = 500;
-	// Expenses = 0;
-	Revenue = 0;
+	IslandValue = 0;
 	BlockPlayerMovement = false;
 }
 
@@ -21,53 +20,11 @@ AGameManager::AGameManager()
 void AGameManager::BeginPlay()
 {
 	Super::BeginPlay();
-	for (TActorIterator<ALand> It(GetWorld()); It; ++It)
-	{
-		LandActors.Add(*It);
-	}
-
-	for (TActorIterator<AHouseLand> It(GetWorld()); It; ++It)
-	{
-		HouseActors.Add(*It);
-	}
-
-	for (TActorIterator<AFarmLand> It(GetWorld()); It; ++It)
-	{
-		FarmActors.Add(*It);
-	}
-	for (TActorIterator<APond> It(GetWorld()); It; ++It)
-	{
-		PondActors.Add(*It);
-	}
-	GetWorldTimerManager().SetTimer(DayNightCycle, this, &AGameManager::TriggerDailyEconomy, 300.f, true);
-	LoadAll();
+	LoadGame();
 }
 void AGameManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-}
-void AGameManager::TriggerDailyEconomy()
-{
-	// UE_LOG(LogTemp, Warning, TEXT("%d"), coins);
-	// // Update each HouseActor
-	// for (AHouseLand *HouseActor : HouseActors)
-	// {
-	// 	if (HouseActor)
-	// 	{
-	// 		HouseActor->GetHouseRent();
-	// 	}
-	// }
-}
-// Called every frame
-
-// void AGameManager::AddExpenses(int Amount)
-// {
-// 	Expenses += Amount;
-// }
-
-void AGameManager::AddIncome(int Amount)
-{
-	Revenue += Amount;
 }
 void AGameManager::DeleteFarmSave()
 {
@@ -88,9 +45,7 @@ void AGameManager::SaveGame()
 	if (SaveGameInstance)
 	{
 		SaveGameInstance->Coins = coins;
-		// SaveGameInstance->Expenses = Expenses;
-		SaveGameInstance->Revenue = Revenue;
-
+		SaveGameInstance->IslandValue = IslandValue;
 		UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("ManagerSaveSlot"), 0);
 		UE_LOG(LogTemp, Warning, TEXT("Game saved"));
 	}
@@ -102,41 +57,10 @@ void AGameManager::LoadGame()
 	{
 		USaveGameManager *LoadGameInstance = Cast<USaveGameManager>(UGameplayStatics::LoadGameFromSlot(TEXT("ManagerSaveSlot"), 0));
 		if (LoadGameInstance)
-		{
+		{	
+			IslandValue = LoadGameInstance->IslandValue;
 			coins = LoadGameInstance->Coins;
-			// Expenses = LoadGameInstance->Expenses;
-			Revenue = LoadGameInstance->Revenue;
 			UE_LOG(LogTemp, Warning, TEXT("Game loaded"));
-		}
-	}
-}
-
-void AGameManager::SaveAll()
-{
-	TArray<AActor *> SaveableActors;
-	UGameplayStatics::GetAllActorsWithInterface(GetWorld(), USaveGameInterface::StaticClass(), SaveableActors);
-
-	for (AActor *Actor : SaveableActors)
-	{
-		ISaveGameInterface *SaveableActor = Cast<ISaveGameInterface>(Actor);
-		if (SaveableActor)
-		{
-			SaveableActor->SaveGame();
-		}
-	}
-}
-
-void AGameManager::LoadAll()
-{
-	TArray<AActor *> SaveableActors;
-	UGameplayStatics::GetAllActorsWithInterface(GetWorld(), USaveGameInterface::StaticClass(), SaveableActors);
-
-	for (AActor *Actor : SaveableActors)
-	{
-		ISaveGameInterface *SaveableActor = Cast<ISaveGameInterface>(Actor);
-		if (SaveableActor)
-		{
-			SaveableActor->LoadGame();
 		}
 	}
 }
