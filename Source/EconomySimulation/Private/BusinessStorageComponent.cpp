@@ -147,5 +147,6 @@ TArray<FStorageItem> UBusinessStorageComponent::GetItems() const
 void UBusinessStorageComponent::ClearItems()
 {
     Storage.Empty();
+    UE_LOG(LogTemp, Error, TEXT("storage cleared"));
     SaveStorage();
 }
