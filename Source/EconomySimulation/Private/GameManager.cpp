@@ -47,7 +47,7 @@ void AGameManager::SaveGame()
 		SaveGameInstance->Coins = coins;
 		SaveGameInstance->IslandValue = IslandValue;
 		UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("ManagerSaveSlot"), 0);
-		UE_LOG(LogTemp, Warning, TEXT("Game saved"));
+		UE_LOG(LogTemp, Warning, TEXT("GAME MANAGER Game saved"));
 	}
 }
 
