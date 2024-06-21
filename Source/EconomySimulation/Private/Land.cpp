@@ -6,6 +6,7 @@
 #include "CarpenterShop.h"
 #include "FishShop.h"
 #include "OresShop.h"
+#include "VegetableShop.h"
 #include "LandSaveGame.h"
 #include "Land.h"
 #include "GameManager.h"
@@ -215,6 +216,36 @@ void ALand::ConvertToOresShop()
     }
 }
 
+void ALand::ConvertToVegetableShop()
+{
+    if (!VegetableShopBlueprint)
+    {
+        UE_LOG(LogTemp, Warning, TEXT("SUS2"));
+        return;
+    }
+
+    // Spawn the Carpenter Shop Actor
+    AVegetableShop *VegetableShop = GetWorld()->SpawnActor<AVegetableShop>(VegetableShopBlueprint, GetActorLocation(), GetActorRotation());
+
+    if (VegetableShop)
+    {
+        // Attach the Carpenter Shop to the LandMesh
+        VegetableShop->AttachToComponent(LandMesh, FAttachmentTransformRules::SnapToTargetIncludingScale);
+
+        VegetableShop->SetActorRelativeLocation(FVector(0.0f, 0.0f, 200.0f));
+        VegetableShop->SetActorRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
+        VegetableShop->SetActorRelativeScale3D(FVector(0.4f, 0.5f, 1.0f));
+
+        UE_LOG(LogTemp, Warning, TEXT("VegetableShop successfully converted and attached to LandMesh"));
+        LandTypeNum = 8;
+        SaveGame();
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("Failed to spawn Vegetable Shop"));
+    }
+}
+
 void ALand::KeepSimpleLand()
 {
     bIsRented = true;
@@ -330,6 +361,10 @@ void ALand::LoadGame()
             else if (LandTypeNum == 7 && MiningLandBlueprint)
             {
                 ConvertToMiningLand();
+            }
+             else if (LandTypeNum == 8 && VegetableShopBlueprint)
+            {
+                ConvertToVegetableShop();
             }
 
             break;

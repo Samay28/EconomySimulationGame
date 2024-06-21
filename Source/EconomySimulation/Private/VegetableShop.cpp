@@ -46,7 +46,6 @@ void AVegetableShop::SellItem(AMyPlayerCharacter *PlayerCharacter)
 	UE_LOG(LogTemp, Warning, TEXT("Total coins earned from selling all items: %d"), TotalValue);
 }
 
-// Called when the game starts or when spawned
 void AVegetableShop::BeginPlay()
 {
 	Super::BeginPlay();
@@ -54,7 +53,6 @@ void AVegetableShop::BeginPlay()
 	GM = Cast<AGameManager>(FoundActor);
 }
 
-// Called every frame
 void AVegetableShop::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
