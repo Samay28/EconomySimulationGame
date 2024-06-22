@@ -27,6 +27,7 @@ public:
 
 	void DeductRent();
 
+	UPROPERTY(BlueprintReadOnly)
 	class AGameManager *GM;
 	class AMyPlayerCharacter* Player;
 

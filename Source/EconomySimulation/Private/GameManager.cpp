@@ -12,7 +12,7 @@ AGameManager::AGameManager()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	coins = 500;
-	IslandValue = 0;
+	IslandValue = 1500;
 	BlockPlayerMovement = false;
 }
 
