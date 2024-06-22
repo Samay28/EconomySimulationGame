@@ -37,6 +37,8 @@ void ALand::PurchaseLand()
         GrassMesh->SetVisibility(false);
         LandTypeNum = 0;
         GM->coins -= LandCost;
+        GM->IslandValue += 100;
+        GM->SaveGame();
         SaveGame();
     }
 }
@@ -44,12 +46,13 @@ void ALand::PurchaseLand()
 void ALand::BeginPlay()
 {
     Super::BeginPlay();
-    LoadGame();
     AActor *FoundActor = UGameplayStatics::GetActorOfClass(GetWorld(), AGameManager::StaticClass());
     GM = Cast<AGameManager>(FoundActor);
+    LoadGame();
 
     if (GM && bIsRented)
     {
+        GM->IslandValue += 100;
         GrassMesh->SetVisibility(false);
     }
 }
@@ -72,6 +75,7 @@ void ALand::ConvertToHouse()
     {
         CreatedActors.Add(NewHouse);
         LandTypeNum = 2;
+        GM->IslandValue += 200;
         SaveGame();
         Destroy();
     }
@@ -95,6 +99,7 @@ void ALand::ConvertToPond()
     {
         CreatedActors.Add(NewPond);
         LandTypeNum = 6;
+        GM->IslandValue += 250;
         SaveGame();
         Destroy();
     }
@@ -117,6 +122,7 @@ void ALand::ConvertToMiningLand()
     if (NewMiningLand)
     {
         CreatedActors.Add(NewMiningLand);
+        GM->IslandValue += 350;
         LandTypeNum = 7;
         SaveGame();
         Destroy();
@@ -146,6 +152,7 @@ void ALand::ConvertToCarpenterShop()
 
         UE_LOG(LogTemp, Warning, TEXT("Carpenter Shop successfully converted and attached to LandMesh"));
         LandTypeNum = 3;
+        GM->IslandValue += 50;
         SaveGame();
     }
     else
@@ -176,6 +183,7 @@ void ALand::ConvertToFishShop()
         FishShop->SetActorRelativeScale3D(FVector(0.4f, 0.5f, 1.0f));
 
         UE_LOG(LogTemp, Warning, TEXT("Fish Shop successfully converted and attached to LandMesh"));
+        GM->IslandValue += 50;
         LandTypeNum = 4;
         SaveGame();
     }
@@ -192,22 +200,19 @@ void ALand::ConvertToOresShop()
         UE_LOG(LogTemp, Warning, TEXT("SUS2"));
         return;
     }
-
-    // Spawn the Carpenter Shop Actor
     AOresShop *OresShop = GetWorld()->SpawnActor<AOresShop>(OresShopBlueprint, GetActorLocation(), GetActorRotation());
 
     if (OresShop)
     {
-        // Attach the Carpenter Shop to the LandMesh
         OresShop->AttachToComponent(LandMesh, FAttachmentTransformRules::SnapToTargetIncludingScale);
 
-        // Set transform values
         OresShop->SetActorRelativeLocation(FVector(0.0f, 0.0f, 200.0f));
         OresShop->SetActorRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
         OresShop->SetActorRelativeScale3D(FVector(0.4f, 0.5f, 1.0f));
 
         UE_LOG(LogTemp, Warning, TEXT("Ores Shop successfully converted and attached to LandMesh"));
         LandTypeNum = 5;
+        GM->IslandValue += 50;
         SaveGame();
     }
     else
@@ -238,6 +243,7 @@ void ALand::ConvertToVegetableShop()
 
         UE_LOG(LogTemp, Warning, TEXT("VegetableShop successfully converted and attached to LandMesh"));
         LandTypeNum = 8;
+        GM->IslandValue += 50;
         SaveGame();
     }
     else
@@ -270,6 +276,7 @@ void ALand::ConvertToFarm()
     {
         CreatedActors.Add(NewFarm);
         LandTypeNum = 1;
+        GM->IslandValue += 100;
         SaveGame();
         Destroy();
     }
@@ -362,7 +369,7 @@ void ALand::LoadGame()
             {
                 ConvertToMiningLand();
             }
-             else if (LandTypeNum == 8 && VegetableShopBlueprint)
+            else if (LandTypeNum == 8 && VegetableShopBlueprint)
             {
                 ConvertToVegetableShop();
             }

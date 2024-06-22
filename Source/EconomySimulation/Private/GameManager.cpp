@@ -12,8 +12,8 @@ AGameManager::AGameManager()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	coins = 500;
-	IslandValue = 1500;
 	BlockPlayerMovement = false;
+	IslandValue = 0;
 }
 
 // Called when the game starts or when spawned
