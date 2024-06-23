@@ -17,16 +17,19 @@ AHouseLand::AHouseLand()
     DoesOwnHouse = false;
     PayCheck = 10;
     count = 0;
-    LoadGame();
 }
 
 void AHouseLand::BeginPlay()
 {
     Super::BeginPlay();
-    if (count == 0)
+    GM->LoadGame();
+    LoadGame();
+
+    if (!DoesOwnHouse)
     {
         OwnHouse();
     }
+
     GetWorldTimerManager().SetTimer(HouseRent, this, &AHouseLand::GetHouseRent, 10.0f, true);
 }
 
@@ -46,7 +49,10 @@ void AHouseLand::OwnHouse()
         DoesOwnHouse = true;
         HouseMesh->SetVisibility(true);
         GM->coins -= HouseConstructionCost;
+        GM->SaveGame(); // Save the game manager state after deducting coins
         UE_LOG(LogTemp, Warning, TEXT("House Bought, Remaining money : %d"), GM->coins);
+        HouseID = FMath::Rand();
+        UE_LOG(LogTemp, Warning, TEXT("House id : %d"), HouseID);
         count++;
         SaveGame();
     }
@@ -79,19 +85,30 @@ void AHouseLand::SaveGame()
         }
     }
 
-    // Log to verify loading or creation of SaveGameInstance
     UE_LOG(LogTemp, Warning, TEXT("SaveGameInstance loaded or created"));
 
     FHouseData HouseData;
-    // HouseData.DoesOwnHouse = DoesOwnHouse;
-    // HouseData.PayCheck = PayCheck;
+    HouseData.HouseID = HouseID;
+    HouseData.DoesOwnHouse = DoesOwnHouse;
     HouseData.RentCollected = RentCollected;
-    // HouseData.count = count;
-    UE_LOG(LogTemp, Warning, TEXT("Total Rent Saved As : %d"), HouseData.RentCollected);
+    UE_LOG(LogTemp, Warning, TEXT("house : %d"), HouseData.RentCollected);
 
-    // Add or update the house data in the array
-    SaveGameInstance->HouseDataArray.Empty();
-    SaveGameInstance->HouseDataArray.Add(HouseData);
+    bool bFoundExisting = false;
+    for (int32 i = 0; i < SaveGameInstance->HouseDataArray.Num(); ++i)
+    {
+        if (SaveGameInstance->HouseDataArray[i].HouseID == HouseID)
+        {   
+            SaveGameInstance->HouseDataArray[i] = HouseData;
+            bFoundExisting = true;
+            break;
+        }
+    }
+
+    if (!bFoundExisting)
+    {
+        SaveGameInstance->HouseDataArray.Add(HouseData);
+        UE_LOG(LogTemp, Warning, TEXT("House ID Saved as : %d"), HouseData.HouseID);
+    }
 
     if (UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("HouseSaveSlot"), 0))
     {
@@ -108,13 +125,16 @@ void AHouseLand::LoadGame()
     UHouseSaveGame *LoadGameInstance = Cast<UHouseSaveGame>(UGameplayStatics::LoadGameFromSlot(TEXT("HouseSaveSlot"), 0));
     if (LoadGameInstance && LoadGameInstance->HouseDataArray.Num() > 0)
     {
-        const FHouseData &HouseData = LoadGameInstance->HouseDataArray[0];
-        // DoesOwnHouse = HouseData.DoesOwnHouse;
-        // PayCheck = HouseData.PayCheck;
-        // count = HouseData.count;
-        RentCollected = HouseData.RentCollected;
-        // HouseMesh->SetVisibility(DoesOwnHouse);
-        UE_LOG(LogTemp, Warning, TEXT("Loaded RentCollected: %d"), RentCollected);
+        for (const FHouseData &HouseData : LoadGameInstance->HouseDataArray)
+        {
+            if (HouseData.HouseID == HouseID)
+            {
+                DoesOwnHouse = HouseData.DoesOwnHouse;
+                RentCollected = HouseData.RentCollected;
+                UE_LOG(LogTemp, Warning, TEXT("Loaded RentCollected: %d"), RentCollected);
+                break;
+            }
+        }
     }
     else
     {
@@ -122,11 +142,13 @@ void AHouseLand::LoadGame()
     }
 }
 
+
+
 void AHouseLand::TransferRent()
 {
     GM->coins += RentCollected;
     RentCollected = 0;
-    UE_LOG(LogTemp, Error, TEXT("HOUSE TRANSFERRED RENT"));
+    UE_LOG(LogTemp, Warning, TEXT("HOUSE TRANSFERRED RENT"));
     SaveGame();
     GM->SaveGame();
 }

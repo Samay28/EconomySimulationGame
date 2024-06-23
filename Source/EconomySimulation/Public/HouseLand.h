@@ -24,8 +24,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool DoesOwnHouse;
 
-	// UPROPERTY(VisibleAnywhere, Category = "SaveGameData")
-	// int32 HouseID;
+	UPROPERTY(VisibleAnywhere, Category = "SaveGameData")
+	int32 HouseID;
 
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent *HouseMesh;

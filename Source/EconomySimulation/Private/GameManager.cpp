@@ -20,7 +20,6 @@ AGameManager::AGameManager()
 void AGameManager::BeginPlay()
 {
 	Super::BeginPlay();
-	LoadGame();
 }
 void AGameManager::Tick(float DeltaTime)
 {
@@ -47,7 +46,7 @@ void AGameManager::SaveGame()
 		SaveGameInstance->Coins = coins;
 		// SaveGameInstance->IslandValue = IslandValue;
 		UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("ManagerSaveSlot"), 0);
-		UE_LOG(LogTemp, Warning, TEXT("GAME MANAGER Game saved"));
+		UE_LOG(LogTemp, Warning, TEXT("GAME MANAGER Game saved with coins : %d"), SaveGameInstance->Coins);
 	}
 }
 
@@ -60,7 +59,7 @@ void AGameManager::LoadGame()
 		{	
 			// IslandValue = LoadGameInstance->IslandValue;
 			coins = LoadGameInstance->Coins;
-			UE_LOG(LogTemp, Warning, TEXT("Game loaded"));
+			UE_LOG(LogTemp, Warning, TEXT("GAME MANAGER Game LOADED with coins : %d"), LoadGameInstance->Coins);
 		}
 	}
 }

@@ -13,6 +13,12 @@ struct FHouseData
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int32 RentCollected;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	int32 HouseID;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	bool DoesOwnHouse;
 };
 
 UCLASS()
