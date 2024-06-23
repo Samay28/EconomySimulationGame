@@ -26,8 +26,8 @@ ALand::ALand()
     bIsRented = false;
     IsOccupied = false;
 
-    LandID = FMath::Rand();
     LandTypeNum = 0;
+    LandID = FMath::Rand();
 }
 
 void ALand::PurchaseLand()
@@ -49,13 +49,13 @@ void ALand::BeginPlay()
     Super::BeginPlay();
     AActor *FoundActor = UGameplayStatics::GetActorOfClass(GetWorld(), AGameManager::StaticClass());
     GM = Cast<AGameManager>(FoundActor);
-    LoadGame();
 
     if (GM && bIsRented)
     {
         GM->IslandValue += 100;
         GrassMesh->SetVisibility(false);
     }
+    LoadGame();
 }
 
 void ALand::ConvertToHouse()

@@ -8,7 +8,6 @@
 #include "BusinessStorageComponent.h"
 #include "FarmLand.generated.h"
 
-
 UCLASS()
 class ECONOMYSIMULATION_API AFarmLand : public ALand
 {
@@ -28,25 +27,23 @@ public:
 
 	void HarvestCropsToStorage();
 
-	 void SaveGame() ;	
-	 void LoadGame() ;
+	void SaveGame();
+	void LoadGame();
 
-	class AMyPlayerCharacter* Player;
+	class AMyPlayerCharacter *Player;
 
-	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category="Storage")
-	UBusinessStorageComponent* StorageComponent;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Storage")
+	UBusinessStorageComponent *StorageComponent;
+
 protected:
-
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 	int FarmSetupCost;
 	int count;
 
 private:
-
-	UPROPERTY(EditAnywhere, Category = "Farm")
-    int32 FarmID;
+	UPROPERTY(EditAnywhere, Category = "Farm") //hata
+	int32 FarmID;
 
 	FTimerHandle ResourceGeneratingHandle;
-	
 };
