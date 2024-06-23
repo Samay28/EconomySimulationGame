@@ -24,6 +24,7 @@ ALand::ALand()
     GrassMesh->SetupAttachment(LandMesh);
     LandCost = 50;
     bIsRented = false;
+    IsOccupied = false;
 
     LandID = FMath::Rand();
     LandTypeNum = 0;
@@ -76,6 +77,7 @@ void ALand::ConvertToHouse()
         CreatedActors.Add(NewHouse);
         LandTypeNum = 2;
         GM->IslandValue += 200;
+        IsOccupied = true;
         SaveGame();
         Destroy();
     }
@@ -100,6 +102,7 @@ void ALand::ConvertToPond()
         CreatedActors.Add(NewPond);
         LandTypeNum = 6;
         GM->IslandValue += 250;
+        IsOccupied = true;
         SaveGame();
         Destroy();
     }
@@ -124,6 +127,7 @@ void ALand::ConvertToMiningLand()
         CreatedActors.Add(NewMiningLand);
         GM->IslandValue += 350;
         LandTypeNum = 7;
+        IsOccupied = true;
         SaveGame();
         Destroy();
     }
@@ -153,6 +157,7 @@ void ALand::ConvertToCarpenterShop()
         UE_LOG(LogTemp, Warning, TEXT("Carpenter Shop successfully converted and attached to LandMesh"));
         LandTypeNum = 3;
         GM->IslandValue += 50;
+        IsOccupied = true;
         SaveGame();
     }
     else
@@ -184,6 +189,7 @@ void ALand::ConvertToFishShop()
 
         UE_LOG(LogTemp, Warning, TEXT("Fish Shop successfully converted and attached to LandMesh"));
         GM->IslandValue += 50;
+        IsOccupied = true;
         LandTypeNum = 4;
         SaveGame();
     }
@@ -213,6 +219,7 @@ void ALand::ConvertToOresShop()
         UE_LOG(LogTemp, Warning, TEXT("Ores Shop successfully converted and attached to LandMesh"));
         LandTypeNum = 5;
         GM->IslandValue += 50;
+        IsOccupied = true;
         SaveGame();
     }
     else
@@ -244,6 +251,7 @@ void ALand::ConvertToVegetableShop()
         UE_LOG(LogTemp, Warning, TEXT("VegetableShop successfully converted and attached to LandMesh"));
         LandTypeNum = 8;
         GM->IslandValue += 50;
+        IsOccupied = true;
         SaveGame();
     }
     else
@@ -277,6 +285,7 @@ void ALand::ConvertToFarm()
         CreatedActors.Add(NewFarm);
         LandTypeNum = 1;
         GM->IslandValue += 100;
+        IsOccupied = true;
         SaveGame();
         Destroy();
     }

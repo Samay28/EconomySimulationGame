@@ -25,6 +25,9 @@ public:
 	
 	int LandCost;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	bool IsOccupied;
+
 	void DeductRent();
 
 	UPROPERTY(BlueprintReadOnly)
@@ -98,7 +101,7 @@ protected:
 	virtual void Tick(float DeltaTime) override;
 	virtual void BeginPlay() override;
 
-	int LandTypeNum; // 1 for farm, 2 for house, 0 for plain land
+	int LandTypeNum; 
 
 private:
 	UPROPERTY(EditAnywhere)
