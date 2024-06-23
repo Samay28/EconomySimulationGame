@@ -121,7 +121,8 @@ void AFarmLand::LoadGame()
         for (const FFarmData &FarmData : LoadGameInstance->FarmDataArray)
         {
             if (FarmData.FarmID == FarmID)
-            {
+            {   
+                UE_LOG(LogTemp, Error, TEXT("Found Farm ID"));
                 bIsRented = FarmData.bIsRented;
                 count = FarmData.count;
                 Carrots->SetVisibility(bIsRented);

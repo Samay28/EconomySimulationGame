@@ -59,9 +59,7 @@ void AMiningLand::SetupMiningLand()
     {
         MiningLevel = 1;
         GM->coins -= MiningLandSetupCost;
-        GM->SaveGame();
         count++;
-        SaveGame();
     }
 }
 

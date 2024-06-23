@@ -12,17 +12,7 @@ struct FHouseData
 	GENERATED_BODY()
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	int PayCheck;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
 	int32 RentCollected;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	bool DoesOwnHouse;
-
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	int32 count;
 };
 
 UCLASS()

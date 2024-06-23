@@ -45,7 +45,7 @@ void AGameManager::SaveGame()
 	if (SaveGameInstance)
 	{
 		SaveGameInstance->Coins = coins;
-		SaveGameInstance->IslandValue = IslandValue;
+		// SaveGameInstance->IslandValue = IslandValue;
 		UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("ManagerSaveSlot"), 0);
 		UE_LOG(LogTemp, Warning, TEXT("GAME MANAGER Game saved"));
 	}
@@ -58,7 +58,7 @@ void AGameManager::LoadGame()
 		USaveGameManager *LoadGameInstance = Cast<USaveGameManager>(UGameplayStatics::LoadGameFromSlot(TEXT("ManagerSaveSlot"), 0));
 		if (LoadGameInstance)
 		{	
-			IslandValue = LoadGameInstance->IslandValue;
+			// IslandValue = LoadGameInstance->IslandValue;
 			coins = LoadGameInstance->Coins;
 			UE_LOG(LogTemp, Warning, TEXT("Game loaded"));
 		}

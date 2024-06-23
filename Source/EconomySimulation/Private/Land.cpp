@@ -39,8 +39,8 @@ void ALand::PurchaseLand()
         LandTypeNum = 0;
         GM->coins -= LandCost;
         GM->IslandValue += 100;
-        GM->SaveGame();
         SaveGame();
+        GM->SaveGame();
     }
 }
 
@@ -49,13 +49,13 @@ void ALand::BeginPlay()
     Super::BeginPlay();
     AActor *FoundActor = UGameplayStatics::GetActorOfClass(GetWorld(), AGameManager::StaticClass());
     GM = Cast<AGameManager>(FoundActor);
+    LoadGame();
 
     if (GM && bIsRented)
     {
         GM->IslandValue += 100;
         GrassMesh->SetVisibility(false);
     }
-    LoadGame();
 }
 
 void ALand::ConvertToHouse()
@@ -324,6 +324,7 @@ void ALand::SaveGame()
     SaveGameInstance->LandDataArray.Add(SaveData);
     UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("LandSaveSlot"), 0);
     UE_LOG(LogTemp, Warning, TEXT("Game Saved"));
+    GM->SaveGame();
 }
 
 void ALand::LoadGame()
