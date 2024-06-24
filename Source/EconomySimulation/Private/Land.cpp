@@ -37,10 +37,10 @@ void ALand::PurchaseLand()
         bIsRented = true;
         GrassMesh->SetVisibility(false);
         LandTypeNum = 0;
-        GM->coins -= LandCost;
+        GM->Expenses += LandCost;
         GM->IslandValue += 100;
         SaveGame();
-        GM->SaveGame();
+        GM->CalculateCoins();
     }
 }
 
@@ -55,6 +55,9 @@ void ALand::BeginPlay()
     {
         GM->IslandValue += 100;
         GrassMesh->SetVisibility(false);
+        GM->LoadGame();
+        GM->Expenses += LandCost;
+        GM->CalculateCoins();
     }
 }
 
@@ -324,7 +327,7 @@ void ALand::SaveGame()
     SaveGameInstance->LandDataArray.Add(SaveData);
     UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("LandSaveSlot"), 0);
     UE_LOG(LogTemp, Warning, TEXT("Game Saved"));
-    GM->SaveGame();
+    // GM->SaveGame();
 }
 
 void ALand::LoadGame()

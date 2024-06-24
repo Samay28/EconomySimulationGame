@@ -14,12 +14,16 @@ AGameManager::AGameManager()
 	coins = 500;
 	BlockPlayerMovement = false;
 	IslandValue = 0;
+	Profit = 0;
+	Expenses = 0;
 }
 
 // Called when the game starts or when spawned
 void AGameManager::BeginPlay()
 {
 	Super::BeginPlay();
+	// LoadGame();
+	CalculateCoins();
 }
 void AGameManager::Tick(float DeltaTime)
 {
@@ -43,10 +47,10 @@ void AGameManager::SaveGame()
 	USaveGameManager *SaveGameInstance = Cast<USaveGameManager>(UGameplayStatics::CreateSaveGameObject(USaveGameManager::StaticClass()));
 	if (SaveGameInstance)
 	{
-		SaveGameInstance->Coins = coins;
-		// SaveGameInstance->IslandValue = IslandValue;
+		SaveGameInstance->Profit = Profit;
+		UE_LOG(LogTemp, Warning, TEXT("Profit : %d"),SaveGameInstance->Profit );
+
 		UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("ManagerSaveSlot"), 0);
-		UE_LOG(LogTemp, Warning, TEXT("GAME MANAGER Game saved with coins : %d"), SaveGameInstance->Coins);
 	}
 }
 
@@ -57,9 +61,15 @@ void AGameManager::LoadGame()
 		USaveGameManager *LoadGameInstance = Cast<USaveGameManager>(UGameplayStatics::LoadGameFromSlot(TEXT("ManagerSaveSlot"), 0));
 		if (LoadGameInstance)
 		{	
-			// IslandValue = LoadGameInstance->IslandValue;
-			coins = LoadGameInstance->Coins;
-			UE_LOG(LogTemp, Warning, TEXT("GAME MANAGER Game LOADED with coins : %d"), LoadGameInstance->Coins);
+			Profit = LoadGameInstance->Profit;
+			UE_LOG(LogTemp, Warning, TEXT("Profit Loaded: %d"),LoadGameInstance->Profit );
 		}
 	}
+}
+
+void AGameManager::CalculateCoins()
+{
+	coins = Profit - Expenses + 1200;
+	SaveGame();
+	UE_LOG(LogTemp, Warning, TEXT("coins : %d"),coins );
 }

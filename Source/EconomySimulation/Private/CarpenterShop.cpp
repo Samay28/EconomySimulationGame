@@ -6,8 +6,8 @@
 // Sets default values
 ACarpenterShop::ACarpenterShop()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+    // Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+    PrimaryActorTick.bCanEverTick = true;
     ShopMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ShopMesh"));
     SetRootComponent(ShopMesh);
 }
@@ -15,19 +15,18 @@ ACarpenterShop::ACarpenterShop()
 // Called when the game starts or when spawned
 void ACarpenterShop::BeginPlay()
 {
-	Super::BeginPlay();
-	AActor *FoundActor = UGameplayStatics::GetActorOfClass(GetWorld(), AGameManager::StaticClass());
-	GM = Cast<AGameManager>(FoundActor);
+    Super::BeginPlay();
+    AActor *FoundActor = UGameplayStatics::GetActorOfClass(GetWorld(), AGameManager::StaticClass());
+    GM = Cast<AGameManager>(FoundActor);
 }
 
 // Called every frame
 void ACarpenterShop::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
+    Super::Tick(DeltaTime);
 }
 
-
-void ACarpenterShop::SellItem(AMyPlayerCharacter* PlayerCharacter)
+void ACarpenterShop::SellItem(AMyPlayerCharacter *PlayerCharacter)
 {
     if (!PlayerCharacter || !PlayerCharacter->PlayerInventoryComponent)
     {
@@ -35,15 +34,15 @@ void ACarpenterShop::SellItem(AMyPlayerCharacter* PlayerCharacter)
         return;
     }
 
-    UPlayerInventoryComponent* PlayerInventory = PlayerCharacter->PlayerInventoryComponent;
-    TArray<FInventoryItem>& Inventory = PlayerInventory->Inventory;
-    TMap<FName, int32>& ItemValues = PlayerInventory->ItemValues;
+    UPlayerInventoryComponent *PlayerInventory = PlayerCharacter->PlayerInventoryComponent;
+    TArray<FInventoryItem> &Inventory = PlayerInventory->Inventory;
+    TMap<FName, int32> &ItemValues = PlayerInventory->ItemValues;
 
     int32 TotalValue = 0;
 
-    for (const FInventoryItem& Item : Inventory)
+    for (const FInventoryItem &Item : Inventory)
     {
-        int32* ItemValue = ItemValues.Find(Item.ItemName);
+        int32 *ItemValue = ItemValues.Find(Item.ItemName);
         if (ItemValue)
         {
             int32 TotalItemValue = Item.Quantity * (*ItemValue);
@@ -59,10 +58,10 @@ void ACarpenterShop::SellItem(AMyPlayerCharacter* PlayerCharacter)
 
     // Clear the inventory after selling everything
     Inventory.Empty();
-    ItemValues.Empty();  // Clear item values as well
+    ItemValues.Empty(); // Clear item values as well
 
-    GM->coins += TotalValue;
+    GM->Profit += TotalValue;
     PlayerInventory->SaveInventory();
-    GM->SaveGame();
+    GM->CalculateCoins();
     UE_LOG(LogTemp, Warning, TEXT("Total coins earned from selling all items: %d"), TotalValue);
 }

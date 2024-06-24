@@ -22,7 +22,6 @@ AHouseLand::AHouseLand()
 void AHouseLand::BeginPlay()
 {
     Super::BeginPlay();
-    GM->LoadGame();
     LoadGame();
 
     if (!DoesOwnHouse)
@@ -47,9 +46,9 @@ void AHouseLand::OwnHouse()
     if (GM->coins >= HouseConstructionCost && !DoesOwnHouse)
     {
         DoesOwnHouse = true;
-        HouseMesh->SetVisibility(true);
-        GM->coins -= HouseConstructionCost;
-        GM->SaveGame(); // Save the game manager state after deducting coins
+        GM->CalculateCoins();
+        GM->Expenses += HouseConstructionCost;
+        GM->SaveGame(); 
         UE_LOG(LogTemp, Warning, TEXT("House Bought, Remaining money : %d"), GM->coins);
         HouseID = FMath::Rand();
         UE_LOG(LogTemp, Warning, TEXT("House id : %d"), HouseID);
@@ -146,7 +145,8 @@ void AHouseLand::LoadGame()
 
 void AHouseLand::TransferRent()
 {
-    GM->coins += RentCollected;
+    GM->Profit += RentCollected;
+    GM->CalculateCoins();
     RentCollected = 0;
     UE_LOG(LogTemp, Warning, TEXT("HOUSE TRANSFERRED RENT"));
     SaveGame();

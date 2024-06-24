@@ -42,7 +42,7 @@ void AFishShop::SellItem(AMyPlayerCharacter *PlayerCharacter)
 
 	for (const FInventoryItem &Item : Inventory)
 	{
-		int32* ItemValue = ItemValues.Find(Item.ItemName);
+		int32 *ItemValue = ItemValues.Find(Item.ItemName);
 		if (ItemValue)
 		{
 			int32 TotalItemValue = Item.Quantity * (*ItemValue);
@@ -55,8 +55,8 @@ void AFishShop::SellItem(AMyPlayerCharacter *PlayerCharacter)
 	Inventory.Empty();
 	ItemValues.Empty();
 
-	GM->coins += TotalValue;
+	GM->Profit += TotalValue;
 	PlayerInventory->SaveInventory();
-	GM->SaveGame();
+	GM->CalculateCoins();
 	UE_LOG(LogTemp, Warning, TEXT("Total coins earned from selling all items: %d"), TotalValue);
 }

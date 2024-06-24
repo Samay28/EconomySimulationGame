@@ -46,10 +46,11 @@ void AFarmLand::RentLandForFarming()
         // HarvestProfit = FMath::RandRange(5, 25);
         Carrots->SetVisibility(true);
         bIsRented = true;
-        GM->coins -= FarmSetupCost;
+        GM->Expenses += FarmSetupCost;
         UE_LOG(LogTemp, Warning, TEXT("Farm Bought, Remaining money : %d"), GM->coins);
         count++;
         SaveGame();
+        GM->CalculateCoins();
     }
 }
 void AFarmLand::SaveGame()

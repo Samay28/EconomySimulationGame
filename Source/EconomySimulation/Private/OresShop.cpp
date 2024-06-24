@@ -55,9 +55,9 @@ void AOresShop::SellItem(AMyPlayerCharacter *PlayerCharacter)
 	Inventory.Empty();
 	ItemValues.Empty();
 
-	GM->coins += TotalValue;
+	GM->Profit += TotalValue;
 	PlayerInventory->SaveInventory();
-	GM->SaveGame();
+	GM->CalculateCoins();
 	UE_LOG(LogTemp, Warning, TEXT("Total coins earned from selling all items: %d"), TotalValue);
 }
 

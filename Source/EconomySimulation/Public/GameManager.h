@@ -20,6 +20,12 @@ public:
 	int coins;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int Profit;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int Expenses;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int IslandValue;
 
 	virtual void Tick(float DeltaTime) override;
@@ -31,7 +37,11 @@ public:
 	void DeleteFarmSave();
 
 	void SaveGame();
+
+	UFUNCTION(BlueprintCallable)
 	void LoadGame();
+
+	void CalculateCoins();
 
 protected:
 	// Called when the game starts or when spawned

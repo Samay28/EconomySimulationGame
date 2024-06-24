@@ -58,7 +58,8 @@ void AMiningLand::SetupMiningLand()
     if (GM->coins >= MiningLandSetupCost && !IsPurchased)
     {
         MiningLevel = 1;
-        GM->coins -= MiningLandSetupCost;
+        GM->Expenses += MiningLandSetupCost;
+        GM->CalculateCoins();
         count++;
     }
 }
