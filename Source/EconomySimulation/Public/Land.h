@@ -6,6 +6,16 @@
 #include "GameFramework/Actor.h"
 #include "Land.generated.h"
 
+UENUM(BlueprintType)
+enum class EMessageType : uint8
+{
+	MT_ErrorSettingItemProivderLand UMETA(DisplayName = "Shop/storage absent"),
+	MT_ErrorSettingProfitProivderLand UMETA(DisplayName = "Atm Absent"),
+	MT_InsufficientFunds UMETA(DisplayName = "Insufficient Funds"),
+	MT_SuccessfullPurchase UMETA(DisplayName = "Purchase Done"),
+	MT_GameLoaded UMETA(DisplayName = "Game Loaded")
+};
+
 UCLASS()
 class ECONOMYSIMULATION_API ALand : public AActor
 {
@@ -22,7 +32,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool bIsRented;
-	
+
 	int LandCost;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
@@ -32,22 +42,27 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 	class AGameManager *GM;
-	class AMyPlayerCharacter* Player;
+	class AMyPlayerCharacter *Player;
 
 	UFUNCTION(BlueprintCallable)
 	void PurchaseLand();
+	bool IsStoragePresent;
 
 	UFUNCTION(BlueprintCallable)
-	void ConvertToFarm();
+	bool ConvertToFarm();
+	bool IsVegetableShopPresent;
 
 	UFUNCTION(BlueprintCallable)
 	void ConvertToHouse();
+	bool IsATMPresent;
 
 	UFUNCTION(BlueprintCallable)
 	void ConvertToPond();
+	bool IsFishShopPresent;
 
 	UFUNCTION(BlueprintCallable)
 	void ConvertToMiningLand();
+	bool IsOreShopPresent;
 
 	UFUNCTION(BlueprintCallable)
 	void ConvertToCarpenterShop();
@@ -97,11 +112,16 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void LoadGame();
 
+	// printing UI
+
+	UFUNCTION(BlueprintCallable)
+	FString GetMessage(EMessageType MT);
+
 protected:
 	virtual void Tick(float DeltaTime) override;
 	virtual void BeginPlay() override;
 
-	int LandTypeNum; 
+	int LandTypeNum;
 
 private:
 	UPROPERTY(EditAnywhere)

@@ -63,9 +63,9 @@ void ALand::BeginPlay()
 
 void ALand::ConvertToHouse()
 {
-    if (!HouseLandBlueprint)
+    if (!HouseLandBlueprint || !IsATMPresent)
     {
-        UE_LOG(LogTemp, Warning, TEXT("HouseLandBlueprint is not set."));
+        GetMessage(EMessageType::MT_ErrorSettingProfitProivderLand);
         return;
     }
 
@@ -88,9 +88,9 @@ void ALand::ConvertToHouse()
 
 void ALand::ConvertToPond()
 {
-    if (!PondBlueprint)
+    if (!PondBlueprint || !IsFishShopPresent)
     {
-        UE_LOG(LogTemp, Warning, TEXT("PondBlueprint is not set."));
+        GetMessage(EMessageType::MT_ErrorSettingItemProivderLand);
         return;
     }
 
@@ -113,9 +113,9 @@ void ALand::ConvertToPond()
 
 void ALand::ConvertToMiningLand()
 {
-    if (!MiningLandBlueprint)
+    if (!MiningLandBlueprint || !IsOreShopPresent)
     {
-        UE_LOG(LogTemp, Warning, TEXT("MiningLandBlueprint is not set."));
+        GetMessage(EMessageType::MT_ErrorSettingItemProivderLand);
         return;
     }
 
@@ -269,12 +269,12 @@ void ALand::KeepSimpleLand()
     GrassMesh->SetVisibility(false);
 }
 
-void ALand::ConvertToFarm()
+bool ALand::ConvertToFarm()
 {
-    if (!FarmLandBlueprint)
+    if (!FarmLandBlueprint || !IsVegetableShopPresent || !IsStoragePresent)
     {
-        UE_LOG(LogTemp, Warning, TEXT("FarmLandBlueprint is not set."));
-        return;
+        // GetMessage(EMessageType::MT_ErrorSettingItemProivderLand);
+        return false;
     }
 
     FVector Location = GetActorLocation();
@@ -292,6 +292,8 @@ void ALand::ConvertToFarm()
         SaveGame();
         Destroy();
     }
+    return true;
+    // GetMessage(EMessageType::MT_SuccessfullPurchase);
 }
 
 void ALand::SaveGame()
@@ -352,7 +354,7 @@ void ALand::LoadGame()
             LandTypeNum = SaveData.LandTypeNum;
             SetActorLocation(SaveData.Location);
             SetActorRotation(SaveData.Rotation);
-            bIsRented = SaveData.bIsRented; // Add this line
+            bIsRented = SaveData.bIsRented;
 
             if (LandTypeNum == 1 && FarmLandBlueprint)
             {
@@ -389,6 +391,21 @@ void ALand::LoadGame()
 
             break;
         }
+    }
+}
+
+FString ALand::GetMessage(EMessageType MT)
+{
+    switch (MT)
+    {
+    case EMessageType::MT_ErrorSettingItemProivderLand:
+        return TEXT("You need To have Storage/Respective Shop Setup!");
+    case EMessageType::MT_ErrorSettingProfitProivderLand:
+        return TEXT("You need To have ATM Setup!");
+    case EMessageType::MT_SuccessfullPurchase:
+        return TEXT("Successful Purchase!");
+    default:
+        return TEXT("Unknown message type.");
     }
 }
 
