@@ -30,7 +30,7 @@ ALand::ALand()
     LandID = FMath::Rand();
 }
 
-void ALand::PurchaseLand()
+FString ALand::PurchaseLand()
 {
     if (GM->coins >= LandCost && !bIsRented)
     {
@@ -41,7 +41,10 @@ void ALand::PurchaseLand()
         GM->IslandValue += 100;
         SaveGame();
         GM->CalculateCoins();
+        return "";
     }
+
+    return GetMessage(EMessageType::MT_InsufficientFunds);
 }
 
 void ALand::BeginPlay()
@@ -61,12 +64,11 @@ void ALand::BeginPlay()
     }
 }
 
-void ALand::ConvertToHouse()
+FString ALand::ConvertToHouse()
 {
     if (!HouseLandBlueprint || !IsATMPresent)
     {
-        GetMessage(EMessageType::MT_ErrorSettingProfitProivderLand);
-        return;
+        return GetMessage(EMessageType::MT_ErrorSettingProfitProivderLand);
     }
 
     FVector Location = GetActorLocation();
@@ -84,14 +86,14 @@ void ALand::ConvertToHouse()
         SaveGame();
         Destroy();
     }
+    return "";
 }
 
-void ALand::ConvertToPond()
+FString ALand::ConvertToPond()
 {
     if (!PondBlueprint || !IsFishShopPresent)
     {
-        GetMessage(EMessageType::MT_ErrorSettingItemProivderLand);
-        return;
+        return GetMessage(EMessageType::MT_ErrorSettingItemProivderLand);
     }
 
     FVector Location = GetActorLocation();
@@ -109,14 +111,14 @@ void ALand::ConvertToPond()
         SaveGame();
         Destroy();
     }
+    return "";
 }
 
-void ALand::ConvertToMiningLand()
+FString ALand::ConvertToMiningLand()
 {
     if (!MiningLandBlueprint || !IsOreShopPresent)
     {
-        GetMessage(EMessageType::MT_ErrorSettingItemProivderLand);
-        return;
+        return GetMessage(EMessageType::MT_ErrorSettingItemProivderLand);
     }
 
     FVector Location = GetActorLocation();
@@ -134,6 +136,7 @@ void ALand::ConvertToMiningLand()
         SaveGame();
         Destroy();
     }
+    return "";
 }
 
 void ALand::ConvertToCarpenterShop()
@@ -250,8 +253,6 @@ void ALand::ConvertToVegetableShop()
         VegetableShop->SetActorRelativeLocation(FVector(0.0f, 0.0f, 200.0f));
         VegetableShop->SetActorRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
         VegetableShop->SetActorRelativeScale3D(FVector(0.4f, 0.5f, 1.0f));
-
-        UE_LOG(LogTemp, Warning, TEXT("VegetableShop successfully converted and attached to LandMesh"));
         LandTypeNum = 8;
         GM->IslandValue += 50;
         IsOccupied = true;
@@ -269,12 +270,11 @@ void ALand::KeepSimpleLand()
     GrassMesh->SetVisibility(false);
 }
 
-bool ALand::ConvertToFarm()
+FString ALand::ConvertToFarm()
 {
-    if (!FarmLandBlueprint || !IsVegetableShopPresent || !IsStoragePresent)
+    if (!IsVegetableShopPresent || !IsStoragePresent)
     {
-        // GetMessage(EMessageType::MT_ErrorSettingItemProivderLand);
-        return false;
+        return GetMessage(EMessageType::MT_ErrorSettingItemProivderLand);
     }
 
     FVector Location = GetActorLocation();
@@ -292,8 +292,7 @@ bool ALand::ConvertToFarm()
         SaveGame();
         Destroy();
     }
-    return true;
-    // GetMessage(EMessageType::MT_SuccessfullPurchase);
+    return "";
 }
 
 void ALand::SaveGame()

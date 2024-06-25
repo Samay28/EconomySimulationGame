@@ -12,7 +12,7 @@ AFarmLand::AFarmLand()
 {
     Carrots = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Carrots"));
     Carrots->SetupAttachment(LandMesh);
-    Carrots->SetVisibility(false);
+    Carrots->SetVisibility(true);
 
     StorageComponent = CreateDefaultSubobject<UBusinessStorageComponent>(TEXT("Storage"));
 
@@ -33,7 +33,6 @@ void AFarmLand::BeginPlay()
     if (bIsRented)
     {
         GetWorldTimerManager().SetTimer(ResourceGeneratingHandle, this, &AFarmLand::HarvestCropsToStorage, 10.0f, true);
-        // StorageComponent->LoadStorage();
     }
     APlayerController *PlayerController = UGameplayStatics::GetPlayerController(this, 0);
     Player = Cast<AMyPlayerCharacter>(PlayerController->GetCharacter());
@@ -43,11 +42,8 @@ void AFarmLand::RentLandForFarming()
 {
     if (GM->coins >= FarmSetupCost && !bIsRented)
     {
-        // HarvestProfit = FMath::RandRange(5, 25);
-        Carrots->SetVisibility(true);
         bIsRented = true;
         GM->Expenses += FarmSetupCost;
-        UE_LOG(LogTemp, Warning, TEXT("Farm Bought, Remaining money : %d"), GM->coins);
         count++;
         SaveGame();
         GM->CalculateCoins();

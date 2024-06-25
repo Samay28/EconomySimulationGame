@@ -11,9 +11,9 @@ enum class EMessageType : uint8
 {
 	MT_ErrorSettingItemProivderLand UMETA(DisplayName = "Shop/storage absent"),
 	MT_ErrorSettingProfitProivderLand UMETA(DisplayName = "Atm Absent"),
-	MT_InsufficientFunds UMETA(DisplayName = "Insufficient Funds"),
+	MT_InsufficientFunds UMETA(DisplayName = "Insufficient Coins"),
 	MT_SuccessfullPurchase UMETA(DisplayName = "Purchase Done"),
-	MT_GameLoaded UMETA(DisplayName = "Game Loaded")
+	MT_InsufficientIslandValue UMETA(DisplayName = "Increase your Island Value to : ")
 };
 
 UCLASS()
@@ -45,23 +45,23 @@ public:
 	class AMyPlayerCharacter *Player;
 
 	UFUNCTION(BlueprintCallable)
-	void PurchaseLand();
+	FString PurchaseLand();
 	bool IsStoragePresent;
 
 	UFUNCTION(BlueprintCallable)
-	bool ConvertToFarm();
+	FString ConvertToFarm();
 	bool IsVegetableShopPresent;
 
 	UFUNCTION(BlueprintCallable)
-	void ConvertToHouse();
+	FString ConvertToHouse();
 	bool IsATMPresent;
 
 	UFUNCTION(BlueprintCallable)
-	void ConvertToPond();
+	FString ConvertToPond();
 	bool IsFishShopPresent;
 
 	UFUNCTION(BlueprintCallable)
-	void ConvertToMiningLand();
+	FString ConvertToMiningLand();
 	bool IsOreShopPresent;
 
 	UFUNCTION(BlueprintCallable)
