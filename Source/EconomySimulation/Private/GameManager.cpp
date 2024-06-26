@@ -48,7 +48,7 @@ void AGameManager::SaveGame()
 	if (SaveGameInstance)
 	{
 		SaveGameInstance->Profit = Profit;
-		UE_LOG(LogTemp, Warning, TEXT("Profit : %d"),SaveGameInstance->Profit );
+		UE_LOG(LogTemp, Warning, TEXT("Profit saved as : %d"),SaveGameInstance->Profit );
 
 		UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("ManagerSaveSlot"), 0);
 	}
@@ -70,6 +70,6 @@ void AGameManager::LoadGame()
 void AGameManager::CalculateCoins()
 {
 	coins = Profit - Expenses + 1200;
-	SaveGame();
+	// SaveGame();
 	UE_LOG(LogTemp, Warning, TEXT("coins : %d"),coins );
 }

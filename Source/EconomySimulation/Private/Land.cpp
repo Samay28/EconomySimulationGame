@@ -41,6 +41,7 @@ FString ALand::PurchaseLand()
         GM->IslandValue += 100;
         SaveGame();
         GM->CalculateCoins();
+        GM->SaveGame();
         return "";
     }
 
@@ -56,9 +57,9 @@ void ALand::BeginPlay()
 
     if (GM && bIsRented)
     {
+        GM->LoadGame();
         GM->IslandValue += 100;
         GrassMesh->SetVisibility(false);
-        GM->LoadGame();
         GM->Expenses += LandCost;
         GM->CalculateCoins();
     }
@@ -66,7 +67,7 @@ void ALand::BeginPlay()
 
 FString ALand::ConvertToHouse()
 {
-    if (!HouseLandBlueprint || !IsATMPresent)
+    if (!HouseLandBlueprint)
     {
         return GetMessage(EMessageType::MT_ErrorSettingProfitProivderLand);
     }

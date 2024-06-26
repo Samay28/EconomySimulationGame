@@ -147,8 +147,8 @@ void AHouseLand::TransferRent()
 {
     GM->Profit += RentCollected;
     GM->CalculateCoins();
+    GM->SaveGame();
     RentCollected = 0;
     UE_LOG(LogTemp, Warning, TEXT("HOUSE TRANSFERRED RENT"));
     SaveGame();
-    GM->SaveGame();
 }
