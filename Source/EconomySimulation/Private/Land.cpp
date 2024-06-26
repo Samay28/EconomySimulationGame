@@ -25,6 +25,7 @@ ALand::ALand()
     LandCost = 50;
     bIsRented = false;
     IsOccupied = false;
+    AreItemsReady = false;
 
     LandTypeNum = 0;
     LandID = FMath::Rand();

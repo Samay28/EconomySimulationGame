@@ -117,6 +117,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	FString GetMessage(EMessageType MT);
 
+	UPROPERTY(BlueprintReadOnly)
+	bool AreItemsReady;
+
 protected:
 	virtual void Tick(float DeltaTime) override;
 	virtual void BeginPlay() override;
