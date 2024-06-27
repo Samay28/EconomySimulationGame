@@ -18,6 +18,8 @@ bool ALand::IsVegetableShopPresent = false;
 bool ALand::IsATMPresent = false;
 bool ALand::IsFishShopPresent = false;
 bool ALand::IsOreShopPresent = false;
+bool ALand::AreItemsReady = false;
+bool ALand::IsRentReady = false;
 
 
 ALand::ALand()
@@ -204,6 +206,7 @@ void ALand::ConvertToFishShop()
         UE_LOG(LogTemp, Warning, TEXT("Fish Shop successfully converted and attached to LandMesh"));
         GM->IslandValue += 50;
         IsOccupied = true;
+        IsFishShopPresent = true;
         LandTypeNum = 4;
         SaveGame();
     }
@@ -233,6 +236,7 @@ void ALand::ConvertToOresShop()
         UE_LOG(LogTemp, Warning, TEXT("Ores Shop successfully converted and attached to LandMesh"));
         LandTypeNum = 5;
         GM->IslandValue += 50;
+        IsOreShopPresent = true;
         IsOccupied = true;
         SaveGame();
     }
@@ -414,6 +418,16 @@ FString ALand::GetMessage(EMessageType MT)
     default:
         return TEXT("Unknown message type.");
     }
+}
+
+bool ALand::GetAreItemsReady()
+{
+    return AreItemsReady;
+}
+
+bool ALand::GetIsRentReady()
+{
+    return IsRentReady;
 }
 
 // Called every frame

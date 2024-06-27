@@ -117,8 +117,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 	FString GetMessage(EMessageType MT);
 
-	UPROPERTY(BlueprintReadOnly)
-	bool AreItemsReady;
+	static bool AreItemsReady;
+	static bool IsRentReady;
+
+	UFUNCTION(BlueprintCallable)
+	bool GetAreItemsReady();
+
+	UFUNCTION(BlueprintCallable)
+	bool GetIsRentReady();
 
 protected:
 	virtual void Tick(float DeltaTime) override;

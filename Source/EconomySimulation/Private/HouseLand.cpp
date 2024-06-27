@@ -23,6 +23,7 @@ void AHouseLand::BeginPlay()
 {
     Super::BeginPlay();
     LoadGame();
+    IsRentReady = false;
 
     if (!DoesOwnHouse)
     {
@@ -36,7 +37,7 @@ void AHouseLand::GetHouseRent()
 {
     if (DoesOwnHouse)
     {   
-        AreItemsReady = true;
+        IsRentReady = true;
         RentCollected += PayCheck;
         SaveGame();
     }
@@ -150,7 +151,7 @@ void AHouseLand::TransferRent()
     GM->CalculateCoins();
     GM->SaveGame();
     RentCollected = 0;
-    AreItemsReady = false;
+    IsRentReady = false;
     UE_LOG(LogTemp, Warning, TEXT("HOUSE TRANSFERRED RENT"));
     SaveGame();
 }
