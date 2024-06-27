@@ -164,6 +164,7 @@ void AFarmLand::HarvestCropsToStorage()
         }
         int32 Quantity = FMath::RandRange(1, 3);
         StorageComponent->AddItem(AwardedCrop, Quantity, Value);
+        AreItemsReady = true;
     }
     else
     {
@@ -180,6 +181,7 @@ void AFarmLand::TransferItems()
             StorageComponent->RemoveItem(Item.ItemName, Item.Quantity);
             UE_LOG(LogTemp, Warning, TEXT("TRANSFERRING Name: %s, Quantity: %d, Value : %d"), *Item.ItemName.ToString(), Item.Quantity, Item.Value);
             StorageComponent->SaveStorage();
+            AreItemsReady = false;
         }
     }
 }

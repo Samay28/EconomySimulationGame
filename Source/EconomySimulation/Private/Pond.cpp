@@ -86,6 +86,7 @@ void APond::ProvideResourcesToStorage()
 
     UE_LOG(LogTemp, Warning, TEXT("Harvested: %s, Quantity: %d"), *AwardedFish.ToString(), Quantity);
     StorageComponent->SaveStorage();
+    AreItemsReady = true;
 }
 
 void APond::TransferItems()
@@ -98,6 +99,7 @@ void APond::TransferItems()
             StorageComponent->RemoveItem(Item.ItemName, Item.Quantity);
             UE_LOG(LogTemp, Warning, TEXT("TRANSFERRING Name: %s, Quantity: %d, Value : %d"), *Item.ItemName.ToString(), Item.Quantity, Item.Value);
             StorageComponent->SaveStorage();
+            AreItemsReady = false;
         }
     }
     // StorageComponent->ClearItems();

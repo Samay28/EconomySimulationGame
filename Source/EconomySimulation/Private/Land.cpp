@@ -13,7 +13,13 @@
 #include "MyPlayerCharacter.h"
 #include "Kismet/GameplayStatics.h"
 
-// Sets default values
+bool ALand::IsStoragePresent = false;
+bool ALand::IsVegetableShopPresent = false;
+bool ALand::IsATMPresent = false;
+bool ALand::IsFishShopPresent = false;
+bool ALand::IsOreShopPresent = false;
+
+
 ALand::ALand()
 {
     PrimaryActorTick.bCanEverTick = true;
@@ -246,7 +252,7 @@ void ALand::ConvertToVegetableShop()
 
     // Spawn the Carpenter Shop Actor
     AVegetableShop *VegetableShop = GetWorld()->SpawnActor<AVegetableShop>(VegetableShopBlueprint, GetActorLocation(), GetActorRotation());
-
+    IsVegetableShopPresent = true;
     if (VegetableShop)
     {
         // Attach the Carpenter Shop to the LandMesh
@@ -274,7 +280,7 @@ void ALand::KeepSimpleLand()
 
 FString ALand::ConvertToFarm()
 {
-    if (!IsVegetableShopPresent || !IsStoragePresent)
+    if (!IsVegetableShopPresent)
     {
         return GetMessage(EMessageType::MT_ErrorSettingItemProivderLand);
     }

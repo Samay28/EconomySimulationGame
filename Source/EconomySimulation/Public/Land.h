@@ -46,23 +46,23 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	FString PurchaseLand();
-	bool IsStoragePresent;
+	static bool IsStoragePresent;
 
 	UFUNCTION(BlueprintCallable)
 	FString ConvertToFarm();
-	bool IsVegetableShopPresent;
+	static bool IsVegetableShopPresent;
 
 	UFUNCTION(BlueprintCallable)
 	FString ConvertToHouse();
-	bool IsATMPresent;
+	static bool IsATMPresent;
 
 	UFUNCTION(BlueprintCallable)
 	FString ConvertToPond();
-	bool IsFishShopPresent;
+	static bool IsFishShopPresent;
 
 	UFUNCTION(BlueprintCallable)
 	FString ConvertToMiningLand();
-	bool IsOreShopPresent;
+	static bool IsOreShopPresent;
 
 	UFUNCTION(BlueprintCallable)
 	void ConvertToCarpenterShop();

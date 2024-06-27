@@ -48,6 +48,7 @@ void AMiningLand::TransferItems()
             StorageComponent->RemoveItem(Item.ItemName, Item.Quantity);
             UE_LOG(LogTemp, Warning, TEXT("TRANSFERRING Name: %s, Quantity: %d, Value : %d"), *Item.ItemName.ToString(), Item.Quantity, Item.Value);
             StorageComponent->SaveStorage();
+            AreItemsReady = false;
         }
     }
     // StorageComponent->ClearItems();
@@ -94,6 +95,7 @@ void AMiningLand::ProvideResourcesToStorage()
 
     UE_LOG(LogTemp, Warning, TEXT("Harvested: %s, Quantity: %d"), *AwardedOre.ToString(), Quantity);
     StorageComponent->SaveStorage();
+    AreItemsReady = true;
 }
 
 void AMiningLand::SaveGame()
