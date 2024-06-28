@@ -142,7 +142,6 @@ void AFarmLand::HarvestCropsToStorage()
         const float CarrotProbability = 0.3f;
         const float PotatoProbability = 0.1f;
 
-        // Generate a random float between 0 and 1
         float RandomValue = FMath::FRand();
 
         FName AwardedCrop;

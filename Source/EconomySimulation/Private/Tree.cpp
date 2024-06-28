@@ -45,16 +45,35 @@ void ATree::StartCuttingTrees()
 
 void ATree::ProvideRewards()
 {
-    TreeMesh->SetVisibility(false);
-    int32 woodAwardedTemp = FMath::RandRange(0, 2);
-    int32 leafAwardedTemp = FMath::RandRange(0, 5);
-    Player->PlayerInventoryComponent->AddItem("wood", woodAwardedTemp, 5);
-    Player->PlayerInventoryComponent->AddItem("leaf", leafAwardedTemp, 3);
-    UE_LOG(LogTemp, Warning, TEXT("Tree cut! wood rewarded: %d, leaf rewarded : %d"), woodAwardedTemp,leafAwardedTemp);
-    CanBeCut = false;
-    IsCutting = false; // Stop the cutting effect
-    GetWorldTimerManager().SetTimer(RegenerationTimerHandle, this, &ATree::RegenerateTime, TimeToRegenerate, false);
 
+    const float LeafProbability = 0.6f;
+    const float WoodProbability = 0.3f;
+    const float StoneProbability = 0.1f;
+
+    float RandomValue = FMath::FRand();
+    FName AwardedItem;
+    int Value;
+    if (RandomValue < LeafProbability)
+    {
+        AwardedItem = "leaf";
+        Value = 2;
+    }
+    else if (RandomValue < LeafProbability + WoodProbability)
+    {
+        AwardedItem = "wood";
+        Value = 5;
+    }
+    else
+    {
+        AwardedItem = "stone";
+        Value = 7;
+    }
+    int Quantity = FMath::RandRange(1, 3);
+    Player->PlayerInventoryComponent->AddItem(AwardedItem, Quantity, Value);
+    TreeMesh->SetVisibility(false);
+    CanBeCut = false;
+    IsCutting = false;
+    GetWorldTimerManager().SetTimer(RegenerationTimerHandle, this, &ATree::RegenerateTime, TimeToRegenerate, false);
     GM->BlockPlayerMovement = false;
 }
 
@@ -69,4 +88,3 @@ void ATree::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
 }
-
