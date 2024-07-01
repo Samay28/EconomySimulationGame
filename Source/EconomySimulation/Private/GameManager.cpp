@@ -18,7 +18,9 @@ AGameManager::AGameManager()
 	Expenses = 0;
 }
 
-// Called when the game starts or when spawned
+
+
+
 void AGameManager::BeginPlay()
 {
 	Super::BeginPlay();
