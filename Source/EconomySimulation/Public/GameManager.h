@@ -36,6 +36,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "SaveLoad")
 	void DeleteFarmSave();
 
+	UFUNCTION(BlueprintCallable)
 	void SaveGame();
 
 	UFUNCTION(BlueprintCallable)

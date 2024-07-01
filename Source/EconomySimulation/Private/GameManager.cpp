@@ -16,7 +16,6 @@ AGameManager::AGameManager()
 	IslandValue = 0;
 	Profit = 0;
 	Expenses = 0;
-	FirstTimeLoad = true;
 }
 
 // Called when the game starts or when spawned
