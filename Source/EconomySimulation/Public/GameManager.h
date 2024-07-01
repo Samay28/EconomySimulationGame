@@ -43,8 +43,11 @@ public:
 
 	void CalculateCoins();
 
+	UPROPERTY(BlueprintReadWrite)
+	bool FirstTimeLoad;
+
 protected:
-	// Called when the game starts or when spawned
+	
 	virtual void BeginPlay() override;
 
 private:

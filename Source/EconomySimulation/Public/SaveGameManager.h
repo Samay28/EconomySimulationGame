@@ -20,8 +20,5 @@ public:
 	int32 Profit;
 
 	UPROPERTY(VisibleAnywhere, Category = "SaveGameData")
-	int32 Expenses;
-	
-	UPROPERTY(VisibleAnywhere, Category = "SaveGameData")
-	int IslandValue;
+	bool FirstTimeLoad;
 };

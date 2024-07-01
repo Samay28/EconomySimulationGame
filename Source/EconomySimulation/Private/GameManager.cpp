@@ -16,13 +16,13 @@ AGameManager::AGameManager()
 	IslandValue = 0;
 	Profit = 0;
 	Expenses = 0;
+	FirstTimeLoad = true;
 }
 
 // Called when the game starts or when spawned
 void AGameManager::BeginPlay()
 {
 	Super::BeginPlay();
-	// LoadGame();
 	CalculateCoins();
 }
 void AGameManager::Tick(float DeltaTime)
@@ -48,6 +48,7 @@ void AGameManager::SaveGame()
 	if (SaveGameInstance)
 	{
 		SaveGameInstance->Profit = Profit;
+		SaveGameInstance->FirstTimeLoad = FirstTimeLoad;
 		UE_LOG(LogTemp, Warning, TEXT("Profit saved as : %d"),SaveGameInstance->Profit );
 
 		UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("ManagerSaveSlot"), 0);
@@ -62,6 +63,7 @@ void AGameManager::LoadGame()
 		if (LoadGameInstance)
 		{	
 			Profit = LoadGameInstance->Profit;
+			FirstTimeLoad = LoadGameInstance->FirstTimeLoad;
 			UE_LOG(LogTemp, Warning, TEXT("Profit Loaded: %d"),LoadGameInstance->Profit );
 		}
 	}
