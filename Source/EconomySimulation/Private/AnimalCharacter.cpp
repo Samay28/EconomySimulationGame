@@ -32,3 +32,7 @@ void AAnimalCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 
 }
 
+UBehaviorTree *AAnimalCharacter::GetBehaviorTree() const
+{
+    return Tree;
+}
