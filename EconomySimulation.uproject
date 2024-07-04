@@ -34,22 +34,6 @@
 		{
 			"Name": "OpenImageDenoise",
 			"Enabled": false
-		},
-		{
-			"Name": "MassAI",
-			"Enabled": true
-		},
-		{
-			"Name": "MassCrowd",
-			"Enabled": true
-		},
-		{
-			"Name": "MassEntity",
-			"Enabled": true
-		},
-		{
-			"Name": "MassGameplay",
-			"Enabled": true
 		}
 	]
 }
