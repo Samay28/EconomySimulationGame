@@ -8,7 +8,7 @@
 #include "MyPlayerCharacter.generated.h"
 
 UCLASS()
-class ECONOMYSIMULATION_API  AMyPlayerCharacter : public ACharacter
+class ECONOMYSIMULATION_API AMyPlayerCharacter : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -38,32 +38,42 @@ public:
 
 	bool bShouldMoveForward;
 	FRotator CurrentRotation;
-	FVector StartLocation;
+	FVector StartLocationForJungle;
 	FVector JungleStartLocation;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Economy")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Economy")
 	int Coins;
 
 	UPROPERTY(EditAnywhere)
-	class USpringArmComponent* SpringArm;
+	class USpringArmComponent *SpringArm;
 
 	UPROPERTY(EditAnywhere)
-	class UCameraComponent* CameraComponent;
+	class UCameraComponent *CameraComponent;
 
-	UPROPERTY(VisibleAnywhere,BlueprintReadOnly,Category="Inventory")
-	UPlayerInventoryComponent* PlayerInventoryComponent;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Inventory")
+	UPlayerInventoryComponent *PlayerInventoryComponent;
 
-
-	//jungle
+	// jungle
 	UFUNCTION(BlueprintCallable)
 	void TeleportPlayer();
 
 	UFUNCTION(BlueprintCallable)
 	void SendBackPlayer();
 
+	// new
+	UFUNCTION(BlueprintCallable)
+	void FaceNearestActorWithTag(FString Tag);
+
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
 	FVector MovementDirection;
-	class AGameManager* GM;
+
+	class AGameManager *GM;
+
+	AActor *FindNearestActorWithTag(FString Tag);
+	bool IsReadyToAutoMove;
+
+	FVector StartLocation;
+	FVector EndLocation;
 };
