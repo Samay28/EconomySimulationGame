@@ -20,7 +20,7 @@ AFarmLand::AFarmLand()
     // bIsRented = false;
     // count = 0;
 
-    FarmID = FMath::Rand();
+    // FarmID = FMath::Rand();
     // LoadGame();
 }
 void AFarmLand::BeginPlay()
@@ -44,7 +44,7 @@ void AFarmLand::RentLandForFarming()
     // {
         bIsRented = true;
         GM->Expenses += FarmSetupCost;
-        count++;
+        // count++;
         // SaveGame();
         GM->CalculateCoins();
     // }

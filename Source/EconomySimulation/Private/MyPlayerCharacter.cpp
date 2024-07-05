@@ -25,7 +25,7 @@ AMyPlayerCharacter::AMyPlayerCharacter()
     CameraComponent->SetupAttachment(SpringArm);
 
     PlayerInventoryComponent = CreateDefaultSubobject<UPlayerInventoryComponent>(TEXT("PlayerInventory"));
-    StartLocationForJungle = FVector(-480, 6680, 350);
+    StartLocationForJungle = FVector(-200, 6680, 300);
     JungleStartLocation = FVector(64072.112698f, 129536.133462f, 299.611306f);
 
     IsReadyToAutoMove = false;
@@ -52,7 +52,7 @@ void AMyPlayerCharacter::SendBackPlayer()
 {
     if (!GM->BlockPlayerMovement)
     {
-        SetActorLocation(StartLocation);
+        SetActorLocation(StartLocationForJungle);
         if (SpringArm)
         {
             SpringArm->TargetArmLength = 1390.f;

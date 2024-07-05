@@ -27,9 +27,6 @@ public:
 
 	void HarvestCropsToStorage();
 
-	void SaveGame();
-	void LoadGame();
-
 	class AMyPlayerCharacter *Player;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Storage")
@@ -39,11 +36,9 @@ protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 	int FarmSetupCost;
-	int count;
+
 
 private:
-	UPROPERTY(EditAnywhere, Category = "Farm") //hata
-	int32 FarmID;
 
 	FTimerHandle ResourceGeneratingHandle;
 };

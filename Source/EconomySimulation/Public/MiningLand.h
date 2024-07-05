@@ -29,8 +29,6 @@ public:
 	void SetupMiningLand();
 
 	void ProvideResourcesToStorage();
-	void SaveGame();
-	void LoadGame();
 
 	int MiningLevel;
 
@@ -40,7 +38,6 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	int MiningLandSetupCost;
-	int count;
 
 private:
 	

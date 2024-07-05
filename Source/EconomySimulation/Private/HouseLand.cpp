@@ -14,9 +14,9 @@ AHouseLand::AHouseLand()
     HouseMesh->SetVisibility(true);
 
     HouseConstructionCost = 50;
-    DoesOwnHouse = false;
+    // DoesOwnHouse = false;
     PayCheck = 10;
-    count = 0;
+    // count = 0;
 }
 
 void AHouseLand::BeginPlay()
@@ -25,36 +25,32 @@ void AHouseLand::BeginPlay()
     LoadGame();
     IsRentReady = false;
 
-    if (!DoesOwnHouse)
-    {
+    // if (!DoesOwnHouse)
+    // {
         OwnHouse();
-    }
+    // }
 
     GetWorldTimerManager().SetTimer(HouseRent, this, &AHouseLand::GetHouseRent, 10.0f, true);
 }
 
 void AHouseLand::GetHouseRent()
 {
-    if (DoesOwnHouse)
-    {   
+    // if (DoesOwnHouse)
+    // {   
         IsRentReady = true;
         RentCollected += PayCheck;
         SaveGame();
-    }
+    // }
 }
 
 void AHouseLand::OwnHouse()
 {
-    if (GM->coins >= HouseConstructionCost && !DoesOwnHouse)
+    if (GM->coins >= HouseConstructionCost)
     {
-        DoesOwnHouse = true;
+        // DoesOwnHouse = true;
         GM->CalculateCoins();
         GM->Expenses += HouseConstructionCost;
         GM->SaveGame(); 
-        UE_LOG(LogTemp, Warning, TEXT("House Bought, Remaining money : %d"), GM->coins);
-        HouseID = FMath::Rand();
-        UE_LOG(LogTemp, Warning, TEXT("House id : %d"), HouseID);
-        count++;
         SaveGame();
     }
 }
@@ -89,26 +85,26 @@ void AHouseLand::SaveGame()
     UE_LOG(LogTemp, Warning, TEXT("SaveGameInstance loaded or created"));
 
     FHouseData HouseData;
-    HouseData.HouseID = HouseID;
-    HouseData.DoesOwnHouse = DoesOwnHouse;
+    // HouseData.HouseID = HouseID;
+    // HouseData.DoesOwnHouse = DoesOwnHouse;
     HouseData.RentCollected = RentCollected;
     UE_LOG(LogTemp, Warning, TEXT("house : %d"), HouseData.RentCollected);
 
     bool bFoundExisting = false;
     for (int32 i = 0; i < SaveGameInstance->HouseDataArray.Num(); ++i)
     {
-        if (SaveGameInstance->HouseDataArray[i].HouseID == HouseID)
-        {   
+        // if (SaveGameInstance->HouseDataArray[i].HouseID == HouseID)
+        // {   
             SaveGameInstance->HouseDataArray[i] = HouseData;
             bFoundExisting = true;
             break;
-        }
+        // }
     }
 
     if (!bFoundExisting)
     {
         SaveGameInstance->HouseDataArray.Add(HouseData);
-        UE_LOG(LogTemp, Warning, TEXT("House ID Saved as : %d"), HouseData.HouseID);
+        // UE_LOG(LogTemp, Warning, TEXT("House ID Saved as : %d"), HouseData.HouseID);
     }
 
     if (UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("HouseSaveSlot"), 0))
@@ -128,13 +124,13 @@ void AHouseLand::LoadGame()
     {
         for (const FHouseData &HouseData : LoadGameInstance->HouseDataArray)
         {
-            if (HouseData.HouseID == HouseID)
-            {
-                DoesOwnHouse = HouseData.DoesOwnHouse;
+            // if (HouseData.HouseID == HouseID)
+            // {
+                // DoesOwnHouse = HouseData.DoesOwnHouse;
                 RentCollected = HouseData.RentCollected;
                 UE_LOG(LogTemp, Warning, TEXT("Loaded RentCollected: %d"), RentCollected);
                 break;
-            }
+            // }
         }
     }
     else

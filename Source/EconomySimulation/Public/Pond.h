@@ -17,8 +17,8 @@ class ECONOMYSIMULATION_API APond : public ALand
 public:
 	APond();
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	bool IsPurchased;
+	// UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	// bool IsPurchased;
 
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent *WaterMesh;
@@ -33,8 +33,6 @@ public:
 	void SetupPond();
 
 	void ProvideResourcesToStorage();
-	void SaveGame();
-	void LoadGame();
 
 	int PondLevel;
 	
@@ -44,11 +42,8 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	int PondSetupCost;
-	int count;
 
 private:
-	UPROPERTY(EditAnywhere, Category = "Pond")
-	int32 PondID;
 
 	FTimerHandle ItemsProvider;
 };

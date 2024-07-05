@@ -16,8 +16,8 @@ AMiningLand::AMiningLand()
     StorageComponent = CreateDefaultSubobject<UBusinessStorageComponent>(TEXT("Storage Component"));
 
     MiningLandSetupCost = 50;
-    IsPurchased = false;
-    count = 0;
+    // IsPurchased = false;
+    // count = 0;
     MiningLevel = 1;
 }
 
@@ -29,10 +29,8 @@ void AMiningLand::Tick(float DeltaTime)
 void AMiningLand::BeginPlay()
 {
     Super::BeginPlay();
-    if (count == 0)
-    {
-        SetupMiningLand();
-    }
+    SetupMiningLand();
+
     GetWorldTimerManager().SetTimer(ItemsProvider, this, &AMiningLand::ProvideResourcesToStorage, 10.0f, true);
     APlayerController *PlayerController = UGameplayStatics::GetPlayerController(this, 0);
     Player = Cast<AMyPlayerCharacter>(PlayerController->GetCharacter());
@@ -56,12 +54,11 @@ void AMiningLand::TransferItems()
 
 void AMiningLand::SetupMiningLand()
 {
-    if (GM->coins >= MiningLandSetupCost && !IsPurchased)
+    if (GM->coins >= MiningLandSetupCost)
     {
         MiningLevel = 1;
         GM->Expenses += MiningLandSetupCost;
         GM->CalculateCoins();
-        count++;
     }
 }
 
@@ -98,10 +95,3 @@ void AMiningLand::ProvideResourcesToStorage()
     AreItemsReady = true;
 }
 
-void AMiningLand::SaveGame()
-{
-}
-
-void AMiningLand::LoadGame()
-{
-}
