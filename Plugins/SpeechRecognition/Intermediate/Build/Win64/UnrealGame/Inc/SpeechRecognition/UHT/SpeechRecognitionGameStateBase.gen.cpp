@@ -86,7 +86,9 @@ void EmptyLinkFunctionForGeneratedCodeSpeechRecognitionGameStateBase() {}
 	static_assert(UE_ARRAY_COUNT(Z_Construct_UClass_ASpeechRecognitionGameStateBase_Statics::FuncInfo) < 2048);
 #if WITH_METADATA
 	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ASpeechRecognitionGameStateBase_Statics::Class_MetaDataParams[] = {
+#if !UE_BUILD_SHIPPING
 		{ "Comment", "/**\n * \n */" },
+#endif
 		{ "HideCategories", "Input Movement Collision Rendering HLOD WorldPartition DataLayers Transformation" },
 		{ "IncludePath", "SpeechRecognitionGameStateBase.h" },
 		{ "ModuleRelativePath", "Public/SpeechRecognitionGameStateBase.h" },
@@ -105,9 +107,13 @@ void EmptyLinkFunctionForGeneratedCodeSpeechRecognitionGameStateBase() {}
 #if WITH_METADATA
 	const UECodeGen_Private::FMetaDataPairParam Z_Construct_UClass_ASpeechRecognitionGameStateBase_Statics::NewProp_OptionalWorldList_MetaData[] = {
 		{ "Category", "Audio|SpeechRecognition" },
+#if !UE_BUILD_SHIPPING
 		{ "Comment", "/** Optional phrases to recognize */" },
+#endif
 		{ "ModuleRelativePath", "Public/SpeechRecognitionGameStateBase.h" },
+#if !UE_BUILD_SHIPPING
 		{ "ToolTip", "Optional phrases to recognize" },
+#endif
 	};
 #endif
 	const UECodeGen_Private::FArrayPropertyParams Z_Construct_UClass_ASpeechRecognitionGameStateBase_Statics::NewProp_OptionalWorldList = { "OptionalWorldList", nullptr, (EPropertyFlags)0x0020080000010001, UECodeGen_Private::EPropertyGenFlags::Array, RF_Public|RF_Transient|RF_MarkAsNative, nullptr, nullptr, 1, STRUCT_OFFSET(ASpeechRecognitionGameStateBase, OptionalWorldList), EArrayPropertyFlags::None, METADATA_PARAMS(UE_ARRAY_COUNT(Z_Construct_UClass_ASpeechRecognitionGameStateBase_Statics::NewProp_OptionalWorldList_MetaData), Z_Construct_UClass_ASpeechRecognitionGameStateBase_Statics::NewProp_OptionalWorldList_MetaData) }; // 3609057916
@@ -150,15 +156,15 @@ void EmptyLinkFunctionForGeneratedCodeSpeechRecognitionGameStateBase() {}
 	}
 	DEFINE_VTABLE_PTR_HELPER_CTOR(ASpeechRecognitionGameStateBase);
 	ASpeechRecognitionGameStateBase::~ASpeechRecognitionGameStateBase() {}
-	struct Z_CompiledInDeferFile_FID_Users_Ula_Desktop_SpeechRecognition_HostProject_Plugins_SpeechRecognition_Source_SpeechRecognition_Public_SpeechRecognitionGameStateBase_h_Statics
+	struct Z_CompiledInDeferFile_FID_Users_Asus_Documents_GitHub_EconomySimulation_Plugins_SpeechRecognition_Source_SpeechRecognition_Public_SpeechRecognitionGameStateBase_h_Statics
 	{
 		static const FClassRegisterCompiledInInfo ClassInfo[];
 	};
-	const FClassRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_Ula_Desktop_SpeechRecognition_HostProject_Plugins_SpeechRecognition_Source_SpeechRecognition_Public_SpeechRecognitionGameStateBase_h_Statics::ClassInfo[] = {
-		{ Z_Construct_UClass_ASpeechRecognitionGameStateBase, ASpeechRecognitionGameStateBase::StaticClass, TEXT("ASpeechRecognitionGameStateBase"), &Z_Registration_Info_UClass_ASpeechRecognitionGameStateBase, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ASpeechRecognitionGameStateBase), 1775480798U) },
+	const FClassRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_Asus_Documents_GitHub_EconomySimulation_Plugins_SpeechRecognition_Source_SpeechRecognition_Public_SpeechRecognitionGameStateBase_h_Statics::ClassInfo[] = {
+		{ Z_Construct_UClass_ASpeechRecognitionGameStateBase, ASpeechRecognitionGameStateBase::StaticClass, TEXT("ASpeechRecognitionGameStateBase"), &Z_Registration_Info_UClass_ASpeechRecognitionGameStateBase, CONSTRUCT_RELOAD_VERSION_INFO(FClassReloadVersionInfo, sizeof(ASpeechRecognitionGameStateBase), 188006053U) },
 	};
-	static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_Ula_Desktop_SpeechRecognition_HostProject_Plugins_SpeechRecognition_Source_SpeechRecognition_Public_SpeechRecognitionGameStateBase_h_1255086511(TEXT("/Script/SpeechRecognition"),
-		Z_CompiledInDeferFile_FID_Users_Ula_Desktop_SpeechRecognition_HostProject_Plugins_SpeechRecognition_Source_SpeechRecognition_Public_SpeechRecognitionGameStateBase_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_Ula_Desktop_SpeechRecognition_HostProject_Plugins_SpeechRecognition_Source_SpeechRecognition_Public_SpeechRecognitionGameStateBase_h_Statics::ClassInfo),
+	static FRegisterCompiledInInfo Z_CompiledInDeferFile_FID_Users_Asus_Documents_GitHub_EconomySimulation_Plugins_SpeechRecognition_Source_SpeechRecognition_Public_SpeechRecognitionGameStateBase_h_3650333081(TEXT("/Script/SpeechRecognition"),
+		Z_CompiledInDeferFile_FID_Users_Asus_Documents_GitHub_EconomySimulation_Plugins_SpeechRecognition_Source_SpeechRecognition_Public_SpeechRecognitionGameStateBase_h_Statics::ClassInfo, UE_ARRAY_COUNT(Z_CompiledInDeferFile_FID_Users_Asus_Documents_GitHub_EconomySimulation_Plugins_SpeechRecognition_Source_SpeechRecognition_Public_SpeechRecognitionGameStateBase_h_Statics::ClassInfo),
 		nullptr, 0,
 		nullptr, 0);
 PRAGMA_ENABLE_DEPRECATION_WARNINGS
