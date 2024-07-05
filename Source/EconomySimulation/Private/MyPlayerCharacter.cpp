@@ -199,4 +199,5 @@ void AMyPlayerCharacter::StopMovement()
 {
     GetCharacterMovement()->StopMovementImmediately();
     bShouldMoveForward = false;
+    IsReadyToAutoMove = false;
 }
