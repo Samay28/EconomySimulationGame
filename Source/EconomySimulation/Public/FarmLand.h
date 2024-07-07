@@ -32,13 +32,14 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Storage")
 	UBusinessStorageComponent *StorageComponent;
 
+	UFUNCTION(BlueprintCallable)
+	void HasItemsWithQuantityGreaterThanZero();
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void Tick(float DeltaTime) override;
 	int FarmSetupCost;
 
-
 private:
-
 	FTimerHandle ResourceGeneratingHandle;
 };
