@@ -21,7 +21,6 @@ bool ALand::IsOreShopPresent = false;
 bool ALand::AreItemsReady = false;
 bool ALand::IsRentReady = false;
 
-
 ALand::ALand()
 {
     PrimaryActorTick.bCanEverTick = true;
@@ -51,10 +50,12 @@ FString ALand::PurchaseLand()
         SaveGame();
         GM->CalculateCoins();
         GM->SaveGame();
-        return "";
+        return GetMessage(EMessageType::MT_SuccessfullPurchase);
     }
-
-    return GetMessage(EMessageType::MT_InsufficientFunds);
+    else
+    {
+        return GetMessage(EMessageType::MT_InsufficientFunds);
+    }
 }
 
 void ALand::BeginPlay()
@@ -96,7 +97,7 @@ FString ALand::ConvertToHouse()
         SaveGame();
         Destroy();
     }
-    return "";
+    return GetMessage(EMessageType::MT_SuccessfullPurchase);
 }
 
 FString ALand::ConvertToPond()
