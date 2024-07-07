@@ -83,7 +83,7 @@ void AMyPlayerCharacter::FaceNearestActorWithTag(FString Tag)
 
 AActor *AMyPlayerCharacter::FindNearestActorWithTag(FString Tag)
 {
-
+    StopMovement();
     float MinDistance = FLT_MAX;
     AActor *NearestActor = nullptr;
 

@@ -14,7 +14,6 @@ ATree::ATree()
     LandForTreeMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TreeLandMesh"));
     LandForTreeMesh->SetupAttachment(TreeMesh);
 
-    // coinsToBeRewarded = 10;
     TimeToCut = 10;
     TimeToRegenerate = 60;
     CanBeCut = true;
