@@ -38,7 +38,7 @@ ALand::ALand()
     LandID = FMath::Rand();
 }
 
-FString ALand::PurchaseLand()
+bool ALand::PurchaseLand()
 {
     if (GM->coins >= LandCost && !bIsRented)
     {
@@ -50,11 +50,11 @@ FString ALand::PurchaseLand()
         SaveGame();
         GM->CalculateCoins();
         GM->SaveGame();
-        return GetMessage(EMessageType::MT_SuccessfullPurchase);
+        return true;
     }
     else
     {
-        return GetMessage(EMessageType::MT_InsufficientFunds);
+        return false;
     }
 }
 
@@ -75,11 +75,11 @@ void ALand::BeginPlay()
     }
 }
 
-FString ALand::ConvertToHouse()
+bool ALand::ConvertToHouse()
 {
     if (!HouseLandBlueprint)
     {
-        return GetMessage(EMessageType::MT_ErrorSettingProfitProivderLand);
+        return false;
     }
 
     FVector Location = GetActorLocation();
@@ -97,14 +97,14 @@ FString ALand::ConvertToHouse()
         SaveGame();
         Destroy();
     }
-    return GetMessage(EMessageType::MT_SuccessfullPurchase);
+    return true;
 }
 
-FString ALand::ConvertToPond()
+bool ALand::ConvertToPond()
 {
     if (!PondBlueprint || !IsFishShopPresent)
     {
-        return GetMessage(EMessageType::MT_ErrorSettingItemProivderLand);
+        return false;
     }
 
     FVector Location = GetActorLocation();
@@ -122,14 +122,14 @@ FString ALand::ConvertToPond()
         SaveGame();
         Destroy();
     }
-    return "";
+    return true;
 }
 
-FString ALand::ConvertToMiningLand()
+bool ALand::ConvertToMiningLand()
 {
     if (!MiningLandBlueprint || !IsOreShopPresent)
     {
-        return GetMessage(EMessageType::MT_ErrorSettingItemProivderLand);
+        return false;
     }
 
     FVector Location = GetActorLocation();
@@ -147,26 +147,23 @@ FString ALand::ConvertToMiningLand()
         SaveGame();
         Destroy();
     }
-    return "";
+    return true;
 }
 
-void ALand::ConvertToCarpenterShop()
+bool ALand::ConvertToCarpenterShop()
 {
     if (!CarpenterShopBlueprint)
     {
-        UE_LOG(LogTemp, Warning, TEXT("CarpenterShopBlueprint is not set!"));
-        return;
+        return false;
     }
 
-    // Spawn the Carpenter Shop Actor
     ACarpenterShop *CarpenterShop = GetWorld()->SpawnActor<ACarpenterShop>(CarpenterShopBlueprint, GetActorLocation(), GetActorRotation());
 
     if (CarpenterShop)
     {
-        // Attach the Carpenter Shop to the LandMesh
+
         CarpenterShop->AttachToComponent(LandMesh, FAttachmentTransformRules::SnapToTargetIncludingScale);
 
-        // Set transform values
         CarpenterShop->SetActorRelativeLocation(FVector(0.0f, 0.0f, 200.0f));
         CarpenterShop->SetActorRelativeRotation(FRotator(0.0f, 0.0f, 0.0f));
         CarpenterShop->SetActorRelativeScale3D(FVector(0.4f, 0.5f, 1.0f));
@@ -177,18 +174,14 @@ void ALand::ConvertToCarpenterShop()
         IsOccupied = true;
         SaveGame();
     }
-    else
-    {
-        UE_LOG(LogTemp, Warning, TEXT("Failed to spawn Carpenter Shop"));
-    }
+    return true;
 }
 
-void ALand::ConvertToFishShop()
+bool ALand::ConvertToFishShop()
 {
     if (!FishShopBlueprint)
     {
-        UE_LOG(LogTemp, Warning, TEXT("SUS"));
-        return;
+        return false;
     }
 
     // Spawn the Carpenter Shop Actor
@@ -211,18 +204,14 @@ void ALand::ConvertToFishShop()
         LandTypeNum = 4;
         SaveGame();
     }
-    else
-    {
-        UE_LOG(LogTemp, Warning, TEXT("Failed to spawn Fish Shop"));
-    }
+    return true;
 }
 
-void ALand::ConvertToOresShop()
+bool ALand::ConvertToOresShop()
 {
     if (!OresShopBlueprint)
     {
-        UE_LOG(LogTemp, Warning, TEXT("SUS2"));
-        return;
+        return false;
     }
     AOresShop *OresShop = GetWorld()->SpawnActor<AOresShop>(OresShopBlueprint, GetActorLocation(), GetActorRotation());
 
@@ -241,18 +230,14 @@ void ALand::ConvertToOresShop()
         IsOccupied = true;
         SaveGame();
     }
-    else
-    {
-        UE_LOG(LogTemp, Warning, TEXT("Failed to spawn Ores Shop"));
-    }
+    return true;
 }
 
-void ALand::ConvertToVegetableShop()
+bool ALand::ConvertToVegetableShop()
 {
     if (!VegetableShopBlueprint)
     {
-        UE_LOG(LogTemp, Warning, TEXT("SUS2"));
-        return;
+        return false;
     }
 
     // Spawn the Carpenter Shop Actor
@@ -271,10 +256,7 @@ void ALand::ConvertToVegetableShop()
         IsOccupied = true;
         SaveGame();
     }
-    else
-    {
-        UE_LOG(LogTemp, Warning, TEXT("Failed to spawn Vegetable Shop"));
-    }
+    return true;
 }
 
 void ALand::KeepSimpleLand()
@@ -283,11 +265,11 @@ void ALand::KeepSimpleLand()
     GrassMesh->SetVisibility(false);
 }
 
-FString ALand::ConvertToFarm()
+bool ALand::ConvertToFarm()
 {
     if (!IsVegetableShopPresent)
     {
-        return GetMessage(EMessageType::MT_ErrorSettingItemProivderLand);
+        return false;
     }
 
     FVector Location = GetActorLocation();
@@ -305,7 +287,7 @@ FString ALand::ConvertToFarm()
         SaveGame();
         Destroy();
     }
-    return "";
+    return true;
 }
 
 void ALand::SaveGame()
@@ -406,21 +388,6 @@ void ALand::LoadGame()
     }
 }
 
-FString ALand::GetMessage(EMessageType MT)
-{
-    switch (MT)
-    {
-    case EMessageType::MT_ErrorSettingItemProivderLand:
-        return TEXT("You need To have Storage/Respective Shop Setup!");
-    case EMessageType::MT_ErrorSettingProfitProivderLand:
-        return TEXT("You need To have ATM Setup!");
-    case EMessageType::MT_SuccessfullPurchase:
-        return TEXT("Successful Purchase!");
-    default:
-        return TEXT("Unknown message type.");
-    }
-}
-
 bool ALand::GetAreItemsReady()
 {
     return AreItemsReady;
@@ -435,11 +402,4 @@ bool ALand::GetIsRentReady()
 void ALand::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-}
-
-void ALand::DeductRent()
-{
-    if (bIsRented)
-    {
-    }
 }

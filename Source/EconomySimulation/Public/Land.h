@@ -6,16 +6,6 @@
 #include "GameFramework/Actor.h"
 #include "Land.generated.h"
 
-UENUM(BlueprintType)
-enum class EMessageType : uint8
-{
-	MT_ErrorSettingItemProivderLand UMETA(DisplayName = "Shop/storage absent"),
-	MT_ErrorSettingProfitProivderLand UMETA(DisplayName = "Atm Absent"),
-	MT_InsufficientFunds UMETA(DisplayName = "Insufficient Coins"),
-	MT_SuccessfullPurchase UMETA(DisplayName = "Purchase Done"),
-	MT_InsufficientIslandValue UMETA(DisplayName = "Increase your Island Value to : ")
-};
-
 UCLASS()
 class ECONOMYSIMULATION_API ALand : public AActor
 {
@@ -38,43 +28,41 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool IsOccupied;
 
-	void DeductRent();
-
 	UPROPERTY(BlueprintReadOnly)
 	class AGameManager *GM;
 	class AMyPlayerCharacter *Player;
 
 	UFUNCTION(BlueprintCallable)
-	FString PurchaseLand();
+	bool PurchaseLand();
 	static bool IsStoragePresent;
 
 	UFUNCTION(BlueprintCallable)
-	FString ConvertToFarm();
+	bool ConvertToFarm();
 	static bool IsVegetableShopPresent;
 
 	UFUNCTION(BlueprintCallable)
-	FString ConvertToHouse();
+	bool ConvertToHouse();
 	static bool IsATMPresent;
 
 	UFUNCTION(BlueprintCallable)
-	FString ConvertToPond();
+	bool ConvertToPond();
 	static bool IsFishShopPresent;
 
 	UFUNCTION(BlueprintCallable)
-	FString ConvertToMiningLand();
+	bool ConvertToMiningLand();
 	static bool IsOreShopPresent;
 
 	UFUNCTION(BlueprintCallable)
-	void ConvertToCarpenterShop();
+	bool ConvertToCarpenterShop();
 
 	UFUNCTION(BlueprintCallable)
-	void ConvertToFishShop();
+	bool ConvertToFishShop();
 
 	UFUNCTION(BlueprintCallable)
-	void ConvertToOresShop();
+	bool ConvertToOresShop();
 
 	UFUNCTION(BlueprintCallable)
-	void ConvertToVegetableShop();
+	bool ConvertToVegetableShop();
 
 	UFUNCTION(BlueprintCallable)
 	void KeepSimpleLand();
@@ -113,9 +101,6 @@ public:
 	void LoadGame();
 
 	// printing UI
-
-	UFUNCTION(BlueprintCallable)
-	FString GetMessage(EMessageType MT);
 
 	static bool AreItemsReady;
 	static bool IsRentReady;
