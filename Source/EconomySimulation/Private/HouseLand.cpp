@@ -26,8 +26,10 @@ void AHouseLand::BeginPlay()
     IsRentReady = false;
 
     OwnHouse();
-
-    GetWorldTimerManager().SetTimer(HouseRent, this, &AHouseLand::GetHouseRent, 10.0f, true);
+    if (!IsInCinematic)
+    {
+        GetWorldTimerManager().SetTimer(HouseRent, this, &AHouseLand::GetHouseRent, 10.0f, true);
+    }
 }
 
 void AHouseLand::GetHouseRent()

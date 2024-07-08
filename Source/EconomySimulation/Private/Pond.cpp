@@ -25,7 +25,10 @@ void APond::BeginPlay()
 
     SetupPond();
 
-    GetWorldTimerManager().SetTimer(ItemsProvider, this, &APond::ProvideResourcesToStorage, 10.0f, true);
+    if (!IsInCinematic)
+    {
+        GetWorldTimerManager().SetTimer(ItemsProvider, this, &APond::ProvideResourcesToStorage, 10.0f, true);
+    }
     APlayerController *PlayerController = UGameplayStatics::GetPlayerController(this, 0);
     Player = Cast<AMyPlayerCharacter>(PlayerController->GetCharacter());
 }

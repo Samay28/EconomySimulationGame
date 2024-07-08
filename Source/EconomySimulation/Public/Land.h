@@ -111,6 +111,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	bool GetIsRentReady();
 
+	UPROPERTY(EditAnywhere,BlueprintReadOnly)
+	bool IsInCinematic;
+
 protected:
 	virtual void Tick(float DeltaTime) override;
 	virtual void BeginPlay() override;

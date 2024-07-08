@@ -22,7 +22,10 @@ void AFarmLand::BeginPlay()
 {
     Super::BeginPlay();
     RentLandForFarming();
-    GetWorldTimerManager().SetTimer(ResourceGeneratingHandle, this, &AFarmLand::HarvestCropsToStorage, 10.0f, true);
+    if (!IsInCinematic)
+    {
+        GetWorldTimerManager().SetTimer(ResourceGeneratingHandle, this, &AFarmLand::HarvestCropsToStorage, 10.0f, true);
+    }
     APlayerController *PlayerController = UGameplayStatics::GetPlayerController(this, 0);
     Player = Cast<AMyPlayerCharacter>(PlayerController->GetCharacter());
 }
