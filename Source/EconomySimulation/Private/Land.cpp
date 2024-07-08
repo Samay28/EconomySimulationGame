@@ -63,7 +63,6 @@ void ALand::BeginPlay()
     Super::BeginPlay();
     AActor *FoundActor = UGameplayStatics::GetActorOfClass(GetWorld(), AGameManager::StaticClass());
     GM = Cast<AGameManager>(FoundActor);
-    LoadGame();
 
     if (GM && bIsRented)
     {
@@ -73,6 +72,7 @@ void ALand::BeginPlay()
         GM->Expenses += LandCost;
         GM->CalculateCoins();
     }
+    LoadGame();
 }
 
 bool ALand::ConvertToHouse()
