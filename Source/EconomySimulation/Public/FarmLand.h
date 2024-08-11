@@ -4,11 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Land.h"
+#include "SaveGameInterface.h"
+#include "BusinessStorageComponent.h"
 #include "FarmLand.generated.h"
 
-/**
- *
- */
 UCLASS()
 class ECONOMYSIMULATION_API AFarmLand : public ALand
 {
@@ -18,27 +17,29 @@ public:
 	AFarmLand();
 
 	UPROPERTY(EditAnywhere)
-	int CropsCost;
-
-	UPROPERTY(EditAnywhere)
-	int HarvestProfit;
-
-	UPROPERTY(EditAnywhere,BlueprintReadOnly)
-	bool bCropsSowed;
-
-	UPROPERTY(EditAnywhere)
-	UStaticMeshComponent* Carrots;
-	
-	virtual void Tick(float DeltaTime) override;
-
-	void HarvestCrops();
+	UStaticMeshComponent *Carrots;
 
 	UFUNCTION(BlueprintCallable)
 	void RentLandForFarming();
-	
+
+	UFUNCTION(BlueprintCallable)
+	void TransferItems();
+
+	void HarvestCropsToStorage();
+
+	class AMyPlayerCharacter *Player;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Storage")
+	UBusinessStorageComponent *StorageComponent;
+
+	UFUNCTION(BlueprintCallable)
+	void HasItemsWithQuantityGreaterThanZero();
 
 protected:
 	virtual void BeginPlay() override;
-
+	virtual void Tick(float DeltaTime) override;
 	int FarmSetupCost;
+
+private:
+	FTimerHandle ResourceGeneratingHandle;
 };

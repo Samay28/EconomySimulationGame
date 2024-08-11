@@ -1,5 +1,6 @@
 #include "Tree.h"
 #include "GameManager.h"
+#include "MyPlayerCharacter.h"
 #include "Kismet/GameplayStatics.h"
 #include "Math/UnrealMathUtility.h"
 
@@ -10,12 +11,13 @@ ATree::ATree()
     TreeMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Tree Mesh"));
     TreeMesh->SetupAttachment(RootComponent);
 
-    coinsToBeRewarded = 10;
+    LandForTreeMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("TreeLandMesh"));
+    LandForTreeMesh->SetupAttachment(TreeMesh);
+
     TimeToCut = 10;
     TimeToRegenerate = 60;
     CanBeCut = true;
     IsCutting = false; // Initialize IsCutting flag
-
 }
 
 void ATree::BeginPlay()
@@ -23,12 +25,14 @@ void ATree::BeginPlay()
     Super::BeginPlay();
     AActor *FoundActor = UGameplayStatics::GetActorOfClass(GetWorld(), AGameManager::StaticClass());
     GM = Cast<AGameManager>(FoundActor);
+
+    APlayerController *PlayerController = UGameplayStatics::GetPlayerController(this, 0);
+    Player = Cast<AMyPlayerCharacter>(PlayerController->GetCharacter());
     InitialRotation = GetActorRotation();
 }
 
 void ATree::StartCuttingTrees()
 {
-    UE_LOG(LogTemp, Warning, TEXT("fwfwfwf"));
     GetWorldTimerManager().SetTimer(RewardTimerHandle, this, &ATree::ProvideRewards, TimeToCut, false);
     if (CanBeCut)
     {
@@ -40,14 +44,35 @@ void ATree::StartCuttingTrees()
 
 void ATree::ProvideRewards()
 {
-    TreeMesh->SetVisibility(false);
-    coinsToBeRewarded = FMath::RandRange(5, 15);
-    GM->coins += coinsToBeRewarded;
-    UE_LOG(LogTemp, Warning, TEXT("Tree cut! Coins rewarded: %d"), coinsToBeRewarded);
-    CanBeCut = false;
-    IsCutting = false; // Stop the cutting effect
-    GetWorldTimerManager().SetTimer(RegenerationTimerHandle, this, &ATree::RegenerateTime, TimeToRegenerate, false);
 
+    const float LeafProbability = 0.6f;
+    const float WoodProbability = 0.3f;
+    const float StoneProbability = 0.1f;
+
+    float RandomValue = FMath::FRand();
+    FName AwardedItem;
+    int Value;
+    if (RandomValue < LeafProbability)
+    {
+        AwardedItem = "leaf";
+        Value = 2;
+    }
+    else if (RandomValue < LeafProbability + WoodProbability)
+    {
+        AwardedItem = "wood";
+        Value = 5;
+    }
+    else
+    {
+        AwardedItem = "stone";
+        Value = 7;
+    }
+    int Quantity = FMath::RandRange(1, 3);
+    Player->PlayerInventoryComponent->AddItem(AwardedItem, Quantity, Value);
+    TreeMesh->SetVisibility(false);
+    CanBeCut = false;
+    IsCutting = false;
+    GetWorldTimerManager().SetTimer(RegenerationTimerHandle, this, &ATree::RegenerateTime, TimeToRegenerate, false);
     GM->BlockPlayerMovement = false;
 }
 
@@ -61,12 +86,4 @@ void ATree::RegenerateTime()
 void ATree::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
-
-    if (IsCutting)
-    {
-        const float Angle = FMath::Sin(GetWorld()->TimeSeconds * 50.0f) * 3.0f; // Fast sine wave to shake
-        FRotator NewRotation = GetActorRotation();
-        NewRotation.Pitch = Angle;
-        SetActorRotation(NewRotation);
-    }
 }

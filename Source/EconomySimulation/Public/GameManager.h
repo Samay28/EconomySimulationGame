@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "PlayerMovementInterface.h"
+#include "SaveGameInterface.h"
 #include "GameManager.generated.h"
 
 UCLASS()
@@ -19,28 +19,37 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int coins;
 
-	virtual void Tick(float DeltaTime) override;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int Profit;
 
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	int Expenses;
 
-	UPROPERTY(BlueprintReadOnly)
-	int Income;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	int IslandValue;
 
-	void AddExpenses(int Amount);
-	void AddIncome(int Amount);
+	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(BlueprintReadWrite)
 	bool BlockPlayerMovement;
+
+	UFUNCTION(BlueprintCallable, Category = "SaveLoad")
+	void DeleteFarmSave();
+
+	UFUNCTION(BlueprintCallable)
+	void SaveGame();
+
+	UFUNCTION(BlueprintCallable)
+	void LoadGame();
+
+	void CalculateCoins();
+
+	UPROPERTY(BlueprintReadWrite)
+	bool FirstTimeLoad;
+
 protected:
-	// Called when the game starts or when spawned
+	
 	virtual void BeginPlay() override;
 
 private:
-	FTimerHandle DayNightCycle;
-
-	void TriggerDailyEconomy();
-
-	TArray<class ALand *> LandActors;
-	TArray<class AFarmLand *> FarmActors;
-	TArray<class AHouseLand *> HouseActors;
 };

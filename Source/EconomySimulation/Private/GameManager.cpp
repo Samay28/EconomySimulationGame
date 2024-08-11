@@ -4,78 +4,75 @@
 #include "Land.h"
 #include "HouseLand.h"
 #include "FarmLand.h"
-// Sets default values
+#include "Pond.h"
+#include "SaveGameManager.h"
+#include "Kismet/GameplayStatics.h"
+
 AGameManager::AGameManager()
 {
 	PrimaryActorTick.bCanEverTick = true;
 	coins = 500;
-	Expenses = 0;
-	Income = 0;
 	BlockPlayerMovement = false;
+	IslandValue = 0;
+	Profit = 0;
+	Expenses = 0;
 }
 
 
-// Called when the game starts or when spawned
+
+
 void AGameManager::BeginPlay()
 {
 	Super::BeginPlay();
-	for (TActorIterator<ALand> It(GetWorld()); It; ++It)
-	{
-		LandActors.Add(*It);
-	}
-
-	for (TActorIterator<AHouseLand> It(GetWorld()); It; ++It)
-	{
-		HouseActors.Add(*It);
-	}
-
-	for (TActorIterator<AFarmLand> It(GetWorld()); It; ++It)
-	{
-		FarmActors.Add(*It);
-	}
-	GetWorldTimerManager().SetTimer(DayNightCycle, this, &AGameManager::TriggerDailyEconomy, 300.f, true);
+	CalculateCoins();
 }
 void AGameManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
-void AGameManager::TriggerDailyEconomy()
-{	
-	for (ALand *LandActor : LandActors)
+void AGameManager::DeleteFarmSave()
+{
+
+	UGameplayStatics::DeleteGameInSlot(TEXT("FarmSaveSlot"), 0);
+	UGameplayStatics::DeleteGameInSlot(TEXT("ManagerSaveSlot"), 0);
+	UGameplayStatics::DeleteGameInSlot(TEXT("HouseSaveSlot"), 0);
+	UGameplayStatics::DeleteGameInSlot(TEXT("LandSaveSlot"), 0);
+	UGameplayStatics::DeleteGameInSlot(TEXT("PlayerInventorySlot"), 0);
+	UGameplayStatics::DeleteGameInSlot(TEXT("PondSaveSlot"), 0);
+	UGameplayStatics::DeleteGameInSlot(TEXT("StorageSlot"), 0);
+	UE_LOG(LogTemp, Warning, TEXT("Save game deleted"));
+}
+
+void AGameManager::SaveGame()
+{
+	USaveGameManager *SaveGameInstance = Cast<USaveGameManager>(UGameplayStatics::CreateSaveGameObject(USaveGameManager::StaticClass()));
+	if (SaveGameInstance)
 	{
-		if (LandActor)
+		SaveGameInstance->Profit = Profit;
+		SaveGameInstance->FirstTimeLoad = FirstTimeLoad;
+		UE_LOG(LogTemp, Warning, TEXT("Profit saved as : %d"),SaveGameInstance->Profit );
+
+		UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("ManagerSaveSlot"), 0);
+	}
+}
+
+void AGameManager::LoadGame()
+{
+	if (UGameplayStatics::DoesSaveGameExist(TEXT("ManagerSaveSlot"), 0))
+	{
+		USaveGameManager *LoadGameInstance = Cast<USaveGameManager>(UGameplayStatics::LoadGameFromSlot(TEXT("ManagerSaveSlot"), 0));
+		if (LoadGameInstance)
 		{	
-			LandActor->DeductRent();
-		}
-	}
-	UE_LOG(LogTemp,Warning,TEXT("%d"),coins);
-	// Update each HouseActor
-	for (AHouseLand *HouseActor : HouseActors)
-	{
-		if (HouseActor)
-		{
-			HouseActor->GetHouseRent();
-		}
-	}
-
-	// Update each FarmActor
-	for (AFarmLand *FarmActor : FarmActors)
-	{
-		if (FarmActor)
-		{
-			FarmActor->HarvestCrops();
+			Profit = LoadGameInstance->Profit;
+			FirstTimeLoad = LoadGameInstance->FirstTimeLoad;
+			UE_LOG(LogTemp, Warning, TEXT("Profit Loaded: %d"),LoadGameInstance->Profit );
 		}
 	}
 }
-// Called every frame
 
-void AGameManager::AddExpenses(int Amount)
+void AGameManager::CalculateCoins()
 {
-	Expenses+=Amount;
+	coins = Profit - Expenses + 1200;
+	// SaveGame();
+	UE_LOG(LogTemp, Warning, TEXT("coins : %d"),coins );
 }
-
-void AGameManager::AddIncome(int Amount)
-{
-	Income+=Amount;
-}
-

@@ -8,7 +8,7 @@ public class EconomySimulation : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "GameplayTasks","NavigationSystem","AIModule","LevelSequence", "MovieScene"});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

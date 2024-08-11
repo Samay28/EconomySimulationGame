@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Land.h"
+#include "SaveGameInterface.h"
 #include "HouseLand.generated.h"
 
 /**
@@ -16,11 +17,15 @@ class ECONOMYSIMULATION_API AHouseLand : public ALand
 
 public:
 	AHouseLand();
+
 	UPROPERTY(EditAnywhere)
 	int PayCheck;
 
-	UPROPERTY(EditAnywhere)
-	int MaintenanceFees;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	bool DoesOwnHouse;
+
+	// UPROPERTY(VisibleAnywhere, Category = "SaveGameData")
+	// int32 HouseID;
 
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent *HouseMesh;
@@ -30,12 +35,21 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void OwnHouse();
 
-	UPROPERTY(EditAnywhere,BlueprintReadOnly)
-	bool DoesOwnHouse;
+	void SaveGame();
+	void LoadGame();
+	
+
+	UFUNCTION(BlueprintCallable)
+	void TransferRent();
 
 protected:
 	virtual void Tick(float DeltaTime) override;
 	virtual void BeginPlay() override;
 
 	int HouseConstructionCost;
+	// int count;
+
+	FTimerHandle HouseRent;
+
+	static int RentCollected;
 };

@@ -18,6 +18,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent *TreeMesh;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	UStaticMeshComponent *LandForTreeMesh;
 
 	int coinsToBeRewarded;
 	int TimeToCut;
@@ -38,6 +40,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	class AGameManager* GM;
+	class AMyPlayerCharacter* Player;
 
 private:
 	FTimerHandle RewardTimerHandle;
