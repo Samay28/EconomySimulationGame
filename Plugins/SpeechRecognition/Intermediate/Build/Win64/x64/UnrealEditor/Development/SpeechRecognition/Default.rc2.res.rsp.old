@@ -2,7 +2,7 @@
 /D_WIN64
 /l 0x409
 /I "."
-/I "C:\Program Files\Microsoft Visual Studio\2022\Preview\VC\Tools\MSVC\14.38.33129\INCLUDE"
+/I "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.36.32532\INCLUDE"
 /I "C:\Program Files (x86)\Windows Kits\10\include\10.0.22621.0\ucrt"
 /I "C:\Program Files (x86)\Windows Kits\10\include\10.0.22621.0\shared"
 /I "C:\Program Files (x86)\Windows Kits\10\include\10.0.22621.0\um"
@@ -71,8 +71,8 @@
 /DORIGINAL_FILE_NAME="UnrealEditor-SpeechRecognition.dll"
 /DBUILT_FROM_CHANGELIST=29314046
 /DBUILD_VERSION=++UE5+Release-5.3-CL-29314046
-/DBUILD_ICON_FILE_NAME="\"C:\\Users\\Asus\\Documents\\GitHub\\EconomySimulation\\Build\\Windows\\Application.ico\""
+/DBUILD_ICON_FILE_NAME="\"..\\Build\\Windows\\Resources\\Default.ico\""
 /DPROJECT_COPYRIGHT_STRING="Fill out your copyright notice in the Description page of Project Settings."
 /DPROJECT_PRODUCT_IDENTIFIER=EconomySimulation
-/fo "C:\Users\Asus\Documents\GitHub\EconomySimulation\Plugins\SpeechRecognition\Intermediate\Build\Win64\x64\UnrealEditor\Development\SpeechRecognition\Default.rc2.res"
+/fo "C:\Users\samay\Documents\Github\EconomySimulationGame-31b48990fb12251802c68573fccb1716cfc845b8\Plugins\SpeechRecognition\Intermediate\Build\Win64\x64\UnrealEditor\Development\SpeechRecognition\Default.rc2.res"
 "..\Build\Windows\Resources\Default.rc2"

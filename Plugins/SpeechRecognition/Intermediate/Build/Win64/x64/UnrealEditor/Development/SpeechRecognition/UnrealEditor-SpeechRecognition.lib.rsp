@@ -6,7 +6,7 @@
 /NAME:"UnrealEditor-SpeechRecognition.dll"
 /IGNORE:4221
 /NODEFAULTLIB
-"C:\Users\samay\Documents\Github\EconomySimulationGame-31b48990fb12251802c68573fccb1716cfc845b8\Intermediate\Build\Win64\x64\EconomySimulationEditor\Development\Engine\SharedPCH.Engine.Cpp20.h.obj"
-"C:\Users\samay\Documents\Github\EconomySimulationGame-31b48990fb12251802c68573fccb1716cfc845b8\Plugins\SpeechRecognition\Intermediate\Build\Win64\x64\UnrealEditor\Development\SpeechRecognition\Module.SpeechRecognition.cpp.obj"
-"C:\Users\samay\Documents\Github\EconomySimulationGame-31b48990fb12251802c68573fccb1716cfc845b8\Plugins\SpeechRecognition\Intermediate\Build\Win64\x64\UnrealEditor\Development\SpeechRecognition\Default.rc2.res"
-/OUT:"C:\Users\samay\Documents\Github\EconomySimulationGame-31b48990fb12251802c68573fccb1716cfc845b8\Plugins\SpeechRecognition\Intermediate\Build\Win64\x64\UnrealEditor\Development\SpeechRecognition\UnrealEditor-SpeechRecognition.lib"
+"C:\Users\samay\Documents\Github\EconomySimulationGame\Intermediate\Build\Win64\x64\EconomySimulationEditor\Development\Engine\SharedPCH.Engine.Cpp20.h.obj"
+"C:\Users\samay\Documents\Github\EconomySimulationGame\Plugins\SpeechRecognition\Intermediate\Build\Win64\x64\UnrealEditor\Development\SpeechRecognition\Module.SpeechRecognition.cpp.obj"
+"C:\Users\samay\Documents\Github\EconomySimulationGame\Plugins\SpeechRecognition\Intermediate\Build\Win64\x64\UnrealEditor\Development\SpeechRecognition\Default.rc2.res"
+/OUT:"C:\Users\samay\Documents\Github\EconomySimulationGame\Plugins\SpeechRecognition\Intermediate\Build\Win64\x64\UnrealEditor\Development\SpeechRecognition\UnrealEditor-SpeechRecognition.lib"
