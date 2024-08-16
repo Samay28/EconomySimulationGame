@@ -1,4 +1,3 @@
-// Fill out your copyright notice in the Description page of Project Settings.
 #include "HouseLand.h"
 #include "FarmLand.h"
 #include "Pond.h"
@@ -64,15 +63,11 @@ void ALand::BeginPlay()
     AActor *FoundActor = UGameplayStatics::GetActorOfClass(GetWorld(), AGameManager::StaticClass());
     GM = Cast<AGameManager>(FoundActor);
 
+    LoadGame();
     if (GM && bIsRented)
     {
-        GM->LoadGame();
-        GM->IslandValue += 100;
-        GrassMesh->SetVisibility(false);
-        GM->Expenses += LandCost;
-        GM->CalculateCoins();
+        KeepSimpleLand();
     }
-    LoadGame();
 }
 
 bool ALand::ConvertToHouse()
@@ -198,10 +193,10 @@ bool ALand::ConvertToFishShop()
         FishShop->SetActorRelativeScale3D(FVector(0.4f, 0.5f, 1.0f));
 
         UE_LOG(LogTemp, Warning, TEXT("Fish Shop successfully converted and attached to LandMesh"));
-        GM->IslandValue += 50;
-        IsOccupied = true;
-        IsFishShopPresent = true;
         LandTypeNum = 4;
+        GM->IslandValue += 50;
+        IsFishShopPresent = true;
+        IsOccupied = true;
         SaveGame();
     }
     return true;
@@ -261,12 +256,11 @@ bool ALand::ConvertToVegetableShop()
 
 void ALand::KeepSimpleLand()
 {
-    bIsRented = true;
+    GM->LoadGame();
+    GM->IslandValue += 100;
     GrassMesh->SetVisibility(false);
     GM->Expenses += LandCost;
-    GM->IslandValue += 100;
     GM->CalculateCoins();
-    GM->SaveGame();
 }
 
 bool ALand::ConvertToFarm()
@@ -326,7 +320,7 @@ void ALand::SaveGame()
 
     SaveGameInstance->LandDataArray.Add(SaveData);
     UGameplayStatics::SaveGameToSlot(SaveGameInstance, TEXT("LandSaveSlot"), 0);
-    UE_LOG(LogTemp, Warning, TEXT("land Game Saved"));
+    UE_LOG(LogTemp, Warning, TEXT("Game Saved"));
     // GM->SaveGame();
 }
 
@@ -353,44 +347,56 @@ void ALand::LoadGame()
             SetActorLocation(SaveData.Location);
             SetActorRotation(SaveData.Rotation);
             bIsRented = SaveData.bIsRented;
-            KeepSimpleLand();
 
             if (LandTypeNum == 1 && FarmLandBlueprint)
             {
                 ConvertToFarm();
+                // GM->IslandValue += 100;
+                // GM->Expenses += LandCost;
+                GM->CalculateCoins();
             }
             else if (LandTypeNum == 2 && HouseLandBlueprint)
             {
                 ConvertToHouse();
+                // GM->IslandValue += 100;
+                // GM->Expenses += LandCost;
+                GM->CalculateCoins();
             }
             else if (LandTypeNum == 3 && CarpenterShopBlueprint)
             {
                 ConvertToCarpenterShop();
+
             }
             else if (LandTypeNum == 4 && FishShopBlueprint)
             {
                 ConvertToFishShop();
+
             }
             else if (LandTypeNum == 5 && OresShopBlueprint)
             {
                 ConvertToOresShop();
+
             }
             else if (LandTypeNum == 6 && PondBlueprint)
             {
                 ConvertToPond();
+                // GM->IslandValue += 100;
+                // GM->Expenses += LandCost;
+                GM->CalculateCoins();
             }
             else if (LandTypeNum == 7 && MiningLandBlueprint)
             {
                 ConvertToMiningLand();
+                // GM->IslandValue += 100;
+                // GM->Expenses += LandCost;
+                GM->CalculateCoins();
             }
             else if (LandTypeNum == 8 && VegetableShopBlueprint)
             {
                 ConvertToVegetableShop();
             }
-
             break;
         }
-        UE_LOG(LogTemp, Warning, TEXT("land Game loaded"));
     }
 }
 

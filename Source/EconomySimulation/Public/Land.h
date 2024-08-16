@@ -23,6 +23,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	bool bIsRented;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsAlreadyProcessed;
+
 	int LandCost;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
@@ -66,6 +69,8 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void KeepSimpleLand();
+
+	void InitializeDefaultLand();
 
 	UPROPERTY(EditDefaultsOnly, Category = "Conversion")
 	TSubclassOf<class AHouseLand> HouseLandBlueprint;

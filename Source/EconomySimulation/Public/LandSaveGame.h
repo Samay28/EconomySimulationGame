@@ -23,6 +23,9 @@ struct FLandSaveData
     
     UPROPERTY(EditAnywhere, BlueprintReadWrite)
     bool bIsRented;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite)
+    bool bIsAlreadyProcessed;
 };
 
 UCLASS()

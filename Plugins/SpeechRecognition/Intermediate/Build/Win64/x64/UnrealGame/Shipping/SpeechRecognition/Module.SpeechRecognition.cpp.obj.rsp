@@ -1,11 +1,11 @@
-"C:\Users\samay\Documents\Github\EconomySimulationGame-31b48990fb12251802c68573fccb1716cfc845b8\Plugins\SpeechRecognition\Intermediate\Build\Win64\x64\UnrealGame\Shipping\SpeechRecognition\Module.SpeechRecognition.cpp"
-/FI"C:\Users\samay\Documents\Github\EconomySimulationGame-31b48990fb12251802c68573fccb1716cfc845b8\Intermediate\Build\Win64\x64\EconomySimulation\Shipping\Engine\SharedPCH.Engine.Cpp20.h"
-/FI"C:\Users\samay\Documents\Github\EconomySimulationGame-31b48990fb12251802c68573fccb1716cfc845b8\Plugins\SpeechRecognition\Intermediate\Build\Win64\x64\UnrealGame\Shipping\SpeechRecognition\Definitions.SpeechRecognition.h"
-/Yu"C:\Users\samay\Documents\Github\EconomySimulationGame-31b48990fb12251802c68573fccb1716cfc845b8\Intermediate\Build\Win64\x64\EconomySimulation\Shipping\Engine\SharedPCH.Engine.Cpp20.h"
-/Fp"C:\Users\samay\Documents\Github\EconomySimulationGame-31b48990fb12251802c68573fccb1716cfc845b8\Intermediate\Build\Win64\x64\EconomySimulation\Shipping\Engine\SharedPCH.Engine.Cpp20.h.pch"
-/Fo"C:\Users\samay\Documents\Github\EconomySimulationGame-31b48990fb12251802c68573fccb1716cfc845b8\Plugins\SpeechRecognition\Intermediate\Build\Win64\x64\UnrealGame\Shipping\SpeechRecognition\Module.SpeechRecognition.cpp.obj"
-/sourceDependencies "C:\Users\samay\Documents\Github\EconomySimulationGame-31b48990fb12251802c68573fccb1716cfc845b8\Plugins\SpeechRecognition\Intermediate\Build\Win64\x64\UnrealGame\Shipping\SpeechRecognition\Module.SpeechRecognition.cpp.dep.json"
-@"C:\Users\samay\Documents\Github\EconomySimulationGame-31b48990fb12251802c68573fccb1716cfc845b8\Plugins\SpeechRecognition\Intermediate\Build\Win64\x64\UnrealGame\Shipping\SpeechRecognition\SpeechRecognition.Shared.rsp"
+"C:\Users\samay\Documents\Github\EconomySimulationGame\Plugins\SpeechRecognition\Intermediate\Build\Win64\x64\UnrealGame\Shipping\SpeechRecognition\Module.SpeechRecognition.cpp"
+/FI"C:\Users\samay\Documents\Github\EconomySimulationGame\Intermediate\Build\Win64\x64\EconomySimulation\Shipping\Engine\SharedPCH.Engine.Cpp20.h"
+/FI"C:\Users\samay\Documents\Github\EconomySimulationGame\Plugins\SpeechRecognition\Intermediate\Build\Win64\x64\UnrealGame\Shipping\SpeechRecognition\Definitions.SpeechRecognition.h"
+/Yu"C:\Users\samay\Documents\Github\EconomySimulationGame\Intermediate\Build\Win64\x64\EconomySimulation\Shipping\Engine\SharedPCH.Engine.Cpp20.h"
+/Fp"C:\Users\samay\Documents\Github\EconomySimulationGame\Intermediate\Build\Win64\x64\EconomySimulation\Shipping\Engine\SharedPCH.Engine.Cpp20.h.pch"
+/Fo"C:\Users\samay\Documents\Github\EconomySimulationGame\Plugins\SpeechRecognition\Intermediate\Build\Win64\x64\UnrealGame\Shipping\SpeechRecognition\Module.SpeechRecognition.cpp.obj"
+/sourceDependencies "C:\Users\samay\Documents\Github\EconomySimulationGame\Plugins\SpeechRecognition\Intermediate\Build\Win64\x64\UnrealGame\Shipping\SpeechRecognition\Module.SpeechRecognition.cpp.dep.json"
+@"C:\Users\samay\Documents\Github\EconomySimulationGame\Plugins\SpeechRecognition\Intermediate\Build\Win64\x64\UnrealGame\Shipping\SpeechRecognition\SpeechRecognition.Shared.rsp"
 /Zc:inline
 /nologo
 /Oi
