@@ -28,7 +28,7 @@ ALand::ALand()
 
     GrassMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Grass"));
     GrassMesh->SetupAttachment(LandMesh);
-    LandCost = 50;
+    LandCost = 200;
     bIsRented = false;
     IsOccupied = false;
     AreItemsReady = false;
@@ -72,8 +72,9 @@ void ALand::BeginPlay()
 
 bool ALand::ConvertToHouse()
 {
-    if (!HouseLandBlueprint)
-    {
+    if (!HouseLandBlueprint || GM->coins <=500)
+    {   
+        UE_LOG(LogTemp, Warning, TEXT("coins : %d"),GM->coins );
         return false;
     }
 
@@ -97,7 +98,7 @@ bool ALand::ConvertToHouse()
 
 bool ALand::ConvertToPond()
 {
-    if (!PondBlueprint || !IsFishShopPresent)
+    if (!PondBlueprint || !IsFishShopPresent || GM->coins <=800)
     {
         return false;
     }
@@ -122,7 +123,7 @@ bool ALand::ConvertToPond()
 
 bool ALand::ConvertToMiningLand()
 {
-    if (!MiningLandBlueprint || !IsOreShopPresent)
+    if (!MiningLandBlueprint || !IsOreShopPresent || GM->coins <=1200)
     {
         return false;
     }
@@ -265,7 +266,7 @@ void ALand::KeepSimpleLand()
 
 bool ALand::ConvertToFarm()
 {
-    if (!IsVegetableShopPresent)
+    if (!IsVegetableShopPresent || GM->coins <=300)
     {
         return false;
     }

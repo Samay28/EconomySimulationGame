@@ -16,7 +16,7 @@ AFarmLand::AFarmLand()
 
     StorageComponent = CreateDefaultSubobject<UBusinessStorageComponent>(TEXT("Storage"));
 
-    FarmSetupCost = 50;
+    FarmSetupCost = 300;
 }
 void AFarmLand::BeginPlay()
 {
@@ -24,7 +24,7 @@ void AFarmLand::BeginPlay()
     RentLandForFarming();
     if (!IsInCinematic)
     {
-        GetWorldTimerManager().SetTimer(ResourceGeneratingHandle, this, &AFarmLand::HarvestCropsToStorage, 10.0f, true);
+        GetWorldTimerManager().SetTimer(ResourceGeneratingHandle, this, &AFarmLand::HarvestCropsToStorage, 120.0f, true);
     }
     APlayerController *PlayerController = UGameplayStatics::GetPlayerController(this, 0);
     Player = Cast<AMyPlayerCharacter>(PlayerController->GetCharacter());
@@ -58,17 +58,17 @@ void AFarmLand::HarvestCropsToStorage()
         if (RandomValue < WheatProbability)
         {
             AwardedCrop = "wheat";
-            Value = 10;
+            Value = 8;
         }
         else if (RandomValue < WheatProbability + CarrotProbability)
         {
             AwardedCrop = "carrot";
-            Value = 20;
+            Value = 10;
         }
         else
         {
             AwardedCrop = "potato";
-            Value = 25;
+            Value = 15;
         }
         int32 Quantity = FMath::RandRange(1, 3);
         StorageComponent->AddItem(AwardedCrop, Quantity, Value);

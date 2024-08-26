@@ -16,7 +16,7 @@ APond::APond()
 
     StorageComponent = CreateDefaultSubobject<UBusinessStorageComponent>(TEXT("Storage Component"));
 
-    PondSetupCost = 50;
+    PondSetupCost = 800;
     PondLevel = 1;
 }
 void APond::BeginPlay()
@@ -27,7 +27,7 @@ void APond::BeginPlay()
 
     if (!IsInCinematic)
     {
-        GetWorldTimerManager().SetTimer(ItemsProvider, this, &APond::ProvideResourcesToStorage, 10.0f, true);
+        GetWorldTimerManager().SetTimer(ItemsProvider, this, &APond::ProvideResourcesToStorage, 180.0f, true);
     }
     APlayerController *PlayerController = UGameplayStatics::GetPlayerController(this, 0);
     Player = Cast<AMyPlayerCharacter>(PlayerController->GetCharacter());
@@ -65,17 +65,17 @@ void APond::ProvideResourcesToStorage()
     if (RandomValue < TroutProbability)
     {
         AwardedFish = "trout";
-        Value = 20;
+        Value = 12;
     }
     else if (RandomValue < TroutProbability + TunaProbability)
     {
         AwardedFish = "tuna";
-        Value = 30;
+        Value = 18;
     }
     else
     {
         AwardedFish = "salmon";
-        Value = 45;
+        Value = 25;
     }
     int32 Quantity = FMath::RandRange(1, 2);
     StorageComponent->AddItem(AwardedFish, Quantity, Value);

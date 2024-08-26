@@ -13,9 +13,9 @@ AHouseLand::AHouseLand()
     HouseMesh->SetupAttachment(LandMesh);
     HouseMesh->SetVisibility(true);
 
-    HouseConstructionCost = 50;
+    HouseConstructionCost = 500;
     // DoesOwnHouse = false;
-    PayCheck = 10;
+    PayCheck = 20;
     // count = 0;
 }
 
@@ -28,7 +28,7 @@ void AHouseLand::BeginPlay()
     OwnHouse();
     if (!IsInCinematic)
     {
-        GetWorldTimerManager().SetTimer(HouseRent, this, &AHouseLand::GetHouseRent, 10.0f, true);
+        GetWorldTimerManager().SetTimer(HouseRent, this, &AHouseLand::GetHouseRent, 60.0f, true);
     }
 }
 

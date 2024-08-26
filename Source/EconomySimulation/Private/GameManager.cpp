@@ -72,7 +72,7 @@ void AGameManager::LoadGame()
 
 void AGameManager::CalculateCoins()
 {
-	coins = Profit - Expenses + 1200;
+	coins = Profit - Expenses + 2900;
 	// SaveGame();
 	UE_LOG(LogTemp, Warning, TEXT("coins : %d"),coins );
 }

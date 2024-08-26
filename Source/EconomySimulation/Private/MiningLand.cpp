@@ -15,7 +15,7 @@ AMiningLand::AMiningLand()
 
     StorageComponent = CreateDefaultSubobject<UBusinessStorageComponent>(TEXT("Storage Component"));
 
-    MiningLandSetupCost = 50;
+    MiningLandSetupCost = 1200;
     MiningLevel = 1;
 }
 
@@ -31,7 +31,7 @@ void AMiningLand::BeginPlay()
     if (!IsInCinematic)
     {
 
-        GetWorldTimerManager().SetTimer(ItemsProvider, this, &AMiningLand::ProvideResourcesToStorage, 10.0f, true);
+        GetWorldTimerManager().SetTimer(ItemsProvider, this, &AMiningLand::ProvideResourcesToStorage, 240.0f, true);
     }
     APlayerController *PlayerController = UGameplayStatics::GetPlayerController(this, 0);
     Player = Cast<AMyPlayerCharacter>(PlayerController->GetCharacter());
@@ -76,17 +76,17 @@ void AMiningLand::ProvideResourcesToStorage()
     if (RandomValue < CoalProbability)
     {
         AwardedOre = "coal";
-        Value = 30;
+        Value = 20;
     }
     else if (RandomValue < CoalProbability + CopperProbability)
     {
         AwardedOre = "copper";
-        Value = 40;
+        Value = 28;
     }
     else
     {
         AwardedOre = "iron";
-        Value = 55;
+        Value = 35;
     }
     int32 Quantity = FMath::RandRange(1, 2);
     StorageComponent->AddItem(AwardedOre, Quantity, Value);

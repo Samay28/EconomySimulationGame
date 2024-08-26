@@ -55,17 +55,17 @@ void ATree::ProvideRewards()
     if (RandomValue < LeafProbability)
     {
         AwardedItem = "leaf";
-        Value = 2;
+        Value = 1;
     }
     else if (RandomValue < LeafProbability + WoodProbability)
     {
         AwardedItem = "wood";
-        Value = 5;
+        Value = 2;
     }
     else
     {
         AwardedItem = "stone";
-        Value = 7;
+        Value = 3;
     }
     int Quantity = FMath::RandRange(1, 3);
     Player->PlayerInventoryComponent->AddItem(AwardedItem, Quantity, Value);
